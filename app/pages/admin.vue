@@ -19,8 +19,24 @@
         </div>
         
         <!-- MOCK LOGIN DEV BYPASS -->
-        <button v-if="showBypass" @click="isAuthenticated = true" class="mt-8 text-xs text-slate-600 hover:text-slate-400 underline">
+        <button v-if="showBypass" @click="isAuthenticated = true; isAuthorized = true" class="mt-8 text-xs text-slate-600 hover:text-slate-400 underline">
           Desarrollador: Forzar Login (Bypass)
+        </button>
+      </div>
+    </div>
+
+    <!-- Unauthorized View -->
+    <div v-else-if="!isAuthorized" class="max-w-md mx-auto mt-20">
+      <div class="glass-panel p-8 text-center border-t-4 border-t-pride-red animate-shake">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-pride-red mx-auto mb-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+        </svg>
+        <h2 class="text-3xl font-bold mb-2">Acceso Denegado</h2>
+        <p class="text-slate-400 mb-2">Tu correo <strong>{{ userEmail }}</strong> no está en la lista de administradores.</p>
+        <p class="text-xs text-slate-500 mb-8">Contacta al administrador para solicitar acceso.</p>
+        
+        <button @click="handleLogout" class="glass-button !border-pride-red/30 hover:!bg-pride-red/10 text-pride-red w-full py-3">
+          Cerrar Sesión
         </button>
       </div>
     </div>
@@ -174,10 +190,15 @@ const TIMEZONE = 'America/Mexico_City'
 
 // Admin State
 const isAuthenticated = ref(false)
+const isAuthorized = ref(false)
+const userEmail = ref('')
 const allAbsences = ref([])
 const showPastDates = ref(false)
 const deletingId = ref(null)
 const isDeleting = ref(false)
+
+const config = useRuntimeConfig()
+const adminEmails = config.public.adminEmails || []
 
 // InsForge Client
 const insforge = useInsforge()
@@ -192,7 +213,14 @@ const checkSession = async () => {
   const { data } = await insforge.auth.getCurrentSession()
   if (data?.session) {
     isAuthenticated.value = true
-    fetchAdminData()
+    userEmail.value = data.session.user?.email || ''
+    
+    // Check if email is in whitelist
+    isAuthorized.value = adminEmails.includes(userEmail.value.toLowerCase())
+    
+    if (isAuthorized.value) {
+      fetchAdminData()
+    }
   }
 }
 
@@ -207,6 +235,8 @@ const loginWithGoogle = async () => {
 const handleLogout = async () => {
   await insforge.auth.signOut()
   isAuthenticated.value = false
+  isAuthorized.value = false
+  userEmail.value = ''
 }
 
 // Data Fetching
