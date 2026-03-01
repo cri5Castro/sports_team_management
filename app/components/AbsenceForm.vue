@@ -16,26 +16,32 @@
     <form @submit.prevent="submitForm" class="space-y-6">
       
       <!-- Shark Name with Autocomplete -->
-      <div class="space-y-2 relative">
-        <label class="block text-sm font-medium text-slate-300">Nombre de Shark</label>
+      <div class="space-y-2 relative pride-glow-focus">
+        <label class="block text-sm font-medium text-slate-300 flex items-center gap-2">
+          <span>Nombre de Shark</span>
+          <span class="w-1.5 h-1.5 rounded-full pride-bar inline-block"></span>
+        </label>
         <input 
           v-model="form.name" 
           @focus="showAutocomplete = true"
           @blur="hideAutocompleteDelay"
-          class="glass-input" 
+          class="glass-input relative z-10" 
           type="text" 
           placeholder="Escribe tu nombre o apodo..." 
           required 
         />
         <!-- Autocomplete dropdown -->
-        <ul v-if="showAutocomplete && filteredNames.length" class="absolute top-full left-0 w-full mt-1 bg-slate-800 border border-white/10 rounded-xl shadow-xl max-h-48 overflow-y-auto z-20 divide-y divide-white/5">
+        <ul v-if="showAutocomplete && filteredNames.length" class="absolute top-full left-0 w-full mt-2 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl max-h-48 overflow-y-auto z-30 divide-y divide-white/5 overflow-hidden">
           <li 
             v-for="name in filteredNames" 
             :key="name" 
             @click="selectName(name)"
-            class="px-4 py-2 hover:bg-white/10 cursor-pointer text-slate-200 transition-colors"
+            class="px-4 py-3 hover:bg-white/10 cursor-pointer text-slate-200 transition-all flex items-center justify-between group active:bg-white/20 pride-glow"
           >
-            {{ name }}
+            <span class="group-hover:translate-x-1 transition-transform">{{ name }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 text-pride-blue opacity-0 group-hover:opacity-100 transition-opacity">
+              <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
+            </svg>
           </li>
         </ul>
         
@@ -244,7 +250,7 @@ import { toZonedTime } from 'date-fns-tz'
 import { es } from 'date-fns/locale'
 
 const TIMEZONE = 'America/Mexico_City'
-const tlatelolcoSlots = ['11:00 am - 12:00 pm', '12:00 pm - 1:00 pm']
+const tlatelolcoSlots = ['12:00 pm - 1:00 pm', '1:00 pm - 2:00 pm']
 const cuauhtemocSlots = ['3:00 pm - 4:00 pm', '4:00 pm - 5:00 pm']
 
 // State
