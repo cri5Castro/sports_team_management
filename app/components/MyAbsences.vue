@@ -2,7 +2,9 @@
   <div class="glass-panel p-6 sm:p-8 animate-fade-in relative z-10">
     <div class="mb-8">
       <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
-        <span class="iconify text-pride-blue" data-icon="heroicons:calendar-days" data-inline="false"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-pride-blue">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+        </svg>
         Mis Ausencias
       </h2>
       <p class="text-slate-400 text-sm">Busca tu nombre para ver y gestionar tus reportes futuros.</p>
@@ -21,7 +23,9 @@
           type="text" 
           placeholder="Ej: Carlos Silva..." 
         />
-        <span class="iconify absolute left-3 top-3 text-slate-400 text-lg" data-icon="heroicons:magnifying-glass"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 absolute left-3 top-3 text-slate-400">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+        </svg>
         
         <button 
           v-if="searchQuery" 
@@ -47,12 +51,16 @@
 
     <!-- Results Section -->
     <div v-if="loading" class="flex justify-center py-12">
-      <span class="iconify animate-spin text-4xl text-pride-light" data-icon="heroicons:arrow-path"></span>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 animate-spin text-pride-light">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+      </svg>
     </div>
 
     <div v-else-if="hasSearched">
       <div v-if="userAbsences.length === 0" class="text-center py-10 bg-white/5 rounded-2xl border border-white/10">
-        <span class="iconify text-5xl text-slate-500 mb-3 mx-auto" data-icon="heroicons:document-magnifying-glass"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-slate-500 mb-3 mx-auto">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6" />
+        </svg>
         <p class="text-slate-300">No se encontraron ausencias futuras para <strong class="text-white">"{{ lastSearched }}"</strong>.</p>
       </div>
       
@@ -71,13 +79,26 @@
 
             <div class="pl-3">
               <div class="flex items-center gap-2 mb-1">
-                <span class="iconify text-slate-400" data-icon="heroicons:calendar"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-slate-400">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                </svg>
                 <span class="font-bold text-white text-lg">{{ formatDate(absence.date) }}</span>
               </div>
               <div class="flex items-center gap-3 text-sm text-slate-300">
-                <span class="flex items-center gap-1"><span class="iconify text-pride-purple" data-icon="heroicons:clock"></span> {{ absence.timeSlot }}</span>
+                <span class="flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-pride-purple">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                  {{ absence.timeSlot }}
+                </span>
                 <span class="text-white/20">•</span>
-                <span class="flex items-center gap-1"><span class="iconify text-pride-pink" data-icon="heroicons:map-pin"></span> {{ absence.location }}</span>
+                <span class="flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-pride-pink">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                  </svg>
+                  {{ absence.location }}
+                </span>
               </div>
             </div>
 
@@ -90,7 +111,9 @@
                   @click="deletingId = absence.id"
                   class="glass-button !py-2 !px-4 hover:border-pride-red/50 hover:text-pride-red text-slate-400 text-sm group-hover:bg-white/10"
                 >
-                  <span class="iconify mr-1" data-icon="heroicons:trash"></span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                  </svg>
                   Eliminar
                 </button>
                 
@@ -98,7 +121,9 @@
                 <div v-else class="flex items-center gap-2 bg-slate-900 border border-pride-red rounded-xl p-1 shadow-lg pr-3 pl-3 py-1.5">
                   <span class="text-xs font-bold text-pride-red mr-2">¿Seguro?</span>
                   <button @click="confirmDelete(absence.id)" class="px-3 py-1 bg-pride-red text-white text-xs font-bold rounded hover:bg-red-700 transition" :disabled="isDeleting">
-                    <span v-if="isDeleting" class="iconify animate-spin" data-icon="heroicons:arrow-path"></span>
+                    <svg v-if="isDeleting" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 animate-spin">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
                     <span v-else>Sí</span>
                   </button>
                   <button @click="deletingId = null" class="px-3 py-1 bg-slate-700 text-white text-xs font-bold rounded hover:bg-slate-600 transition" :disabled="isDeleting">No</button>

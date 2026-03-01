@@ -3,24 +3,23 @@
     <!-- Unauthenticated View -->
     <div v-if="!isAuthenticated" class="max-w-md mx-auto mt-20">
       <div class="glass-panel p-8 text-center border-t-4 border-t-pride-blue">
-        <div class="w-20 h-20 mx-auto bg-slate-800 rounded-full flex items-center justify-center mb-6 shadow-xl border border-white/5">
-          <span class="iconify text-5xl text-pride-light" data-icon="heroicons:shield-check-solid"></span>
-        </div>
         <h2 class="text-3xl font-bold mb-2">Panel Administrativo</h2>
         <p class="text-slate-400 mb-8">Acceso restringido. Inicia sesión para continuar.</p>
         
         <div class="flex justify-center">
-          <!-- We mock the google login for now if the specific client ID fails, but use the real component if it works -->
-          <GoogleLogin :callback="handleGoogleLogin">
-            <button class="flex items-center justify-center gap-3 w-full bg-slate-800 text-white font-bold py-3 px-6 rounded-xl hover:bg-slate-700 transition shadow-lg w-[260px] pride-glow border border-white/10">
-              <span class="iconify text-2xl" data-icon="logos:google-icon"></span>
-              Iniciar Sesión con Google
-            </button>
-          </GoogleLogin>
+          <button @click="loginWithGoogle" class="flex items-center justify-center gap-3 w-full bg-slate-800 text-white font-bold py-3 px-6 rounded-xl hover:bg-slate-700 transition shadow-lg w-[260px] pride-glow border border-white/10">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48">
+              <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+              <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+              <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+              <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+            </svg>
+            Iniciar Sesión con Google
+          </button>
         </div>
         
         <!-- MOCK LOGIN DEV BYPASS -->
-        <button @click="isAuthenticated = true" class="mt-8 text-xs text-slate-600 hover:text-slate-400 underline">
+        <button v-if="showBypass" @click="isAuthenticated = true" class="mt-8 text-xs text-slate-600 hover:text-slate-400 underline">
           Desarrollador: Forzar Login (Bypass)
         </button>
       </div>
@@ -31,7 +30,9 @@
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
           <h1 class="text-3xl font-bold flex items-center gap-3">
-            <span class="iconify text-pride-blue" data-icon="heroicons:presentation-chart-line"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-pride-blue">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86l2.392 4.427a.75.75 0 0 0 1.252.015l3.181-5.257 1.411 2.339A.75.75 0 0 0 15 15.75h4.5M2.25 13.5v7.5c0 1.242 1.008 2.25 2.25 2.25h15c1.242 0 2.25-1.008 2.25-2.25v-7.5M2.25 13.5 4.5 10.5m1.5 6h.008v.008H6V16.5Zm3.75 0h.008v.008h-.008V16.5Zm3.75 0h.008v.008h-.008V16.5Zm3.75 0h.008v.008h-.008V16.5ZM2.25 3.75h19.5M4.5 3.75v16.5M19.5 3.75v16.5" />
+            </svg>
             Panel de Administración
           </h1>
           <p class="text-slate-400 mt-1">Gestión completa de ausencias del equipo Sharkes</p>
@@ -49,17 +50,24 @@
           </label>
 
           <button @click="exportCSV" class="glass-button !py-2 !px-4 hover:border-pride-green/50 text-sm pride-glow">
-            <span class="iconify mr-2 text-pride-green" data-icon="heroicons:arrow-down-tray"></span> Exportar CSV
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 text-pride-green">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            Exportar CSV
           </button>
           
           <label class="glass-button !py-2 !px-4 hover:border-pride-blue/50 text-sm cursor-pointer pride-glow">
-            <span class="iconify mr-2 text-pride-blue" data-icon="heroicons:arrow-up-tray"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 text-pride-blue">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+            </svg>
             Importar CSV
             <input type="file" accept=".csv" class="hidden" @change="importCSV" />
           </label>
 
-          <button @click="isAuthenticated = false" class="ml-auto md:ml-2 text-slate-400 hover:text-pride-red p-2 rounded-xl border border-transparent hover:border-pride-red/30 hover:bg-pride-red/10 transition">
-            <span class="iconify text-xl" data-icon="heroicons:arrow-right-on-rectangle"></span>
+          <button @click="handleLogout" class="ml-auto md:ml-2 text-slate-400 hover:text-pride-red p-2 rounded-xl border border-transparent hover:border-pride-red/30 hover:bg-pride-red/10 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+            </svg>
           </button>
         </div>
       </div>
@@ -115,14 +123,16 @@
                 <td class="p-4 pr-6 text-right relative">
                   <!-- Inline Delete for Admin -->
                   <div class="inline-flex justify-end">
-                    <button 
-                      v-if="deletingId !== a.id"
-                      @click="deletingId = a.id"
-                      class="p-2 text-slate-500 hover:text-pride-red hover:bg-pride-red/10 rounded-lg transition opacity-0 group-hover:opacity-100 focus:opacity-100"
-                      title="Eliminar Reporte"
-                    >
-                      <span class="iconify" data-icon="heroicons:trash"></span>
-                    </button>
+                      <button 
+                        v-if="deletingId !== a.id"
+                        @click="deletingId = a.id"
+                        class="p-2 text-slate-500 hover:text-pride-red hover:bg-pride-red/10 rounded-lg transition opacity-0 group-hover:opacity-100 focus:opacity-100"
+                        title="Eliminar Reporte"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>
+                      </button>
                     
                     <div v-else class="flex items-center bg-slate-900 border border-pride-red rounded p-1 absolute right-6 top-1/2 -translate-y-1/2 shadow-lg z-10 w-[140px] justify-between">
                       <span class="text-[10px] font-bold text-pride-red ml-2 leading-none">¿Eliminar?</span>
@@ -139,7 +149,9 @@
             <tbody v-else>
               <tr>
                 <td colspan="6" class="p-12 text-center text-slate-400">
-                  <span class="iconify text-5xl opacity-40 mb-3 mx-auto" data-icon="heroicons:inbox"></span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 opacity-40 mb-3 mx-auto">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                  </svg>
                   <p>No hay ausencias registradas.</p>
                 </td>
               </tr>
@@ -167,12 +179,34 @@ const showPastDates = ref(false)
 const deletingId = ref(null)
 const isDeleting = ref(false)
 
-// Google OAuth Handler
-const handleGoogleLogin = (response) => {
-  // In a real app we'd verify response.credential with our backend
-  console.log("Ingreso exitoso con Google", response)
-  isAuthenticated.value = true
-  fetchAdminData()
+// InsForge Client
+const insforge = useInsforge()
+
+const showBypass = computed(() => {
+  if (import.meta.server) return false
+  return !window.location.hostname.includes('insforge.site')
+})
+
+// Session Handling
+const checkSession = async () => {
+  const { data } = await insforge.auth.getCurrentSession()
+  if (data?.session) {
+    isAuthenticated.value = true
+    fetchAdminData()
+  }
+}
+
+// OAuth Handler
+const loginWithGoogle = async () => {
+  await insforge.auth.signInWithOAuth({
+    provider: 'google',
+    redirectTo: window.location.href
+  })
+}
+
+const handleLogout = async () => {
+  await insforge.auth.signOut()
+  isAuthenticated.value = false
 }
 
 // Data Fetching
@@ -186,8 +220,7 @@ const fetchAdminData = async () => {
 }
 
 onMounted(() => {
-  // If we wanted auto-fetch we could, but let's wait for authentication
-  if (isAuthenticated.value) fetchAdminData()
+  checkSession()
 })
 
 watch(isAuthenticated, (newVal) => {

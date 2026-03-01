@@ -3,7 +3,9 @@
     <!-- Success Message Overlay -->
     <div v-if="submitSuccess" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/95 backdrop-blur-xl z-10 px-6 text-center">
       <div class="w-16 h-16 rounded-full bg-pride-green/20 flex items-center justify-center mb-4">
-        <span class="iconify text-pride-green text-3xl" data-icon="heroicons:check-circle-solid" data-inline="false"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-pride-green">
+          <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12m13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+        </svg>
       </div>
       <h3 class="text-2xl font-bold pridetext mb-2">¡Ausencia Registrada!</h3>
       <p class="text-slate-300 mb-6">Gracias, tu reporte nos ayuda a organizar mejor los entrenamientos.</p>
@@ -39,7 +41,9 @@
         
         <!-- Dynamic Absent Indicator -->
         <p v-if="form.name && form.dateStr" class="text-xs text-pride-light mt-1 animate-pulse">
-          <span class="iconify inline-block mr-1 align-middle" data-icon="heroicons:information-circle" data-inline="false"></span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block mr-1 align-middle">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+          </svg>
           Ausencias en {{ currentSelectedMonthName }}: {{ monthlyAbsencesCount }}
         </p>
       </div>
@@ -72,9 +76,13 @@
               class="flex items-center justify-center px-5 py-2.5 rounded-full text-sm transition-all bg-slate-800 text-slate-300 border border-white/10 hover:bg-slate-700 hover:text-white font-medium pride-glow"
               :class="{'!bg-white !text-slate-900 shadow-md font-bold !border-white': isCustomDateActive}"
             >
-              <span class="iconify mr-2" data-icon="heroicons:calendar-days"></span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+              </svg>
               {{ isCustomDateActive && form.dateStr ? formatDateMedium(form.dateStr) : 'Elegir otra fecha...' }}
-              <span class="iconify ml-2 transition-transform" :class="{'rotate-180': isCalendarOpen}" data-icon="heroicons:chevron-down"></span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-2 transition-transform" :class="{'rotate-180': isCalendarOpen}">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+              </svg>
             </button>
             
             <!-- Custom Premium Dropdown Panel -->
@@ -88,7 +96,9 @@
                      Fechas Futuras (Sáb/Dom)
                    </h4>
                    <button @click="closeCalendarPanel" type="button" class="text-slate-400 hover:text-white transition-colors" title="Cerrar">
-                     <span class="iconify" data-icon="heroicons:x-mark"></span>
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                       <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                     </svg>
                    </button>
                  </div>
                  
@@ -104,7 +114,9 @@
                    >
                      <div v-if="form.dateStr === date.iso" class="absolute left-0 top-0 bottom-0 w-1 bg-pride-blue"></div>
                      <span :class="{'pl-2': form.dateStr === date.iso}">{{ date.labelLong }}</span>
-                     <span v-if="form.dateStr === date.iso" class="iconify text-pride-blue text-lg" data-icon="heroicons:check-circle-solid"></span>
+                     <svg v-if="form.dateStr === date.iso" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-pride-blue">
+                       <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12m13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+                     </svg>
                    </button>
                    
                    <div v-if="!upcomingYearDates.length" class="text-center py-4 text-slate-500 text-xs">
@@ -126,7 +138,11 @@
           <!-- Tlatelolco -->
           <div class="space-y-2 p-4 bg-slate-800/40 border border-white/5 rounded-2xl">
             <h4 class="font-medium text-pride-pink flex items-center gap-2">
-              <span class="iconify" data-icon="heroicons:map-pin"></span> Tlatelolco
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+              </svg>
+              Tlatelolco
             </h4>
             <div class="space-y-2">
               <label 
@@ -147,7 +163,11 @@
           <!-- Cuauhtemoc -->
           <div class="space-y-2 p-4 bg-slate-800/40 border border-white/5 rounded-2xl">
             <h4 class="font-medium text-pride-purple flex items-center gap-2">
-              <span class="iconify" data-icon="heroicons:map-pin"></span> Cuauhtémoc
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+              </svg>
+              Cuauhtémoc
             </h4>
             <div class="space-y-2">
               <label 
@@ -189,7 +209,9 @@
         :disabled="loading"
       >
         <div class="absolute bottom-0 left-0 w-full h-1 pride-bar translate-y-full group-hover:translate-y-0 transition-transform"></div>
-        <span v-if="loading" class="iconify animate-spin" data-icon="heroicons:arrow-path"></span>
+        <svg v-if="loading" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 animate-spin">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
         <span v-else>Confirmar Ausencia</span>
       </button>
 
