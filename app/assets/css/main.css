@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-900 text-white min-h-screen relative font-sans antialiased selection:bg-pink-500 selection:text-white;
+    background-image:
+      radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+      radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 0.2) 0, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 0.2) 0, transparent 50%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-slate-800/30 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0] shadow-black/30 rounded-2xl;
+  }
+
+  .glass-input {
+    @apply bg-slate-900/50 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 rounded-xl px-4 py-3 w-full transition-all duration-300 shadow-inner;
+  }
+
+  .glass-button {
+    @apply relative overflow-hidden bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 text-white rounded-xl px-6 py-3 transition-all duration-300 shadow-lg hover:shadow-xl active:scale-95 flex items-center justify-center font-medium;
+  }
+
+  .pride-gradient-text {
+    background: linear-gradient(90deg, #E40303, #FF8C00, #FFED00, #008026, #24408E, #732982, #5BCEFA, #F5A9B8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .pride-border {
+    position: relative;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+    border-radius: 1rem;
+  }
+
+  .pride-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: -1;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #E40303, #FF8C00, #FFED00, #008026, #24408E, #732982, #5BCEFA, #F5A9B8, #FFFFFF, #613915, #000000);
+  }
+
+  .pride-bar {
+    @apply h-1.5 w-full;
+    background: linear-gradient(90deg, #E40303, #FF8C00, #FFED00, #008026, #24408E, #732982, #5BCEFA, #F5A9B8);
+  }
+
+  .pride-glow {
+    position: relative;
+  }
+
+  .pride-glow::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #E40303 0%, #FF8C00 10%, #FFED00 20%, #008026 30%, #24408E 40%, #732982 50%, #5BCEFA 60%, #F5A9B8 70%);
+    filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .pride-glow:hover::after,
+  .pride-glow-focus:focus-within::after {
+    opacity: 0.4;
+  }
+}
