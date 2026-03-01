@@ -1,7 +1,7 @@
 <template>
-  <div class="glass-panel p-6 sm:p-8 animate-fade-in relative overflow-hidden">
+  <div class="glass-panel p-6 sm:p-8 animate-fade-in relative z-10 w-full max-w-2xl mx-auto">
     <!-- Success Message Overlay -->
-    <div v-if="submitSuccess" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/95 backdrop-blur-xl z-10 px-6 text-center">
+    <div v-if="submitSuccess" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/95 backdrop-blur-xl z-20 px-6 text-center rounded-2xl">
       <div class="w-16 h-16 rounded-full bg-pride-green/20 flex items-center justify-center mb-4">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-pride-green">
           <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12m13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
@@ -85,46 +85,60 @@
               </svg>
             </button>
             
+            
             <!-- Custom Premium Dropdown Panel -->
-            <Transition name="fade-slide">
-              <div v-if="isCalendarOpen" class="absolute top-full right-0 mt-3 w-72 bg-slate-900/90 backdrop-blur-3xl border border-white/20 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.5)] z-30 p-4">
-                 
-                 <!-- Header / PRIDE accents -->
-                 <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
-                   <h4 class="font-bold text-white flex items-center gap-2">
-                     <span class="w-2 h-2 rounded-full pride-bar inline-block"></span>
-                     Fechas Futuras (Sáb/Dom)
-                   </h4>
-                   <button @click="closeCalendarPanel" type="button" class="text-slate-400 hover:text-white transition-colors" title="Cerrar">
-                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                       <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                     </svg>
-                   </button>
-                 </div>
-                 
-                 <!-- Date List -->
-                 <div class="space-y-1 max-h-60 overflow-y-auto pr-1">
-                   <button
-                     v-for="date in upcomingYearDates"
-                     :key="date.iso"
-                     type="button"
-                     @click="selectCustomDate(date.iso)"
-                     class="w-full text-left px-3 py-2.5 rounded-xl text-sm transition-colors flex justify-between items-center group relative overflow-hidden"
-                     :class="form.dateStr === date.iso ? 'bg-pride-blue/20 text-white font-bold border border-pride-blue/30' : 'text-slate-300 hover:bg-white/10 border border-transparent'"
-                   >
-                     <div v-if="form.dateStr === date.iso" class="absolute left-0 top-0 bottom-0 w-1 bg-pride-blue"></div>
-                     <span :class="{'pl-2': form.dateStr === date.iso}">{{ date.labelLong }}</span>
-                     <svg v-if="form.dateStr === date.iso" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-pride-blue">
-                       <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12m13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
-                     </svg>
-                   </button>
-                   
-                   <div v-if="!upcomingYearDates.length" class="text-center py-4 text-slate-500 text-xs">
-                     Cargando fechas...
-                   </div>
-                 </div>
+            <Teleport to="body" :disabled="!isMobile">
+              <!-- Backdrop for mobile -->
+              <div v-if="isCalendarOpen && isMobile" 
+                   class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 animate-fade-in"
+                   @click="closeCalendarPanel">
               </div>
-            </Transition>
+
+              <Transition name="fade-slide">
+                <div v-if="isCalendarOpen" 
+                     @click.stop
+                     class="z-50 bg-slate-900/90 backdrop-blur-3xl border-white/20 shadow-[0_16px_40px_rgba(0,0,0,0.5)] transition-all duration-300
+                            fixed inset-x-0 bottom-0 w-full rounded-t-3xl p-6 max-h-[85vh] flex flex-col
+                            sm:absolute sm:inset-auto sm:top-full sm:right-0 sm:bottom-auto sm:mt-3 sm:w-72 sm:rounded-2xl sm:border sm:p-4 sm:block"
+                >
+                   
+                   <!-- Header / PRIDE accents -->
+                   <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
+                     <h4 class="font-bold text-white flex items-center gap-2">
+                       <span class="w-2 h-2 rounded-full pride-bar inline-block"></span>
+                       Fechas Futuras
+                     </h4>
+                     <button @click="closeCalendarPanel" type="button" class="text-slate-400 hover:text-white transition-colors p-2 -mr-2" title="Cerrar">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                       </svg>
+                     </button>
+                   </div>
+                   
+                   <!-- Date List -->
+                   <div class="space-y-1 overflow-y-auto pr-1 flex-1 custom-scrollbar">
+                     <button
+                       v-for="date in upcomingYearDates"
+                       :key="date.iso"
+                       type="button"
+                       @click="selectCustomDate(date.iso)"
+                       class="w-full text-left px-4 py-3 sm:py-2.5 rounded-xl text-sm transition-colors flex justify-between items-center group relative overflow-hidden active:bg-white/5"
+                       :class="form.dateStr === date.iso ? 'bg-pride-blue/20 text-white font-bold border border-pride-blue/30' : 'text-slate-300 hover:bg-white/10 border border-transparent'"
+                     >
+                       <div v-if="form.dateStr === date.iso" class="absolute left-0 top-0 bottom-0 w-1 bg-pride-blue"></div>
+                       <span :class="{'pl-2': form.dateStr === date.iso}">{{ date.labelLong }}</span>
+                       <svg v-if="form.dateStr === date.iso" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-pride-blue">
+                         <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12m13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+                       </svg>
+                     </button>
+                     
+                     <div v-if="!upcomingYearDates.length" class="text-center py-8 text-slate-500 text-xs">
+                       Cargando fechas...
+                     </div>
+                   </div>
+                </div>
+              </Transition>
+            </Teleport>
           </div>
         </div>
         <p v-if="dateError" class="text-pride-red text-sm mt-2 font-medium bg-pride-red/10 border border-pride-red/30 rounded-lg px-3 py-2 inline-block shadow-lg">{{ dateError }}</p>
@@ -224,7 +238,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { startOfDay, addDays, isSaturday, isSunday, format, parseISO } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
 import { es } from 'date-fns/locale'
@@ -253,6 +267,27 @@ const submitError = ref('')
 const showAutocomplete = ref(false)
 const availableNames = ref([])
 const absencesData = ref([])
+
+
+const isMobile = ref(false)
+
+const updateMobileStatus = () => {
+  if (import.meta.client) {
+    isMobile.value = window.innerWidth < 640
+  }
+}
+
+// Init Mobile Check
+onMounted(() => {
+  updateMobileStatus()
+  window.addEventListener('resize', updateMobileStatus)
+})
+
+onUnmounted(() => {
+  if (import.meta.client) {
+    window.removeEventListener('resize', updateMobileStatus)
+  }
+})
 
 // Fetch Init Data
 onMounted(async () => {
