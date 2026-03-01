@@ -15,6 +15,44 @@
     <!-- Form -->
     <form @submit.prevent="submitForm" class="space-y-6">
       
+      <!-- Sport Selection -->
+      <div class="space-y-3">
+        <label class="block text-sm font-medium text-slate-300 flex items-center gap-2">
+          <span>Deporte</span>
+          <span class="w-1.5 h-1.5 rounded-full pride-bar inline-block"></span>
+        </label>
+        <div class="flex gap-4">
+          <button 
+            type="button"
+            @click="selectSport('swimming')"
+            class="flex-1 p-4 rounded-2xl border transition-all flex flex-col items-center gap-2 group pride-glow"
+            :class="form.sport === 'swimming' ? 'bg-pride-blue/20 border-pride-blue' : 'bg-slate-800/40 border-white/5 hover:border-white/20'"
+          >
+            <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center group-hover:scale-110 transition-transform" :class="{'!bg-pride-blue/30': form.sport === 'swimming'}">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A11.952 11.952 0 0 1 12 15c-2.998 0-5.74-1.1-7.843-2.918M4.284 14.253A8.957 8.957 0 0 1 3 12c0-.778.099-1.533.284-2.253" />
+              </svg>
+            </div>
+            <span class="font-bold text-sm" :class="form.sport === 'swimming' ? 'text-white' : 'text-slate-400'">Natación</span>
+          </button>
+          <button 
+            type="button"
+            @click="selectSport('soccer')"
+            class="flex-1 p-4 rounded-2xl border transition-all flex flex-col items-center gap-2 group pride-glow"
+            :class="form.sport === 'soccer' ? 'bg-pride-green/20 border-pride-green' : 'bg-slate-800/40 border-white/5 hover:border-white/20'"
+          >
+            <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center group-hover:scale-110 transition-transform" :class="{'!bg-pride-green/30': form.sport === 'soccer'}">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.048 8.287 8.287 0 0 0 9 9.6a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1A3.75 3.75 0 0 0 12 18Z" />
+              </svg>
+            </div>
+            <span class="font-bold text-sm" :class="form.sport === 'soccer' ? 'text-white' : 'text-slate-400'">Fútbol</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Shark Name with Autocomplete -->
       <div class="space-y-2 relative pride-glow-focus">
         <label class="block text-sm font-medium text-slate-300 flex items-center gap-2">
@@ -55,10 +93,10 @@
       </div>
 
       <!-- Date Selection -->
-      <div class="space-y-3">
+      <div class="space-y-3" v-if="form.sport">
         <label class="block text-sm font-medium text-slate-300 flex justify-between items-center">
           <span>Fecha de Ausencia</span>
-          <span class="text-xs text-slate-500">Solo Sábado o Domingo</span>
+          <span class="text-xs text-slate-500">{{ form.sport === 'soccer' ? 'Solo Sábados' : 'Solo Sábado o Domingo' }}</span>
         </label>
         
         <div class="flex flex-wrap gap-2">
@@ -151,10 +189,11 @@
       </div>
 
       <!-- Time / Location Slots -->
-      <div class="space-y-3">
+      <div class="space-y-3" v-if="form.sport">
         <label class="block text-sm font-medium text-slate-300">Horario de Entrenamiento</label>
-        <div class="grid sm:grid-cols-2 gap-4">
-          
+        
+        <!-- Swimming Layout -->
+        <div v-if="form.sport === 'swimming'" class="grid sm:grid-cols-2 gap-4">
           <!-- Tlatelolco -->
           <div class="space-y-2 p-4 bg-slate-800/40 border border-white/5 rounded-2xl">
             <h4 class="font-medium text-pride-pink flex items-center gap-2">
@@ -204,12 +243,28 @@
               </label>
             </div>
           </div>
+        </div>
 
+        <!-- Soccer Layout -->
+        <div v-else class="space-y-2 p-4 bg-slate-800/40 border border-white/5 rounded-2xl">
+          <h4 class="font-medium text-pride-green flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+            </svg>
+            Tlatelolco (Fútbol)
+          </h4>
+          <div class="p-4 rounded-xl border border-pride-green bg-pride-green/10 flex items-center">
+            <div class="w-4 h-4 rounded-full border border-pride-green mr-3 flex items-center justify-center">
+              <div class="w-2 h-2 bg-pride-green rounded-full"></div>
+            </div>
+            <span class="text-sm text-slate-200">Sábado 10:00 am - 11:00 am</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-2 px-1">La selección de sede y horario es automática para fútbol.</p>
         </div>
       </div>
 
       <!-- Reason Textarea -->
-      <div class="space-y-2">
+      <div class="space-y-2" v-if="form.sport">
         <label class="block text-sm font-medium text-slate-300">
           Motivo Breve <span class="text-xs text-slate-500 font-normal">(Ej: Enfermedad, viaje, trabajo)</span>
         </label>
@@ -224,6 +279,7 @@
 
       <!-- Submit Button -->
       <button 
+        v-if="form.sport"
         type="submit" 
         class="w-full bg-slate-800 text-white hover:bg-slate-700 hover:text-white py-4 mt-8 text-lg font-black rounded-2xl border border-white/10 shadow-[0_4px_20px_0_rgba(0,0,0,0.3)] transition-all active:scale-[0.98] flex items-center justify-center gap-2 relative overflow-hidden group pride-glow"
         :disabled="loading"
@@ -255,6 +311,7 @@ const cuauhtemocSlots = ['3:00 pm - 4:00 pm', '4:00 pm - 5:00 pm']
 
 // State
 const form = ref({
+  sport: '', // 'swimming' or 'soccer'
   name: '',
   dateStr: '',
   timeSlot: '',
@@ -280,6 +337,21 @@ const isMobile = ref(false)
 const updateMobileStatus = () => {
   if (import.meta.client) {
     isMobile.value = window.innerWidth < 640
+  }
+}
+
+// Actions
+const selectSport = (sport) => {
+  form.value.sport = sport
+  form.value.dateStr = ''
+  form.value.timeSlot = ''
+  form.value.location = ''
+  dateError.value = ''
+  
+  // Auto-set soccer location/slot
+  if (sport === 'soccer') {
+    form.value.location = 'Tlatelolco'
+    form.value.timeSlot = '10:00 am - 11:00 am'
   }
 }
 
@@ -353,7 +425,11 @@ const quickDates = computed(() => {
   let current = getTodayCDMX()
   
   while(dates.length < 5) {
-    if (isSaturday(current) || isSunday(current)) {
+    const allowed = form.value.sport === 'soccer' 
+      ? isSaturday(current) 
+      : (isSaturday(current) || isSunday(current))
+      
+    if (allowed) {
       dates.push({
         iso: format(current, 'yyyy-MM-dd'),
         label: format(current, "EEE d MMM", { locale: es }).replace(/^\w/, c => c.toUpperCase())
@@ -369,10 +445,12 @@ const upcomingYearDates = computed(() => {
   let current = getTodayCDMX()
   const endLimit = addDays(current, 180) // 6 months into the future
   
-  // Skip the first 5 quick dates so we don't duplicate them in the dropdown initially,
-  // or just include all of them. Let's include everything for simplicity.
   while(current < endLimit) {
-    if (isSaturday(current) || isSunday(current)) {
+    const allowed = form.value.sport === 'soccer' 
+      ? isSaturday(current) 
+      : (isSaturday(current) || isSunday(current))
+
+    if (allowed) {
       dates.push({
         iso: format(current, 'yyyy-MM-dd'),
         labelLong: format(current, "EEEE, d 'de' MMMM", { locale: es }).replace(/^\w/, c => c.toUpperCase())
@@ -432,7 +510,8 @@ const submitForm = async () => {
         date: form.value.dateStr,
         timeSlot: form.value.timeSlot,
         location: form.value.location,
-        reason: form.value.reason
+        reason: form.value.reason,
+        sport: form.value.sport
       }
     })
     
@@ -453,6 +532,7 @@ const submitForm = async () => {
 const resetForm = () => {
   submitSuccess.value = false
   form.value = {
+    sport: '',
     name: '',
     dateStr: '',
     timeSlot: '',

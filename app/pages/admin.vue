@@ -89,10 +89,18 @@
       </div>
 
       <!-- Dashboard Stats -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         <div class="glass-panel p-4 bg-gradient-to-br from-slate-800/80 to-slate-900/80">
-          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Total Ausencias</p>
+          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Total</p>
           <p class="text-3xl font-bold">{{ filteredAbsences.length }}</p>
+        </div>
+        <div class="glass-panel p-4 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-t-2 border-t-pride-blue">
+          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Natación</p>
+          <p class="text-3xl font-bold">{{ swimmingCount }}</p>
+        </div>
+        <div class="glass-panel p-4 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-t-2 border-t-pride-green">
+          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Fútbol</p>
+          <p class="text-3xl font-bold">{{ soccerCount }}</p>
         </div>
         <div class="glass-panel p-4 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-t-2 border-t-pride-pink">
           <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Tlatelolco</p>
@@ -101,10 +109,6 @@
         <div class="glass-panel p-4 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-t-2 border-t-pride-purple">
           <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Cuauhtémoc</p>
           <p class="text-3xl font-bold">{{ cuauhtemocCount }}</p>
-        </div>
-        <div class="glass-panel p-4 bg-gradient-to-br from-slate-800/80 to-slate-900/80">
-          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Próxima Fecha</p>
-          <p class="text-xl font-bold pt-1 text-pride-light line-clamp-1">{{ nextDateLabel }}</p>
         </div>
       </div>
 
@@ -115,7 +119,8 @@
             <thead>
               <tr class="bg-slate-900/60 border-b border-white/10 text-xs uppercase tracking-wider text-slate-400 font-semibold">
                 <th class="p-4 pl-6">Fecha</th>
-                <th class="p-4">Nadador</th>
+                <th class="p-4">Shark</th>
+                <th class="p-4">Deporte</th>
                 <th class="p-4">Sede</th>
                 <th class="p-4">Horario</th>
                 <th class="p-4">Motivo</th>
@@ -127,6 +132,19 @@
               <tr v-for="a in filteredAbsences" :key="a.id" class="hover:bg-white/5 transition group">
                 <td class="p-4 pl-6 whitespace-nowrap font-medium">{{ formatDate(a.date) }}</td>
                 <td class="p-4 font-bold text-pride-light">{{ a.name }}</td>
+                <td class="p-4">
+                  <span class="flex items-center gap-1.5 px-2 py-1 rounded inline-flex text-[10px] font-black uppercase tracking-tight"
+                    :class="a.sport === 'soccer' ? 'bg-pride-green/20 text-pride-green' : 'bg-pride-blue/20 text-pride-blue'"
+                  >
+                    <svg v-if="a.sport === 'soccer'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
+                      <path d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.048 8.287 8.287 0 0 0 9 9.6a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
+                    </svg>
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
+                      <path d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A11.952 11.952 0 0 1 12 15c-2.998 0-5.74-1.1-7.843-2.918M4.284 14.253A8.957 8.957 0 0 1 3 12c0-.778.099-1.533.284-2.253" />
+                    </svg>
+                    {{ a.sport === 'soccer' ? 'Fútbol' : 'Natación' }}
+                  </span>
+                </td>
                 <td class="p-4">
                   <span class="px-2 py-1 rounded inline-flex text-xs font-bold"
                     :class="a.location === 'Tlatelolco' ? 'bg-pride-pink/20 text-pride-pink' : 'bg-pride-purple/20 text-pride-purple'"
@@ -269,6 +287,8 @@ const filteredAbsences = computed(() => {
   })
 })
 
+const swimmingCount = computed(() => filteredAbsences.value.filter(a => a.sport === 'swimming' || !a.sport).length)
+const soccerCount = computed(() => filteredAbsences.value.filter(a => a.sport === 'soccer').length)
 const tlatelolcoCount = computed(() => filteredAbsences.value.filter(a => a.location === 'Tlatelolco').length)
 const cuauhtemocCount = computed(() => filteredAbsences.value.filter(a => a.location === 'Cuauhtemoc').length)
 
@@ -301,10 +321,11 @@ const confirmDelete = async (id) => {
 const exportCSV = () => {
   if (!allAbsences.value.length) return alert('No hay datos para exportar')
   
-  const headers = ['ID', 'Nombre', 'Fecha', 'Sede', 'Horario', 'Motivo']
+  const headers = ['ID', 'Nombre', 'Deporte', 'Fecha', 'Sede', 'Horario', 'Motivo']
   const rows = allAbsences.value.map(a => [
     a.id, 
     `"${a.name}"`, 
+    `"${a.sport || 'swimming'}"`,
     a.date, 
     a.location, 
     `"${a.timeSlot}"`, 
@@ -345,15 +366,16 @@ const importCSV = (event) => {
     for (let i = 1; i < lines.length; i++) {
         // Simple regex to split by commas outside of quotes
         const cols = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || []
-        if(cols.length >= 6) {
+        if(cols.length >= 7) {
              const clean = str => str ? str.replace(/^"|"$/g, '').trim() : ''
              newItems.push({
                  id: clean(cols[0]) || Date.now().toString() + i, // Preserve ID or make new if empty
                  name: clean(cols[1]),
-                 date: clean(cols[2]),
-                 location: clean(cols[3]),
-                 timeSlot: clean(cols[4]),
-                 reason: clean(cols[5]) || ''
+                 sport: clean(cols[2]) || 'swimming',
+                 date: clean(cols[3]),
+                 location: clean(cols[4]),
+                 timeSlot: clean(cols[5]),
+                 reason: clean(cols[6]) || ''
              })
         }
     }

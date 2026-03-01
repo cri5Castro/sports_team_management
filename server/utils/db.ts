@@ -1,5 +1,5 @@
 export const absences = [
-    { id: '1', name: 'Alex Rios', date: '2026-03-01', timeSlot: '11:00 am - 12:00 pm', location: 'Tlatelolco', reason: 'Viaje' },
+    { id: '1', name: 'Alex Rios', date: '2026-03-01', timeSlot: '11:00 am - 12:00 pm', location: 'Tlatelolco', reason: 'Viaje', sport: 'swimming' },
 ]
 
 export const getNames = () => {

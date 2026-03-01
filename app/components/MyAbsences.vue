@@ -84,14 +84,25 @@
                 </svg>
                 <span class="font-bold text-white text-lg">{{ formatDate(absence.date) }}</span>
               </div>
-              <div class="flex items-center gap-3 text-sm text-slate-300">
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-300">
+                <span class="flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/5 text-[10px] font-bold uppercase tracking-tight"
+                  :class="absence.sport === 'soccer' ? 'text-pride-green border border-pride-green/20' : 'text-pride-blue border border-pride-blue/20'"
+                >
+                  <svg v-if="absence.sport === 'soccer'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
+                    <path d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.048 8.287 8.287 0 0 0 9 9.6a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
+                  </svg>
+                  <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
+                    <path d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A11.952 11.952 0 0 1 12 15c-2.998 0-5.74-1.1-7.843-2.918M4.284 14.253A8.957 8.957 0 0 1 3 12c0-.778.099-1.533.284-2.253" />
+                  </svg>
+                  {{ absence.sport === 'soccer' ? 'Fútbol' : 'Natación' }}
+                </span>
                 <span class="flex items-center gap-1">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-pride-purple">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                   </svg>
                   {{ absence.timeSlot }}
                 </span>
-                <span class="text-white/20">•</span>
+                <span class="text-white/20 hidden sm:inline">•</span>
                 <span class="flex items-center gap-1">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-pride-pink">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
