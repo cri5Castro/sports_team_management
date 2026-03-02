@@ -56,27 +56,37 @@
         
         <div class="flex items-center gap-3 w-full md:w-auto">
           <!-- Switch for past dates -->
-          <label class="flex items-center cursor-pointer p-2 bg-slate-800/50 border border-white/10 rounded-xl hover:bg-slate-800 transition mr-2">
+          <label class="flex items-center cursor-pointer p-2 bg-slate-800/50 border border-white/10 rounded-xl hover:bg-slate-800 transition">
             <div class="relative">
               <input type="checkbox" v-model="showPastDates" class="sr-only" />
               <div class="block bg-slate-600 w-10 h-6 rounded-full transition" :class="{'bg-pride-green': showPastDates}"></div>
               <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition" :class="{'translate-x-4': showPastDates}"></div>
             </div>
-            <div class="ml-3 text-sm font-medium text-slate-300">Mostrar Pasadas</div>
+            <div class="ml-3 text-[10px] font-bold uppercase tracking-wider text-slate-300">Pasadas</div>
           </label>
 
-          <button @click="exportCSV" class="glass-button !py-2 !px-4 hover:border-pride-green/50 text-sm pride-glow">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 text-pride-green">
+          <!-- Switch for next day only -->
+          <label class="flex items-center cursor-pointer p-2 bg-slate-800/50 border border-white/10 rounded-xl hover:bg-slate-800 transition">
+            <div class="relative">
+              <input type="checkbox" v-model="showNextDayOnly" class="sr-only" />
+              <div class="block bg-slate-600 w-10 h-6 rounded-full transition" :class="{'bg-pride-light': showNextDayOnly}"></div>
+              <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition" :class="{'translate-x-4': showNextDayOnly}"></div>
+            </div>
+            <div class="ml-3 text-[10px] font-bold uppercase tracking-wider text-slate-300">Próxima Fecha</div>
+          </label>
+
+          <button @click="exportCSV" class="glass-button !py-2 !px-4 hover:border-pride-green/50 text-xs pride-glow">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 text-pride-green">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
-            Exportar CSV
+            Exportar
           </button>
           
-          <label class="glass-button !py-2 !px-4 hover:border-pride-blue/50 text-sm cursor-pointer pride-glow">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 text-pride-blue">
+          <label class="glass-button !py-2 !px-4 hover:border-pride-blue/50 text-xs cursor-pointer pride-glow">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 text-pride-blue">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
             </svg>
-            Importar CSV
+            Importar
             <input type="file" accept=".csv" class="hidden" @change="importCSV" />
           </label>
 
@@ -88,28 +98,78 @@
         </div>
       </div>
 
-      <!-- Dashboard Stats -->
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-        <div class="glass-panel p-4 bg-gradient-to-br from-slate-800/80 to-slate-900/80">
-          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Total</p>
-          <p class="text-3xl font-bold">{{ filteredAbsences.length }}</p>
-        </div>
-        <div class="glass-panel p-4 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-t-2 border-t-pride-blue">
-          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Natación</p>
-          <p class="text-3xl font-bold">{{ swimmingCount }}</p>
-        </div>
-        <div class="glass-panel p-4 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-t-2 border-t-pride-green">
-          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Fútbol</p>
-          <p class="text-3xl font-bold">{{ soccerCount }}</p>
-        </div>
-        <div class="glass-panel p-4 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-t-2 border-t-pride-pink">
-          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Tlatelolco</p>
-          <p class="text-3xl font-bold">{{ tlatelolcoCount }}</p>
-        </div>
-        <div class="glass-panel p-4 bg-gradient-to-br from-slate-800/80 to-slate-900/80 border-t-2 border-t-pride-purple">
-          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1">Cuauhtémoc</p>
-          <p class="text-3xl font-bold">{{ cuauhtemocCount }}</p>
-        </div>
+      <!-- Dashboard Stats - Interactive Filters -->
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <button 
+          @click="currentFilter = 'all'"
+          class="glass-panel p-4 text-left transition-all active:scale-95 group"
+          :class="currentFilter === 'all' ? 'ring-2 ring-white bg-white/10' : 'bg-slate-800/80 hover:bg-slate-800'"
+        >
+          <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center justify-between">
+            Total
+            <span v-if="currentFilter === 'all'" class="w-1.5 h-1.5 rounded-full bg-white"></span>
+          </p>
+          <p class="text-3xl font-black">{{ totalCount }}</p>
+        </button>
+
+        <button 
+          @click="currentFilter = 'swimming'"
+          class="glass-panel p-4 text-left border-t-2 transition-all active:scale-95 group relative overflow-hidden"
+          :class="currentFilter === 'swimming' ? 'ring-2 ring-pride-light bg-pride-light/5 border-t-pride-light' : 'bg-slate-800/80 border-t-pride-light hover:bg-slate-800'"
+        >
+          <div class="absolute -right-2 -top-2 opacity-10 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16">
+              <path d="M4 12c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center justify-between relative z-10">
+            Natación
+            <span v-if="currentFilter === 'swimming'" class="w-1.5 h-1.5 rounded-full bg-pride-light"></span>
+          </p>
+          <p class="text-3xl font-black relative z-10">{{ rawSwimmingCount }}</p>
+        </button>
+
+        <button 
+          @click="currentFilter = 'soccer'"
+          class="glass-panel p-4 text-left border-t-2 transition-all active:scale-95 group relative overflow-hidden"
+          :class="currentFilter === 'soccer' ? 'ring-2 ring-pride-green bg-pride-green/5 border-t-pride-green' : 'bg-slate-800/80 border-t-pride-green hover:bg-slate-800'"
+        >
+          <div class="absolute -right-2 -top-2 opacity-10 group-hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M12 7l-3 2v3l3 2 3-2V9zM7 12l2-3-2-3-3 1v4zM17 12l-2-3 2-3 3 1v4zM9 16l3-2 3 2-1 4H10z" fill="currentColor"/>
+            </svg>
+          </div>
+          <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center justify-between relative z-10">
+            Fútbol
+            <span v-if="currentFilter === 'soccer'" class="w-1.5 h-1.5 rounded-full bg-pride-green"></span>
+          </p>
+          <p class="text-3xl font-black relative z-10">{{ rawSoccerCount }}</p>
+        </button>
+
+        <button 
+          @click="currentFilter = 'Tlatelolco'"
+          class="glass-panel p-4 text-left border-t-2 transition-all active:scale-95 group"
+          :class="currentFilter === 'Tlatelolco' ? 'ring-2 ring-pride-pink bg-pride-pink/5 border-t-pride-pink' : 'bg-slate-800/80 border-t-pride-pink hover:bg-slate-800'"
+        >
+          <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center justify-between">
+            Tlatelolco
+            <span v-if="currentFilter === 'Tlatelolco'" class="w-1.5 h-1.5 rounded-full bg-pride-pink"></span>
+          </p>
+          <p class="text-3xl font-black">{{ rawTlatelolcoCount }}</p>
+        </button>
+
+        <button 
+          @click="currentFilter = 'Cuauhtemoc'"
+          class="glass-panel p-4 text-left border-t-2 transition-all active:scale-95 group"
+          :class="currentFilter === 'Cuauhtemoc' ? 'ring-2 ring-pride-purple bg-pride-purple/5 border-t-pride-purple' : 'bg-slate-800/80 border-t-pride-purple hover:bg-slate-800'"
+        >
+          <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center justify-between">
+            Cuauhtémoc
+            <span v-if="currentFilter === 'Cuauhtemoc'" class="w-1.5 h-1.5 rounded-full bg-pride-purple"></span>
+          </p>
+          <p class="text-3xl font-black">{{ rawCuauhtemocCount }}</p>
+        </button>
       </div>
 
       <!-- Table View -->
@@ -134,13 +194,15 @@
                 <td class="p-4 font-bold text-pride-light">{{ a.name }}</td>
                 <td class="p-4">
                   <span class="flex items-center gap-1.5 px-2 py-1 rounded inline-flex text-[10px] font-black uppercase tracking-tight"
-                    :class="a.sport === 'soccer' ? 'bg-pride-green/20 text-pride-green' : 'bg-pride-blue/20 text-pride-blue'"
+                    :class="a.sport === 'soccer' ? 'bg-pride-green/20 text-pride-green' : 'bg-pride-light/20 text-pride-light'"
                   >
-                    <svg v-if="a.sport === 'soccer'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
-                      <path d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.048 8.287 8.287 0 0 0 9 9.6a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
+                    <svg v-if="a.sport === 'soccer'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3">
+                      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M12 7l-3 2v3l3 2 3-2V9zM7 12l2-3-2-3-3 1v4zM17 12l-2-3 2-3 3 1v4zM9 16l3-2 3 2-1 4H10z" fill="currentColor"/>
                     </svg>
-                    <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
-                      <path d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A11.952 11.952 0 0 1 12 15c-2.998 0-5.74-1.1-7.843-2.918M4.284 14.253A8.957 8.957 0 0 1 3 12c0-.778.099-1.533.284-2.253" />
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3">
+                      <path d="M4 12c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      <path d="M4 16c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
                     </svg>
                     {{ a.sport === 'soccer' ? 'Fútbol' : 'Natación' }}
                   </span>
@@ -212,6 +274,8 @@ const isAuthorized = ref(false)
 const userEmail = ref('')
 const allAbsences = ref([])
 const showPastDates = ref(false)
+const showNextDayOnly = ref(false)
+const currentFilter = ref('all')
 const deletingId = ref(null)
 const isDeleting = ref(false)
 
@@ -279,18 +343,57 @@ watch(isAuthenticated, (newVal) => {
 
 // Computeds
 const filteredAbsences = computed(() => {
-  if (showPastDates.value) return allAbsences.value
-  
+  // 1. Filter by Past Dates
+  let result = allAbsences.value
   const todayCDMX = startOfDay(toZonedTime(new Date(), TIMEZONE))
-  return allAbsences.value.filter(a => {
-    return parseISO(a.date).getTime() >= todayCDMX.getTime()
-  })
+  
+  if (!showPastDates.value) {
+    result = result.filter(a => parseISO(a.date).getTime() >= todayCDMX.getTime())
+  }
+  
+  // 2. Filter by Type (Sport or Location)
+  if (currentFilter.value === 'swimming') {
+    result = result.filter(a => a.sport === 'swimming' || !a.sport)
+  } else if (currentFilter.value === 'soccer') {
+    result = result.filter(a => a.sport === 'soccer')
+  } else if (currentFilter.value === 'Tlatelolco' || currentFilter.value === 'Cuauhtemoc') {
+    result = result.filter(a => a.location === currentFilter.value)
+  }
+
+  // 3. Filter by Next Day Only
+  if (showNextDayOnly.value && result.length > 0) {
+    // Sort to find the earliest date in the current selection
+    const sorted = [...result].sort((a, b) => parseISO(a.date).getTime() - parseISO(b.date).getTime())
+    const minDate = sorted[0].date
+    result = result.filter(a => a.date === minDate)
+  }
+
+  return result
 })
 
-const swimmingCount = computed(() => filteredAbsences.value.filter(a => a.sport === 'swimming' || !a.sport).length)
-const soccerCount = computed(() => filteredAbsences.value.filter(a => a.sport === 'soccer').length)
-const tlatelolcoCount = computed(() => filteredAbsences.value.filter(a => a.location === 'Tlatelolco').length)
-const cuauhtemocCount = computed(() => filteredAbsences.value.filter(a => a.location === 'Cuauhtemoc').length)
+// Raw counts for the toggle buttons (showing totals for the current Time/Date filter)
+const absencesAfterTimeFilters = computed(() => {
+  let result = allAbsences.value
+  const todayCDMX = startOfDay(toZonedTime(new Date(), TIMEZONE))
+  
+  if (!showPastDates.value) {
+    result = result.filter(a => parseISO(a.date).getTime() >= todayCDMX.getTime())
+  }
+  
+  if (showNextDayOnly.value && result.length > 0) {
+    const sorted = [...result].sort((a, b) => parseISO(a.date).getTime() - parseISO(b.date).getTime())
+    const minDate = sorted[0].date
+    result = result.filter(a => a.date === minDate)
+  }
+  
+  return result
+})
+
+const totalCount = computed(() => absencesAfterTimeFilters.value.length)
+const rawSwimmingCount = computed(() => absencesAfterTimeFilters.value.filter(a => a.sport === 'swimming' || !a.sport).length)
+const rawSoccerCount = computed(() => absencesAfterTimeFilters.value.filter(a => a.sport === 'soccer').length)
+const rawTlatelolcoCount = computed(() => absencesAfterTimeFilters.value.filter(a => a.location === 'Tlatelolco').length)
+const rawCuauhtemocCount = computed(() => absencesAfterTimeFilters.value.filter(a => a.location === 'Cuauhtemoc').length)
 
 const nextDateLabel = computed(() => {
   if (!filteredAbsences.value.length) return 'N/A'

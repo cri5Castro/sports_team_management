@@ -75,7 +75,7 @@
             class="bg-slate-800/60 border border-white/10 p-4 rounded-xl hover:border-white/20 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden group"
           >
             <!-- Date Banner Decoration -->
-            <div class="absolute left-0 top-0 bottom-0 w-1 bg-pride-blue"></div>
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-pride-light"></div>
 
             <div class="pl-3">
               <div class="flex items-center gap-2 mb-1">
@@ -86,13 +86,15 @@
               </div>
               <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-300">
                 <span class="flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/5 text-[10px] font-bold uppercase tracking-tight"
-                  :class="absence.sport === 'soccer' ? 'text-pride-green border border-pride-green/20' : 'text-pride-blue border border-pride-blue/20'"
+                  :class="absence.sport === 'soccer' ? 'text-pride-green border border-pride-green/20' : 'text-pride-light border border-pride-light/20'"
                 >
-                  <svg v-if="absence.sport === 'soccer'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
-                    <path d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.048 8.287 8.287 0 0 0 9 9.6a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
+                  <svg v-if="absence.sport === 'soccer'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3">
+                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M12 7l-3 2v3l3 2 3-2V9zM7 12l2-3-2-3-3 1v4zM17 12l-2-3 2-3 3 1v4zM9 16l3-2 3 2-1 4H10z" fill="currentColor"/>
                   </svg>
-                  <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
-                    <path d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A11.952 11.952 0 0 1 12 15c-2.998 0-5.74-1.1-7.843-2.918M4.284 14.253A8.957 8.957 0 0 1 3 12c0-.778.099-1.533.284-2.253" />
+                  <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3">
+                    <path d="M4 12c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M4 16c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
                   </svg>
                   {{ absence.sport === 'soccer' ? 'Fútbol' : 'Natación' }}
                 </span>

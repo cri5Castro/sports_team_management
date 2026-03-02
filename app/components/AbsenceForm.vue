@@ -14,7 +14,6 @@
 
     <!-- Form -->
     <form @submit.prevent="submitForm" class="space-y-6">
-      
       <!-- Sport Selection -->
       <div class="space-y-3">
         <label class="block text-sm font-medium text-slate-300 flex items-center gap-2">
@@ -26,29 +25,30 @@
             type="button"
             @click="selectSport('swimming')"
             class="flex-1 p-4 rounded-2xl border transition-all flex flex-col items-center gap-2 group pride-glow"
-            :class="form.sport === 'swimming' ? 'bg-pride-blue/20 border-pride-blue' : 'bg-slate-800/40 border-white/5 hover:border-white/20'"
+            :class="form.sport === 'swimming' ? 'bg-pride-light/20 border-pride-light shadow-[0_0_15px_rgba(91,206,250,0.3)]' : 'bg-slate-800/40 border-white/5 hover:border-white/20'"
           >
-            <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center group-hover:scale-110 transition-transform" :class="{'!bg-pride-blue/30': form.sport === 'swimming'}">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A11.952 11.952 0 0 1 12 15c-2.998 0-5.74-1.1-7.843-2.918M4.284 14.253A8.957 8.957 0 0 1 3 12c0-.778.099-1.533.284-2.253" />
+            <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner" :class="{'!bg-pride-light/40': form.sport === 'swimming'}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-white">
+                <path d="M4 12c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 16c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
               </svg>
             </div>
-            <span class="font-bold text-sm" :class="form.sport === 'swimming' ? 'text-white' : 'text-slate-400'">Natación</span>
+            <span class="font-bold text-sm tracking-wide" :class="form.sport === 'swimming' ? 'text-white' : 'text-slate-400'">Natación</span>
           </button>
           <button 
             type="button"
             @click="selectSport('soccer')"
             class="flex-1 p-4 rounded-2xl border transition-all flex flex-col items-center gap-2 group pride-glow"
-            :class="form.sport === 'soccer' ? 'bg-pride-green/20 border-pride-green' : 'bg-slate-800/40 border-white/5 hover:border-white/20'"
+            :class="form.sport === 'soccer' ? 'bg-pride-green/20 border-pride-green shadow-[0_0_15px_rgba(0,128,38,0.3)]' : 'bg-slate-800/40 border-white/5 hover:border-white/20'"
           >
-            <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center group-hover:scale-110 transition-transform" :class="{'!bg-pride-green/30': form.sport === 'soccer'}">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.048 8.287 8.287 0 0 0 9 9.6a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1A3.75 3.75 0 0 0 12 18Z" />
+            <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner" :class="{'!bg-pride-green/40': form.sport === 'soccer'}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-white">
+                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"/>
+                <path d="M12 2.05v19.9M2.05 12h19.9M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+                <path d="M12 7l-3 2v3l3 2 3-2V9zM7 12l2-3-2-3-3 1v4zM17 12l-2-3 2-3 3 1v4zM9 16l3-2 3 2-1 4H10z" fill="currentColor"/>
               </svg>
             </div>
-            <span class="font-bold text-sm" :class="form.sport === 'soccer' ? 'text-white' : 'text-slate-400'">Fútbol</span>
+            <span class="font-bold text-sm tracking-wide" :class="form.sport === 'soccer' ? 'text-white' : 'text-slate-400'">Fútbol</span>
           </button>
         </div>
       </div>
@@ -65,7 +65,7 @@
           @blur="hideAutocompleteDelay"
           class="glass-input relative z-10" 
           type="text" 
-          placeholder="Escribe tu nombre o apodo..." 
+          placeholder="Escribe tu nombre completo (Apellidos - Nombre)" 
           required 
         />
         <!-- Autocomplete dropdown -->
@@ -77,7 +77,7 @@
             class="px-4 py-3 hover:bg-white/10 cursor-pointer text-slate-200 transition-all flex items-center justify-between group active:bg-white/20 pride-glow"
           >
             <span class="group-hover:translate-x-1 transition-transform">{{ name }}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 text-pride-blue opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 text-pride-light opacity-0 group-hover:opacity-100 transition-opacity">
               <path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" />
             </svg>
           </li>
@@ -102,9 +102,9 @@
         <div class="flex flex-wrap gap-2">
           <!-- Upcoming weekends pills -->
           <button 
-            type="button"
-            v-for="date in quickDates" 
+            v-for="date in quickDates"
             :key="date.iso"
+            type="button"
             @click="selectDate(date.iso)"
             class="px-5 py-2.5 rounded-full text-sm transition-all whitespace-nowrap font-medium pride-glow"
             :class="form.dateStr === date.iso ? 'bg-white text-slate-900 shadow-md scale-105 border border-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-white/10'"
@@ -167,11 +167,11 @@
                        type="button"
                        @click="selectCustomDate(date.iso)"
                        class="w-full text-left px-4 py-3 sm:py-2.5 rounded-xl text-sm transition-colors flex justify-between items-center group relative overflow-hidden active:bg-white/5"
-                       :class="form.dateStr === date.iso ? 'bg-pride-blue/20 text-white font-bold border border-pride-blue/30' : 'text-slate-300 hover:bg-white/10 border border-transparent'"
+                       :class="form.dateStr === date.iso ? 'bg-pride-light/20 text-white font-bold border border-pride-light/30' : 'text-slate-300 hover:bg-white/10 border border-transparent'"
                      >
-                       <div v-if="form.dateStr === date.iso" class="absolute left-0 top-0 bottom-0 w-1 bg-pride-blue"></div>
+                       <div v-if="form.dateStr === date.iso" class="absolute left-0 top-0 bottom-0 w-1 bg-pride-light"></div>
                        <span :class="{'pl-2': form.dateStr === date.iso}">{{ date.labelLong }}</span>
-                       <svg v-if="form.dateStr === date.iso" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-pride-blue">
+                       <svg v-if="form.dateStr === date.iso" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-pride-light">
                          <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12m13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
                        </svg>
                      </button>
@@ -248,8 +248,9 @@
         <!-- Soccer Layout -->
         <div v-else class="space-y-2 p-4 bg-slate-800/40 border border-white/5 rounded-2xl">
           <h4 class="font-medium text-pride-green flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M12 7l-3 2v3l3 2 3-2V9zM7 12l2-3-2-3-3 1v4zM17 12l-2-3 2-3 3 1v4zM9 16l3-2 3 2-1 4H10z" fill="currentColor"/>
             </svg>
             Tlatelolco (Fútbol)
           </h4>

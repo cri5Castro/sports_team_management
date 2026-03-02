@@ -11,6 +11,26 @@
       radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 0.2) 0, transparent 50%);
     background-attachment: fixed;
   }
+
+  @keyframes blob {
+
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+      transform: translate(60px, -80px) scale(1.2);
+    }
+
+    66% {
+      transform: translate(-50px, 40px) scale(0.8);
+    }
+  }
+
+  .animate-blob {
+    animation: blob 7s infinite linear;
+  }
 }
 
 @layer components {
