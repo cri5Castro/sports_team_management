@@ -43,8 +43,7 @@
           >
             <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner" :class="{'!bg-pride-green/40': form.sport === 'soccer'}">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-white">
-                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"/>
-                <path d="M12 2.05v19.9M2.05 12h19.9M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
                 <path d="M12 7l-3 2v3l3 2 3-2V9zM7 12l2-3-2-3-3 1v4zM17 12l-2-3 2-3 3 1v4zM9 16l3-2 3 2-1 4H10z" fill="currentColor"/>
               </svg>
             </div>
@@ -305,6 +304,7 @@ import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { startOfDay, addDays, isSaturday, isSunday, format, parseISO } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
 import { es } from 'date-fns/locale'
+import { isSessionPast } from '~/utils/time'
 
 const TIMEZONE = 'America/Mexico_City'
 const tlatelolcoSlots = ['12:00 pm - 1:00 pm', '1:00 pm - 2:00 pm']
@@ -431,10 +431,23 @@ const quickDates = computed(() => {
       : (isSaturday(current) || isSunday(current))
       
     if (allowed) {
-      dates.push({
-        iso: format(current, 'yyyy-MM-dd'),
-        label: format(current, "EEE d MMM", { locale: es }).replace(/^\w/, c => c.toUpperCase())
-      })
+      const iso = format(current, 'yyyy-MM-dd')
+      const isToday = iso === todayISO
+      
+      let pastAllSlots = false
+      if (isToday) {
+        // For soccer, last (and only) slot is 10:00 am
+        // For swimming, last slot starts at 4:00 pm
+        const lastSlot = form.value.sport === 'soccer' ? '10:00 am - 11:00 am' : '4:00 pm - 5:00 pm'
+        pastAllSlots = isSessionPast(iso, lastSlot)
+      }
+
+      if (!isToday || !pastAllSlots) {
+        dates.push({
+          iso,
+          label: format(current, "EEE d MMM", { locale: es }).replace(/^\w/, c => c.toUpperCase())
+        })
+      }
     }
     current = addDays(current, 1)
   }
@@ -452,10 +465,21 @@ const upcomingYearDates = computed(() => {
       : (isSaturday(current) || isSunday(current))
 
     if (allowed) {
-      dates.push({
-        iso: format(current, 'yyyy-MM-dd'),
-        labelLong: format(current, "EEEE, d 'de' MMMM", { locale: es }).replace(/^\w/, c => c.toUpperCase())
-      })
+      const iso = format(current, 'yyyy-MM-dd')
+      const isToday = iso === todayISO
+      
+      let pastAllSlots = false
+      if (isToday) {
+        const lastSlot = form.value.sport === 'soccer' ? '10:00 am - 11:00 am' : '4:00 pm - 5:00 pm'
+        pastAllSlots = isSessionPast(iso, lastSlot)
+      }
+
+      if (!isToday || !pastAllSlots) {
+        dates.push({
+          iso,
+          labelLong: format(current, "EEEE, d 'de' MMMM", { locale: es }).replace(/^\w/, c => c.toUpperCase())
+        })
+      }
     }
     current = addDays(current, 1)
   }

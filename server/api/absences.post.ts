@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
 
     const newAbsence = {
         id: Date.now().toString(),
+        createdAt: new Date().toISOString(),
         ...body
     }
 

@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <!-- Authenticated View -->
+      <!-- Authenticated View -->
     <div v-else>
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
@@ -51,52 +51,82 @@
             </svg>
             Panel de Administración
           </h1>
-          <p class="text-slate-400 mt-1">Gestión completa de ausencias del equipo Sharkes</p>
+          <p class="text-slate-400 mt-1">Gestión completa del equipo Sharkes</p>
         </div>
         
         <div class="flex items-center gap-3 w-full md:w-auto">
-          <!-- Switch for past dates -->
-          <label class="flex items-center cursor-pointer p-2 bg-slate-800/50 border border-white/10 rounded-xl hover:bg-slate-800 transition">
-            <div class="relative">
-              <input type="checkbox" v-model="showPastDates" class="sr-only" />
-              <div class="block bg-slate-600 w-10 h-6 rounded-full transition" :class="{'bg-pride-green': showPastDates}"></div>
-              <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition" :class="{'translate-x-4': showPastDates}"></div>
-            </div>
-            <div class="ml-3 text-[10px] font-bold uppercase tracking-wider text-slate-300">Pasadas</div>
-          </label>
-
-          <!-- Switch for next day only -->
-          <label class="flex items-center cursor-pointer p-2 bg-slate-800/50 border border-white/10 rounded-xl hover:bg-slate-800 transition">
-            <div class="relative">
-              <input type="checkbox" v-model="showNextDayOnly" class="sr-only" />
-              <div class="block bg-slate-600 w-10 h-6 rounded-full transition" :class="{'bg-pride-light': showNextDayOnly}"></div>
-              <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition" :class="{'translate-x-4': showNextDayOnly}"></div>
-            </div>
-            <div class="ml-3 text-[10px] font-bold uppercase tracking-wider text-slate-300">Próxima Fecha</div>
-          </label>
-
-          <button @click="exportCSV" class="glass-button !py-2 !px-4 hover:border-pride-green/50 text-xs pride-glow">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 text-pride-green">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-            </svg>
-            Exportar
-          </button>
-          
-          <label class="glass-button !py-2 !px-4 hover:border-pride-blue/50 text-xs cursor-pointer pride-glow">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 text-pride-blue">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
-            </svg>
-            Importar
-            <input type="file" accept=".csv" class="hidden" @change="importCSV" />
-          </label>
-
-          <button @click="handleLogout" class="ml-auto md:ml-2 text-slate-400 hover:text-pride-red p-2 rounded-xl border border-transparent hover:border-pride-red/30 hover:bg-pride-red/10 transition">
+          <button @click="handleLogout" class="ml-auto md:ml-0 text-slate-400 hover:text-pride-red p-2 rounded-xl border border-transparent hover:border-pride-red/30 hover:bg-pride-red/10 transition">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
             </svg>
           </button>
         </div>
       </div>
+
+      <!-- Tabbed Navigation -->
+      <div class="flex p-1 bg-slate-800/50 backdrop-blur rounded-2xl w-full max-w-sm border border-white/10 mb-8 mx-auto md:mx-0">
+        <button 
+          @click="adminTab = 'absences'" 
+          class="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all"
+          :class="adminTab === 'absences' ? 'bg-white/15 text-white shadow-lg' : 'text-slate-400 hover:text-white'"
+        >
+          Ausencias
+        </button>
+        <button 
+          @click="adminTab = 'discounts'" 
+          class="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2"
+          :class="adminTab === 'discounts' ? 'bg-white/15 text-pride-light shadow-lg' : 'text-slate-400 hover:text-white'"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+          </svg>
+          Descuentos
+        </button>
+      </div>
+
+      <Transition name="fade" mode="out-in">
+          <!-- Absences View -->
+          <div v-if="adminTab === 'absences'" key="absences">
+              <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                  <h2 class="text-xl font-bold flex items-center gap-2">Gestión de Ausencias</h2>
+                  <div class="flex items-center gap-3 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
+                      <!-- Switch for past dates -->
+                      <label class="flex items-center cursor-pointer p-2.5 bg-slate-900 border border-white/10 rounded-xl hover:border-white/20 transition-all flex-shrink-0 group">
+                        <div class="relative">
+                          <input type="checkbox" v-model="showPastDates" class="sr-only" />
+                          <div class="block w-11 h-6 rounded-full transition-colors duration-300" :class="showPastDates ? 'bg-pride-green shadow-[0_0_15px_rgba(0,128,38,0.4)]' : 'bg-slate-700'"></div>
+                          <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 shadow-lg" :class="{'translate-x-5': showPastDates, 'scale-110': showPastDates}"></div>
+                        </div>
+                        <div class="ml-3 text-[10px] font-black uppercase tracking-widest transition-colors duration-300" :class="showPastDates ? 'text-pride-green' : 'text-slate-400 group-hover:text-slate-300'">Pasadas</div>
+                      </label>
+
+                      <!-- Switch for next day only -->
+                      <label class="flex items-center cursor-pointer p-2.5 bg-slate-900 border border-white/10 rounded-xl hover:border-white/20 transition-all flex-shrink-0 group">
+                        <div class="relative">
+                          <input type="checkbox" v-model="showNextDayOnly" class="sr-only" />
+                          <div class="block w-11 h-6 rounded-full transition-colors duration-300" :class="showNextDayOnly ? 'bg-pride-light shadow-[0_0_15px_rgba(91,206,250,0.4)]' : 'bg-slate-700'"></div>
+                          <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 shadow-lg" :class="{'translate-x-5': showNextDayOnly, 'scale-110': showNextDayOnly}"></div>
+                        </div>
+                        <div class="ml-3 text-[10px] font-black uppercase tracking-widest transition-colors duration-300" :class="showNextDayOnly ? 'text-pride-light' : 'text-slate-400 group-hover:text-slate-300'">Próxima Fecha</div>
+                      </label>
+
+                      <button @click="exportCSV" class="glass-button !py-2 !px-4 hover:border-pride-green/50 text-xs pride-glow flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 text-pride-green">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                        Exportar
+                      </button>
+                      
+                      <label class="glass-button !py-2 !px-4 hover:border-pride-blue/50 text-xs cursor-pointer pride-glow flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 text-pride-blue">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                        </svg>
+                        Importar
+                        <input type="file" accept=".csv" class="hidden" @change="importCSV" />
+                      </label>
+                  </div>
+              </div>
 
       <!-- Dashboard Stats - Interactive Filters -->
       <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
@@ -184,6 +214,7 @@
                 <th class="p-4">Sede</th>
                 <th class="p-4">Horario</th>
                 <th class="p-4">Motivo</th>
+                <th class="p-4">Reportado</th>
                 <th class="p-4 pr-6 text-right">Acción</th>
               </tr>
             </thead>
@@ -216,6 +247,9 @@
                 </td>
                 <td class="p-4 whitespace-nowrap text-sm">{{ a.timeSlot }}</td>
                 <td class="p-4 text-sm text-slate-300 max-w-xs truncate" :title="a.reason">{{ a.reason || '-' }}</td>
+                <td class="p-4 text-[10px] text-slate-400 italic whitespace-nowrap">
+                  {{ a.createdAt ? format(parseISO(a.createdAt), "d MMM, h:mm a", { locale: es }) : '-' }}
+                </td>
                 <td class="p-4 pr-6 text-right relative">
                   <!-- Inline Delete for Admin -->
                   <div class="inline-flex justify-end">
@@ -255,6 +289,14 @@
           </table>
         </div>
       </div>
+      <!-- End Absences View -->
+          </div>
+
+          <!-- Discounts View -->
+          <div v-else-if="adminTab === 'discounts'" key="discounts">
+             <AdminDiscounts />
+          </div>
+      </Transition>
       
     </div>
   </div>
@@ -265,6 +307,7 @@ import { ref, computed, onMounted } from 'vue'
 import { startOfDay, format, parseISO } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
 import { es } from 'date-fns/locale'
+import { isSessionPast } from '~/utils/time'
 
 const TIMEZONE = 'America/Mexico_City'
 
@@ -278,6 +321,7 @@ const showNextDayOnly = ref(false)
 const currentFilter = ref('all')
 const deletingId = ref(null)
 const isDeleting = ref(false)
+const adminTab = ref('absences')
 
 const config = useRuntimeConfig()
 const adminEmails = config.public.adminEmails || []
@@ -345,10 +389,8 @@ watch(isAuthenticated, (newVal) => {
 const filteredAbsences = computed(() => {
   // 1. Filter by Past Dates
   let result = allAbsences.value
-  const todayCDMX = startOfDay(toZonedTime(new Date(), TIMEZONE))
-  
   if (!showPastDates.value) {
-    result = result.filter(a => parseISO(a.date).getTime() >= todayCDMX.getTime())
+    result = result.filter(a => !isSessionPast(a.date, a.timeSlot))
   }
   
   // 2. Filter by Type (Sport or Location)
@@ -374,10 +416,8 @@ const filteredAbsences = computed(() => {
 // Raw counts for the toggle buttons (showing totals for the current Time/Date filter)
 const absencesAfterTimeFilters = computed(() => {
   let result = allAbsences.value
-  const todayCDMX = startOfDay(toZonedTime(new Date(), TIMEZONE))
-  
   if (!showPastDates.value) {
-    result = result.filter(a => parseISO(a.date).getTime() >= todayCDMX.getTime())
+    result = result.filter(a => !isSessionPast(a.date, a.timeSlot))
   }
   
   if (showNextDayOnly.value && result.length > 0) {
@@ -424,7 +464,7 @@ const confirmDelete = async (id) => {
 const exportCSV = () => {
   if (!allAbsences.value.length) return alert('No hay datos para exportar')
   
-  const headers = ['ID', 'Nombre', 'Deporte', 'Fecha', 'Sede', 'Horario', 'Motivo']
+  const headers = ['ID', 'Nombre', 'Deporte', 'Fecha', 'Sede', 'Horario', 'Motivo', 'Reportado']
   const rows = allAbsences.value.map(a => [
     a.id, 
     `"${a.name}"`, 
@@ -432,7 +472,8 @@ const exportCSV = () => {
     a.date, 
     a.location, 
     `"${a.timeSlot}"`, 
-    `"${(a.reason || '').replace(/"/g, '""')}"`
+    `"${(a.reason || '').replace(/"/g, '""')}"`,
+    `"${a.createdAt || ''}"`
   ])
   
   const csvContent = [
@@ -472,13 +513,14 @@ const importCSV = (event) => {
         if(cols.length >= 7) {
              const clean = str => str ? str.replace(/^"|"$/g, '').trim() : ''
              newItems.push({
-                 id: clean(cols[0]) || Date.now().toString() + i, // Preserve ID or make new if empty
+                 id: clean(cols[0]) || Date.now().toString() + i, 
                  name: clean(cols[1]),
                  sport: clean(cols[2]) || 'swimming',
                  date: clean(cols[3]),
                  location: clean(cols[4]),
                  timeSlot: clean(cols[5]),
-                 reason: clean(cols[6]) || ''
+                 reason: clean(cols[6]) || '',
+                 createdAt: clean(cols[7]) || new Date().toISOString()
              })
         }
     }
