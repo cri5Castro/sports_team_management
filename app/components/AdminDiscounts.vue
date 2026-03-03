@@ -332,7 +332,7 @@ const fetchData = async () => {
     loading.value = true
     try {
         const { data, error } = await insforge.database
-           .from('discounts')
+           .from(getTableName('discounts'))
            .select('*')
            .order('created_at', { ascending: false })
            
@@ -400,7 +400,7 @@ const saveDiscount = async () => {
             const safeFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_')
             
             const { data, error } = await insforge.storage
-               .from('discounts')
+               .from(getTableName('discounts'))
                .upload(`images/${safeFileName}`, imageFile.value)
                
             if (error) throw error
@@ -422,13 +422,13 @@ const saveDiscount = async () => {
 
         if (editingId.value) {
             const { error } = await insforge.database
-                .from('discounts')
+                .from(getTableName('discounts'))
                 .update(payload)
                 .eq('id', editingId.value)
             if (error) throw error
         } else {
              const { error } = await insforge.database
-                .from('discounts')
+                .from(getTableName('discounts'))
                 .insert(payload)
              if (error) throw error
         }
@@ -446,7 +446,7 @@ const confirmDelete = async (id) => {
     isSaving.value = true
     try {
         const { error } = await insforge.database
-            .from('discounts')
+            .from(getTableName('discounts'))
             .delete()
             .eq('id', id)
             

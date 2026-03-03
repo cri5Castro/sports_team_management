@@ -1,34 +1,163 @@
-export const absences = [
-    { id: '1', name: 'Castro Maya Cristopher', date: '2026-03-01', timeSlot: '11:00 am - 12:00 pm', location: 'Tlatelolco', reason: 'Viaje', sport: 'swimming', createdAt: '2026-03-01T20:00:00.000Z' },
-]
+import { createClient } from '@insforge/sdk';
 
-export const getNames = () => {
-    const defaultNames = ['Hernandez Pilar Yasmine', 'Castro Maya Cristopher']
-    const names = new Set([...defaultNames, ...absences.map(a => a.name)])
-    return Array.from(names).sort()
-}
+const getClient = () => {
+    const config = useRuntimeConfig();
+    return createClient({
+        baseUrl: config.public.insforgeUrl,
+        anonKey: config.public.insforgeAnonKey
+    });
+};
 
-export const discounts = [
-    {
-        id: '1',
-        title: 'Descuento Fundacional 20%',
-        businessName: 'Sharkes Store',
-        location: 'Tlatelolco y Cuauhtémoc',
-        description: '20% de descuento en la primer compra de equipo oficial deportivo. Válido unicamente el primer mes.',
-        image: null, // base64 string
-        startDate: '2026-03-01',
-        endDate: '2026-03-31',
-        isIndefinite: false
-    },
-    {
-        id: '2',
-        title: 'Bebidas Gratis',
-        businessName: 'Cafetería del Centro',
-        location: 'CDMX',
-        description: 'Al mostrar tu credencial de Sharkes recibe una bebida gratis en la compra de cualquier alimento.',
-        image: null, // base64 string
-        startDate: '',
-        endDate: '',
-        isIndefinite: true
+const getTableName = (baseName: string) => {
+    const isDev = process.env.NODE_ENV === 'development' || process.dev;
+    return isDev ? `dev_${baseName}` : baseName;
+};
+
+export const getAbsences = async () => {
+    const client = getClient();
+    const { data, error } = await client.database
+        .from(getTableName('absences'))
+        .select('*')
+        .order('date', { ascending: true });
+
+    if (error) {
+        console.error('Error fetching absences:', error);
+        return [];
     }
-]
+
+    return data.map((a: any) => ({
+        id: a.id,
+        name: a.name,
+        date: a.date,
+        timeSlot: a.time_slot,
+        location: a.location,
+        reason: a.reason,
+        sport: a.sport,
+        createdAt: a.created_at
+    }));
+};
+
+export const addAbsence = async (body: any) => {
+    const client = getClient();
+    const { data, error } = await client.database
+        .from(getTableName('absences'))
+        .insert({
+            name: body.name,
+            date: body.date,
+            time_slot: body.timeSlot,
+            location: body.location,
+            reason: body.reason,
+            sport: body.sport
+        })
+        .select()
+        .single();
+
+    if (error) {
+        throw createError({
+            statusCode: 500,
+            statusMessage: 'Error saving absence to database: ' + error.message,
+        });
+    }
+
+    return {
+        id: data.id,
+        name: data.name,
+        date: data.date,
+        timeSlot: data.time_slot,
+        location: data.location,
+        reason: data.reason,
+        sport: data.sport,
+        createdAt: data.created_at
+    };
+};
+
+export const deleteAbsence = async (id: string) => {
+    const client = getClient();
+    const { error } = await client.database
+        .from(getTableName('absences'))
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        throw createError({
+            statusCode: 500,
+            statusMessage: 'Error deleting absence: ' + error.message,
+        });
+    }
+
+    return { success: true };
+};
+
+export const overwriteAbsences = async (items: any[]) => {
+    const client = getClient();
+
+    // Deleting all requires a filter. Since ids are UUIDs, we can filter for anything not null.
+    const { error: deleteError } = await client.database
+        .from(getTableName('absences'))
+        .delete()
+        .neq('name', '___NON_EXISTENT_NAME___');
+
+    if (deleteError) {
+        throw createError({
+            statusCode: 500,
+            statusMessage: 'Error clearing absences for overwrite: ' + deleteError.message,
+        });
+    }
+
+    if (items.length === 0) return { success: true, count: 0 };
+
+    const formattedItems = items.map(a => ({
+        name: a.name,
+        date: a.date,
+        time_slot: a.timeSlot,
+        location: a.location,
+        reason: a.reason,
+        sport: a.sport
+    }));
+
+    const { data, error: insertError } = await client.database
+        .from(getTableName('absences'))
+        .insert(formattedItems)
+        .select();
+
+    if (insertError) {
+        throw createError({
+            statusCode: 500,
+            statusMessage: 'Error inserting bulk absences: ' + insertError.message,
+        });
+    }
+
+    return { success: true, count: data.length };
+};
+
+export const getNames = async () => {
+    const defaultNames = ['Hernandez Pilar Yasmine', 'Castro Maya Cristopher'];
+    const absencesData = await getAbsences();
+    const names = new Set([...defaultNames, ...absencesData.map(a => a.name)]);
+    return Array.from(names).sort();
+};
+
+export const getDiscounts = async () => {
+    const client = getClient();
+    const { data, error } = await client.database
+        .from(getTableName('discounts'))
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching discounts:', error);
+        return [];
+    }
+
+    return data.map((d: any) => ({
+        id: d.id,
+        title: d.title,
+        businessName: d.business_name,
+        location: d.location,
+        description: d.description,
+        image: d.image_url,
+        startDate: d.start_date,
+        endDate: d.end_date,
+        isIndefinite: d.is_indefinite
+    }));
+};

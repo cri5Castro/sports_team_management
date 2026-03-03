@@ -170,7 +170,7 @@ const fetchDiscounts = async () => {
     loading.value = true
     try {
         const { data, error } = await insforge.database
-            .from('discounts')
+            .from(getTableName('discounts'))
             .select('*')
             .order('created_at', { ascending: false })
             

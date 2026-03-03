@@ -1,12 +1,10 @@
-import { absences } from '../../utils/db'
+import { deleteAbsence } from '../../utils/db'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
     const id = getRouterParam(event, 'id')
-
-    const index = absences.findIndex(a => a.id === id)
-    if (index !== -1) {
-        absences.splice(index, 1)
+    if (!id) {
+        throw createError({ statusCode: 400, message: 'Missing ID' })
     }
 
-    return { success: true }
+    return await deleteAbsence(id)
 })

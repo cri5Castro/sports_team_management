@@ -1,4 +1,4 @@
-import { absences } from '../utils/db'
+import { addAbsence } from '../utils/db'
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)
@@ -11,12 +11,6 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    const newAbsence = {
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString(),
-        ...body
-    }
-
-    absences.push(newAbsence)
+    const newAbsence = await addAbsence(body)
     return newAbsence
 })

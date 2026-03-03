@@ -21,3 +21,12 @@ export const useInsforge = () => {
 
     return clientInstance;
 };
+
+/**
+ * Returns the environment-appropriate table name.
+ * If running in development mode, prefixes the table name with 'dev_'.
+ */
+export const getTableName = (baseName: string) => {
+    // process.dev is a Nuxt-specific boolean for development mode
+    return process.dev ? `dev_${baseName}` : baseName;
+};
