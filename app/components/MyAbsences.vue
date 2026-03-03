@@ -119,7 +119,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-pride-purple">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    {{ absence.timeSlot }}
+                    {{ absence.time_slot }}
                   </span>
                   <span class="text-white/20 hidden sm:inline">•</span>
                   <span class="flex items-center gap-1">
@@ -224,6 +224,8 @@ import { toZonedTime } from 'date-fns-tz'
 import { es } from 'date-fns/locale'
 import { isSessionPast } from '~/utils/time'
 
+const insforge = useInsforge()
+
 const TIMEZONE = 'America/Mexico_City'
 
 // State
@@ -242,19 +244,25 @@ const isDeleting = ref(false)
 
 // Computed
 const upcomingAbsences = computed(() => {
-  return allAbsences.value.filter(a => !isSessionPast(a.date, a.timeSlot))
+  return allAbsences.value.filter(a => !isSessionPast(a.date, a.time_slot))
 })
 
 const pastAbsences = computed(() => {
-  return allAbsences.value.filter(a => isSessionPast(a.date, a.timeSlot))
+  return allAbsences.value.filter(a => isSessionPast(a.date, a.time_slot))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 })
 
 // Fetch Init Data
 onMounted(async () => {
   try {
-    const namesRes = await $fetch('/api/names')
-    availableNames.value = namesRes || []
+    const { data: absences, error } = await insforge.database
+      .from('absences')
+      .select('name')
+    
+    if (error) throw error
+    
+    const dbNames = [...new Set(absences.map(a => a.name))]
+    availableNames.value = dbNames.sort()
   } catch (e) {
     console.error('Error loading names', e)
   }
@@ -288,8 +296,13 @@ const fetchUserAbsences = async () => {
   showHistory.value = false
   
   try {
-    const res = await $fetch(`/api/absences?name=${encodeURIComponent(searchQuery.value)}`)
-    allAbsences.value = res || []
+    const { data, error } = await insforge.database
+      .from('absences')
+      .select('*')
+      .eq('name', searchQuery.value)
+    
+    if (error) throw error
+    allAbsences.value = data || []
   } catch (e) {
     console.error('Failed to fetch user absences', e)
     allAbsences.value = []
@@ -303,11 +316,18 @@ const confirmDelete = async (id) => {
   isDeleting.value = true
   try {
     // Optimistic UI update
+    const previousAbsences = [...allAbsences.value]
     allAbsences.value = allAbsences.value.filter(a => a.id !== id)
     
-    // Perform backend call
-    await $fetch(`/api/absences/${id}`, { method: 'DELETE' })
+    const { error } = await insforge.database
+      .from('absences')
+      .delete()
+      .eq('id', id)
     
+    if (error) {
+      allAbsences.value = previousAbsences
+      throw error
+    }
   } catch (err) {
     console.error('Delete failed:', err)
   } finally {

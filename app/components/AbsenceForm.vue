@@ -306,6 +306,8 @@ import { toZonedTime } from 'date-fns-tz'
 import { es } from 'date-fns/locale'
 import { isSessionPast } from '~/utils/time'
 
+const insforge = useInsforge()
+
 const TIMEZONE = 'America/Mexico_City'
 const tlatelolcoSlots = ['12:00 pm - 1:00 pm', '1:00 pm - 2:00 pm']
 const cuauhtemocSlots = ['3:00 pm - 4:00 pm', '4:00 pm - 5:00 pm']
@@ -371,12 +373,18 @@ onUnmounted(() => {
 // Fetch Init Data
 onMounted(async () => {
   try {
-    const [namesRes, absencesRes] = await Promise.all([
-      $fetch('/api/names'),
-      $fetch('/api/absences')
-    ])
-    availableNames.value = namesRes || []
-    absencesData.value = absencesRes || []
+    const { data: absences, error } = await insforge.database
+      .from('absences')
+      .select('name, date')
+      .order('date', { ascending: false })
+    
+    if (error) throw error
+    
+    absencesData.value = absences || []
+    
+    const defaultNames = ['Hernandez Pilar Yasmine', 'Castro Maya Cristopher']
+    const dbNames = [...new Set(absences.map(a => a.name))]
+    availableNames.value = [...new Set([...defaultNames, ...dbNames])].sort()
   } catch (e) {
     console.error('Error loading initial data', e)
   }
@@ -528,22 +536,28 @@ const submitForm = async () => {
   submitError.value = ''
   
   try {
-    const newAbsence = await $fetch('/api/absences', {
-      method: 'POST',
-      body: {
-        name: form.value.name,
-        date: form.value.dateStr,
-        timeSlot: form.value.timeSlot,
-        location: form.value.location,
-        reason: form.value.reason,
-        sport: form.value.sport
-      }
-    })
+    const submission = {
+      name: form.value.name,
+      date: form.value.dateStr,
+      time_slot: form.value.timeSlot,
+      location: form.value.location,
+      reason: form.value.reason,
+      sport: form.value.sport
+    }
+
+    const { data, error } = await insforge.database
+      .from('absences')
+      .insert([submission])
+      .select()
+      .single()
+    
+    if (error) throw error
     
     // update local state
-    absencesData.value.push(newAbsence)
+    absencesData.value.push(data)
     if (!availableNames.value.includes(form.value.name)) {
       availableNames.value.push(form.value.name)
+      availableNames.value.sort()
     }
     
     submitSuccess.value = true

@@ -245,7 +245,7 @@
                     {{ a.location }}
                   </span>
                 </td>
-                <td class="p-4 whitespace-nowrap text-sm">{{ a.timeSlot }}</td>
+                <td class="p-4 whitespace-nowrap text-sm">{{ a.time_slot }}</td>
                 <td class="p-4 text-sm text-slate-300 max-w-xs truncate" :title="a.reason">{{ a.reason || '-' }}</td>
                 <td class="p-4 text-[10px] text-slate-400 italic whitespace-nowrap">
                   {{ a.createdAt ? format(parseISO(a.createdAt), "d MMM, h:mm a", { locale: es }) : '-' }}
@@ -368,8 +368,13 @@ const handleLogout = async () => {
 // Data Fetching
 const fetchAdminData = async () => {
   try {
-    const res = await $fetch('/api/absences')
-    allAbsences.value = res || []
+    const { data, error } = await insforge.database
+      .from('absences')
+      .select('*')
+      .order('date', { ascending: false })
+    
+    if (error) throw error
+    allAbsences.value = data || []
   } catch (err) {
     console.error('Error al obtener datos', err)
   }
@@ -390,7 +395,7 @@ const filteredAbsences = computed(() => {
   // 1. Filter by Past Dates
   let result = allAbsences.value
   if (!showPastDates.value) {
-    result = result.filter(a => !isSessionPast(a.date, a.timeSlot))
+    result = result.filter(a => !isSessionPast(a.date, a.time_slot))
   }
   
   // 2. Filter by Type (Sport or Location)
@@ -417,7 +422,7 @@ const filteredAbsences = computed(() => {
 const absencesAfterTimeFilters = computed(() => {
   let result = allAbsences.value
   if (!showPastDates.value) {
-    result = result.filter(a => !isSessionPast(a.date, a.timeSlot))
+    result = result.filter(a => !isSessionPast(a.date, a.time_slot))
   }
   
   if (showNextDayOnly.value && result.length > 0) {
@@ -450,7 +455,12 @@ const formatDate = (isoStr) => {
 const confirmDelete = async (id) => {
   isDeleting.value = true
   try {
-    await $fetch(`/api/absences/${id}`, { method: 'DELETE' })
+    const { error } = await insforge.database
+      .from('absences')
+      .delete()
+      .eq('id', id)
+    
+    if (error) throw error
     allAbsences.value = allAbsences.value.filter(a => a.id !== id)
   } catch (err) {
     console.error(err)
@@ -471,7 +481,7 @@ const exportCSV = () => {
     `"${a.sport || 'swimming'}"`,
     a.date, 
     a.location, 
-    `"${a.timeSlot}"`, 
+    `"${a.time_slot}"`, 
     `"${(a.reason || '').replace(/"/g, '""')}"`,
     `"${a.createdAt || ''}"`
   ])
@@ -516,9 +526,9 @@ const importCSV = (event) => {
                  id: clean(cols[0]) || Date.now().toString() + i, 
                  name: clean(cols[1]),
                  sport: clean(cols[2]) || 'swimming',
-                 date: clean(cols[3]),
-                 location: clean(cols[4]),
-                 timeSlot: clean(cols[5]),
+                  date: clean(cols[3]),
+                  location: clean(cols[4]),
+                  time_slot: clean(cols[5]),
                  reason: clean(cols[6]) || '',
                  createdAt: clean(cols[7]) || new Date().toISOString()
              })
@@ -530,13 +540,15 @@ const importCSV = (event) => {
       // We will bulk overwrite here locally via manual mock array push. Wait, the req says "Importar CSV: Allows uploading a .csv file to overwrite or populate the records."
       // Since our mock backend just keeps an array, let's create a POST /api/absences/bulk route
       try {
-        await $fetch('/api/absences/bulk', {
-          method: 'POST',
-          body: { items: newItems }
-        })
+        const { error } = await insforge.database
+          .from('absences')
+          .insert(newItems)
+        
+        if (error) throw error
         await fetchAdminData() // refresh from server
         alert(`Se importaron ${newItems.length} registros con éxito.`)
       } catch(err) {
+        console.error(err)
         alert("Error al guardar registros en el backend")
       }
     }
