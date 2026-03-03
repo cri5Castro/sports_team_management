@@ -100,10 +100,30 @@ sequenceDiagram
 ---
 
 
-### 👤 Member Portal
-The member portal is designed for simplicity and speed. Athletes can quickly report their absences for upcoming sessions.
+### 👤 Member Portal — Visual Demos
 
-![Member Portal](./public/member_portal.png)
+The member portal is designed for simplicity and speed. Below are live UX demonstrations of the key flows:
+
+#### Flow 1: Reportar Ausencia
+> Search for a member using auto-suggestions, select a sport, choose a date & time slot, and fill in the reason.
+
+<img src="./public/demo_reportar_ausencia.webp" alt="Reportar Ausencia Flow" width="100%">
+
+---
+
+#### Flow 2: Mis Ausencias
+> Look up a member's absence history — type "castro" to trigger autocomplete, select the user, and view upcoming scheduled absences at a glance.
+
+<img src="./public/demo_mis_ausencias.webp" alt="Mis Ausencias Flow" width="100%">
+
+---
+
+#### Flow 3: Beneficios
+> Browse exclusive team discounts and perks. Coupons display with QR codes, status badges, and location details.
+
+<img src="./public/demo_beneficios.webp" alt="Beneficios Flow" width="100%">
+
+---
 
 ### 🔐 Admin Dashboard
 The admin panel provides total control over team operations, including attendance reports and benefit management.
@@ -111,8 +131,6 @@ The admin panel provides total control over team operations, including attendanc
 | Absence Management | Discount Management |
 |--------------------|---------------------|
 | ![Admin Absences](./public/admin_absences.png) | ![Admin Discounts](./public/admin_discounts.png) |
-
-</details>
 
 ---
 
