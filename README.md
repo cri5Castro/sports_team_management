@@ -103,6 +103,14 @@ sequenceDiagram
 
 ## 📸 Visual Walkthrough
 
+### 📱 Mobile Experience & UX Flow
+Sharkes is fully optimized for mobile devices. See the complete flow—from reporting an absence to discovering community benefits—in our interactive mobile view.
+
+![Member Portal Mobile UX](./public/member_portal_ux.webp)
+
+<details>
+<summary>View Desktop Interfaces</summary>
+
 ### 👤 Member Portal
 The member portal is designed for simplicity and speed. Athletes can quickly report their absences for upcoming sessions.
 
@@ -114,6 +122,8 @@ The admin panel provides total control over team operations, including attendanc
 | Absence Management | Discount Management |
 |--------------------|---------------------|
 | ![Admin Absences](./public/admin_absences.png) | ![Admin Discounts](./public/admin_discounts.png) |
+
+</details>
 
 ---
 
