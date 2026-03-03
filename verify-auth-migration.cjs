@@ -28,8 +28,8 @@ async function verifyAuthMigration() {
 
     console.log('\n--- Verifying Admin Checks ---');
     const testEmails = [
-        'criscastromaya@gmail.com', // Admin
-        'yashb6315@gmail.com',      // Admin
+        'admin1@example.com', // Admin (mapped to Cris)
+        'admin2@example.com', // Admin (mapped to Yash)
         'non-admin@example.com'     // Not in DB
     ];
 
