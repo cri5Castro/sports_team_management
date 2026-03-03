@@ -99,6 +99,24 @@ sequenceDiagram
 
 ---
 
+---
+
+## 📸 Visual Walkthrough
+
+### 👤 Member Portal
+The member portal is designed for simplicity and speed. Athletes can quickly report their absences for upcoming sessions.
+
+![Member Portal](./public/member_portal.png)
+
+### 🔐 Admin Dashboard
+The admin panel provides total control over team operations, including attendance reports and benefit management.
+
+| Absence Management | Discount Management |
+|--------------------|---------------------|
+| ![Admin Absences](./public/admin_absences.png) | ![Admin Discounts](./public/admin_discounts.png) |
+
+---
+
 ## 🛠️ Tech Stack
 
 - **Nuxt 4**: Hybrid Vue Framework for optimal performance.
