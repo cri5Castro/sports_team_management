@@ -7,8 +7,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       insforgeUrl: process.env.NUXT_PUBLIC_INSFORGE_URL || 'https://t3tzpuc3.us-west.insforge.app',
-      insforgeAnonKey: process.env.NUXT_PUBLIC_INSFORGE_ANON_KEY || '',
-      adminEmails: (process.env.NUXT_ADMIN_EMAILS || 'yashb6315@gmail.com,criscastromaya@gmail.com').split(',')
+      insforgeAnonKey: process.env.NUXT_PUBLIC_INSFORGE_ANON_KEY || ''
     }
   }
 })

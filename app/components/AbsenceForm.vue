@@ -307,6 +307,7 @@ import { es } from 'date-fns/locale'
 import { isSessionPast } from '~/utils/time'
 
 const insforge = useInsforge()
+import { getTableName } from '~/utils/insforge'
 
 const TIMEZONE = 'America/Mexico_City'
 const tlatelolcoSlots = ['12:00 pm - 1:00 pm', '1:00 pm - 2:00 pm']
@@ -373,20 +374,28 @@ onUnmounted(() => {
 // Fetch Init Data
 onMounted(async () => {
   try {
-    const { data: absences, error } = await insforge.database
-      .from('absences')
+    // 1. Fetch official member names
+    const { data: members, error: membersError } = await insforge.database
+      .from(getTableName('members'))
+      .select('name')
+      .order('name', { ascending: true })
+    
+    if (membersError) throw membersError
+    availableNames.value = (members || []).map(m => m.name)
+
+    // 2. Fetch absences for indicator logic
+    const { data: absences, error: absencesError } = await insforge.database
+      .from(getTableName('absences'))
       .select('name, date')
       .order('date', { ascending: false })
     
-    if (error) throw error
-    
+    if (absencesError) throw absencesError
     absencesData.value = absences || []
     
-    const defaultNames = ['Hernandez Pilar Yasmine', 'Castro Maya Cristopher']
-    const dbNames = [...new Set(absences.map(a => a.name))]
-    availableNames.value = [...new Set([...defaultNames, ...dbNames])].sort()
   } catch (e) {
     console.error('Error loading initial data', e)
+    // Fallback if DB fails
+    availableNames.value = ['Castro Maya Cristopher', 'Hernandez Pilar Yasmine']
   }
 })
 
@@ -546,7 +555,7 @@ const submitForm = async () => {
     }
 
     const { data, error } = await insforge.database
-      .from('absences')
+      .from(getTableName('absences'))
       .insert([submission])
       .select()
       .single()

@@ -323,11 +323,9 @@ const deletingId = ref(null)
 const isDeleting = ref(false)
 const adminTab = ref('absences')
 
-const config = useRuntimeConfig()
-const adminEmails = config.public.adminEmails || []
-
 // InsForge Client
 const insforge = useInsforge()
+import { getTableName } from '~/utils/insforge'
 
 const showBypass = computed(() => {
   if (import.meta.server) return false
@@ -341,8 +339,19 @@ const checkSession = async () => {
     isAuthenticated.value = true
     userEmail.value = data.session.user?.email || ''
     
-    // Check if email is in whitelist
-    isAuthorized.value = adminEmails.includes(userEmail.value.toLowerCase())
+    // Check if email is in whitelist via database
+    try {
+      const { data: adminData } = await insforge.database
+        .from(getTableName('members'))
+        .select('is_admin')
+        .eq('email', userEmail.value.toLowerCase())
+        .maybeSingle()
+        
+      isAuthorized.value = adminData?.is_admin === true
+    } catch (err) {
+      console.error('Error verifying authorization', err)
+      isAuthorized.value = false
+    }
     
     if (isAuthorized.value) {
       fetchAdminData()
@@ -369,7 +378,7 @@ const handleLogout = async () => {
 const fetchAdminData = async () => {
   try {
     const { data, error } = await insforge.database
-      .from('absences')
+      .from(getTableName('absences'))
       .select('*')
       .order('date', { ascending: false })
     
@@ -386,7 +395,7 @@ onMounted(() => {
 
 watch(isAuthenticated, (newVal) => {
   if (newVal) {
-    fetchAdminData()
+    checkSession() // Re-check session to get authorization
   }
 })
 
@@ -456,7 +465,7 @@ const confirmDelete = async (id) => {
   isDeleting.value = true
   try {
     const { error } = await insforge.database
-      .from('absences')
+      .from(getTableName('absences'))
       .delete()
       .eq('id', id)
     
@@ -536,12 +545,9 @@ const importCSV = (event) => {
     }
     
     if (newItems.length > 0) {
-      // In a real app, send each or bulk to server.
-      // We will bulk overwrite here locally via manual mock array push. Wait, the req says "Importar CSV: Allows uploading a .csv file to overwrite or populate the records."
-      // Since our mock backend just keeps an array, let's create a POST /api/absences/bulk route
       try {
         const { error } = await insforge.database
-          .from('absences')
+          .from(getTableName('absences'))
           .insert(newItems)
         
         if (error) throw error

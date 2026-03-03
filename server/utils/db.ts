@@ -131,10 +131,35 @@ export const overwriteAbsences = async (items: any[]) => {
 };
 
 export const getNames = async () => {
-    const defaultNames = ['Hernandez Pilar Yasmine', 'Castro Maya Cristopher'];
-    const absencesData = await getAbsences();
-    const names = new Set([...defaultNames, ...absencesData.map(a => a.name)]);
-    return Array.from(names).sort();
+    const client = getClient();
+    const { data, error } = await client.database
+        .from(getTableName('members'))
+        .select('name')
+        .order('name', { ascending: true });
+
+    if (error) {
+        console.error('Error fetching names:', error);
+        return ['Castro Maya Cristopher', 'Hernandez Pilar Yasmine'];
+    }
+
+    return data.map((m: any) => m.name);
+};
+
+export const isAdmin = async (email: string) => {
+    if (!email) return false;
+    const client = getClient();
+    const { data, error } = await client.database
+        .from(getTableName('members'))
+        .select('is_admin')
+        .eq('email', email.toLowerCase())
+        .maybeSingle();
+
+    if (error) {
+        console.error('Error checking admin status:', error);
+        return false;
+    }
+
+    return data?.is_admin === true;
 };
 
 export const getDiscounts = async () => {
