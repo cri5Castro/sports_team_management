@@ -329,7 +329,9 @@ import { getTableName } from '~/utils/insforge'
 
 const showBypass = computed(() => {
   if (import.meta.server) return false
-  return !window.location.hostname.includes('insforge.site')
+  const config = useRuntimeConfig()
+  const isDemoMode = config.public.demoMode === 'true' || config.public.demoMode === true
+  return isDemoMode || !window.location.hostname.includes('insforge.site')
 })
 
 // Session Handling

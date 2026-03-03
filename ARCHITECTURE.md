@@ -41,6 +41,20 @@ graph TD
     AP -.-> Storage
 ```
 
+## 🔀 Dual Deployment Strategy
+
+The application leverages a unified backend logic but is deployed into two distinct environments to ensure testing safety and production stability:
+
+1. **Production Deployment**: 
+   - Uses standard, production-ready tables and authentication flows.
+   - Connected to the primary InsForge project.
+   - Designed for end-users and community members.
+
+2. **Demo Deployment**: 
+   - A completely secondary project serving as a staging/demo environment.
+   - Driven by the `NUXT_PUBLIC_DEMO_MODE=true` environment variable.
+   - Utilizes testing infrastructure and includes "admin bypass" functionalities to easily demonstrate features without requiring standard authentication flows.
+
 ## 📁 Directory Structure
 
 ```text

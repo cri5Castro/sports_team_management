@@ -85,10 +85,28 @@ sequenceDiagram
    ```
 
 3. **Environment Setup**
-   Create a `.env` file in the root directory:
+   Create a `.env` file in the root directory. We use a dual deployment strategy (Production and Demo). The demo environment connects to a separate demo database and enables `NUXT_PUBLIC_DEMO_MODE` to provide admin bypass options.
+   
+   Here is a template for the `.env` file:
    ```env
-   NUXT_PUBLIC_INSFORGE_PROJECT_URL=your_project_url
-   NUXT_PUBLIC_INSFORGE_ANON_KEY=your_anon_key
+   # Default Environment (Local Development fallback)
+   NUXT_PUBLIC_INSFORGE_URL=your_default_url
+   NUXT_PUBLIC_INSFORGE_ANON_KEY=your_default_anon_key
+
+   # Enable Demo Mode for admin bypass and dev tables (Set to 'true' in demo environment)
+   NUXT_PUBLIC_DEMO_MODE=false
+   
+   # Production Deployment Config
+   PROD_API_KEY=your_prod_api_key
+   PROD_API_URL=your_prod_api_url
+   PROD_ANON_KEY=your_prod_anon_key
+   PROD_SITE_URL=your_prod_site_url
+   
+   # Demo Deployment Config
+   DEMO_API_KEY=your_demo_api_key
+   DEMO_API_URL=your_demo_api_url
+   DEMO_ANON_KEY=your_demo_anon_key
+   DEMO_SITE_URL=your_demo_site_url
    ```
 
 4. **Launch Development Server**
@@ -96,6 +114,14 @@ sequenceDiagram
    npm run dev
    ```
    Open `http://localhost:3000` in your browser.
+
+---
+
+### 🔀 Dual Deployment Strategy requirements
+
+Sharkes implements a dual deployment pipeline to separate live user app from testing environments:
+- **Production (Live)**: Connects to the main InsForge backend. `NUXT_PUBLIC_DEMO_MODE` is disabled.
+- **Demo (Secondary Project)**: Connects to a secondary InsForge backend. `NUXT_PUBLIC_DEMO_MODE=true` is enabling testing and admin bypass functionalities without affecting the live database.
 
 ---
 
