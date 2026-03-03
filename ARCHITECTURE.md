@@ -2,6 +2,9 @@
 
 Sharkes is a custom-engineered system designed to modernize operations for the **Sharkes Community in CDMX**. This ad-hoc architecture prioritizes high-performance and developer-friendly abstractions, serving as a real-world case study for building integrated community platforms.
 
+### 🤖 AI Agentic Accelerated Development
+This project was built using an **AI Agentic Accelerated Development** workflow. By collaborating closely with autonomous AI coding agents, complex architectural designs, intricate component logic, and the high-end UX were rapidly prototyped, iterated, and deployed. This approach highlights the capabilities of modern AI in scaling robust engineering practices while maintaining a premium standard of code quality and design.
+
 ## 🌐 Overview
 
 The application follows a modern **Jamstack** architecture:

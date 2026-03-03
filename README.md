@@ -9,8 +9,11 @@
 [![Vue 3](https://img.shields.io/badge/Vue-3.5-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Open Source](https://img.shields.io/badge/Open%20Source-%E2%9D%A4-red?style=for-the-badge)](https://github.com/your-username/sports_team_management)
+[![AI Accelerated](https://img.shields.io/badge/AI_Accelerated-Agentic-blueviolet?style=for-the-badge)](#)
 
 **Sharkes** is a custom-built digital operations center for the **Sharkes Sports Community in Mexico City**. While it serves as the production hub for our local athletes, it is maintained as an **open-source project** to provide a real-world reference for developers on how to integrate high-performance web systems and build bespoke community solutions.
+
+Built using **AI Agentic Accelerated Development**, Sharkes demonstrates how human engineers can collaborate with advanced AI agents to rapidly architect, implement, and iterate on complex full-stack applications with premium UI/UX.
 
 [✨ Features](#-features) • [🚀 Getting Started](#-getting-started) • [🏗️ Architecture](./ARCHITECTURE.md) • [🤝 Contributing](./CONTRIBUTING.md)
 
