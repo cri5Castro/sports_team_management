@@ -82,11 +82,12 @@ InsForge acts as our unified backend. We use:
 - **Auth**: Google OAuth for admin authentication.
 - **Storage**: Image storage for team assets and coupons.
 
-### Design System
-Our design system is built on **Tailwind CSS**, featuring:
-- **Custom Color Palette**: Integrated "Pride" gradients and Slate UI.
-- **Glassmorphism**: Backdrop blur effects for a premium feel.
-- **Animations**: CSS transitions and Vue transitions for smooth UI state changes.
+### Design System & UX Principles
+Our design system is built on **Tailwind CSS**, focusing on delivering a premium, highly interactive user experience:
+- **Custom Color Palette**: Integrated "Pride" gradients and extensive use of Slate UI for a modern dark mode aesthetic.
+- **Glassmorphism Layering**: Backdrop blur effects for modals, navigation bars, and cards to create visual hierarchy and depth.
+- **Interactive Micro-animations**: Vue `<Transition>` components combined with Tailwind's transition utilities for smooth enter/leave animations and state changes.
+- **Component-Driven UI**: Reusable, highly polished components that ensure consistency across both the Member Portal and Admin Dashboard.
 
 ## 📊 Data Model
 

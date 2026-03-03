@@ -126,6 +126,17 @@ Sharkes implements a dual deployment pipeline to separate live user app from tes
 ---
 
 
+### ✨ UX Design & Highlights
+
+The Sharkes app is designed with a **premium, FAANG-level user experience** in mind. Key design highlights include:
+- **Vibrant Aesthetics**: A carefully curated color palette featuring custom "Pride" gradients against a sleek, dark Slate UI background.
+- **Glassmorphism**: Extensive use of backdrop blurs and semi-transparent panels to create depth and a modern, high-end feel.
+- **Micro-interactions**: Smooth transitions, hover effects, and spring animations on buttons and cards that make the interface feel alive and responsive.
+- **Mobile-First UX**: Large touch targets, bottom-sheet dialogs, and intuitive swipe gestures optimized for athletes on the go.
+- **Instant Visual Feedback**: Toast notifications, loading skeletons, and interactive states ensure users are always informed of system actions.
+
+---
+
 ### 👤 Member Portal — Visual Demos
 
 The member portal is designed for simplicity and speed. Below are live UX demonstrations of the key flows:
