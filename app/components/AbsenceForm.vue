@@ -1,15 +1,90 @@
 <template>
   <div class="glass-panel p-6 sm:p-8 animate-fade-in relative z-10 w-full max-w-2xl mx-auto">
     <!-- Success Message Overlay -->
-    <div v-if="submitSuccess" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/95 backdrop-blur-xl z-20 px-6 text-center rounded-2xl">
-      <div class="w-16 h-16 rounded-full bg-pride-green/20 flex items-center justify-center mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-pride-green">
-          <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12m13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+    <div v-if="submitSuccess" class="absolute inset-0 z-20 flex flex-col bg-slate-950/98 backdrop-blur-3xl rounded-2xl overflow-hidden animate-fade-in group">
+      <!-- Animated Background Accents -->
+      <div class="absolute -top-24 -right-24 w-64 h-64 bg-pride-light/10 blur-[100px] rounded-full animate-pulse"></div>
+      <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-pride-purple/10 blur-[100px] rounded-full animate-pulse" style="animation-delay: 1s"></div>
+      
+      <!-- Close Button (X) -->
+      <button 
+        @click="resetForm" 
+        class="absolute top-4 right-4 z-30 p-3 rounded-full bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all active:scale-90"
+        aria-label="Cerrar"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
         </svg>
+      </button>
+
+      <div class="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center overflow-y-auto custom-scrollbar relative z-10 w-full">
+        <!-- Success Icon -->
+        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-pride-green/20 flex items-center justify-center mb-8 animate-success-pop shadow-[0_0_50px_rgba(0,128,38,0.3)]">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-12 h-12 sm:w-14 sm:h-14 text-pride-green">
+            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12m13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+          </svg>
+        </div>
+
+        <h3 class="text-3xl sm:text-4xl font-black text-white mb-3 tracking-tighter">¡Listo, Sharke!</h3>
+        <p class="text-slate-400 text-sm sm:text-lg mb-10 max-w-[280px] sm:max-w-md mx-auto leading-relaxed">
+          Pudimos registrar tu ausencia con éxito. ¡Nos vemos en el próximo entrenamiento!
+        </p>
+        
+        <!-- Absence Summary Counter Card -->
+        <div class="w-full max-w-sm bg-white/5 border border-white/10 rounded-[2.5rem] p-6 mb-10 animate-fade-up shadow-2xl relative overflow-hidden group/card backdrop-blur-sm">
+          <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50 pointer-events-none"></div>
+          
+          <p class="text-[10px] uppercase tracking-[0.3em] text-slate-500 font-black mb-5 flex items-center justify-center gap-2">
+            Resumen de {{ currentSelectedMonthName }}
+          </p>
+          
+          <div class="grid grid-cols-2 gap-4 items-center relative z-10">
+            <div class="text-center group/stat">
+              <span class="block text-4xl font-black text-white group-hover/stat:scale-110 transition-transform duration-300">{{ pastMonthlyAbsencesCount }}</span>
+              <span class="text-[10px] text-slate-500 uppercase font-black tracking-widest mt-1 block">Pasadas</span>
+            </div>
+            
+            <div class="absolute left-1/2 -ml-px h-12 w-px bg-white/10"></div>
+            
+            <div class="text-center group/stat">
+              <span class="block text-4xl font-black transition-all duration-300 group-hover/stat:scale-110" 
+                    :class="totalMonthlyAbsencesCount >= 3 ? 'text-pride-red animate-pulse' : 'text-pride-light'">
+                {{ futureMonthlyAbsencesCount }}
+              </span>
+              <span class="text-[10px] text-slate-500 uppercase font-black tracking-widest mt-1 block">Futuras</span>
+            </div>
+          </div>
+          
+          <div v-if="totalMonthlyAbsencesCount >= 3" class="mt-6 pt-5 border-t border-white/5 flex items-center justify-center gap-2">
+            <p class="text-[10px] text-pride-red font-black uppercase tracking-tight">
+              ⚠️ Límite de 3 ausencias alcanzado
+            </p>
+          </div>
+        </div>
+
+        <!-- Action Buttons Area -->
+        <div class="w-full max-w-sm space-y-4 animate-fade-up" style="animation-delay: 0.1s">
+          <button 
+            @click="resetForm" 
+            class="w-full h-16 rounded-2xl bg-white text-slate-900 font-black text-lg transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[0_20px_40px_rgba(255,255,255,0.15)] flex items-center justify-center gap-3 group"
+          >
+            <span>Registrar otra falta</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5 group-hover:rotate-12 transition-transform">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+          </button>
+          
+          <NuxtLink 
+            to="/" 
+            class="w-full h-16 rounded-2xl bg-slate-800/50 border border-white/10 text-white font-bold text-base transition-all hover:bg-white/10 flex items-center justify-center gap-3 backdrop-blur-xl"
+          >
+            <span>Volver al Inicio</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+          </NuxtLink>
+        </div>
       </div>
-      <h3 class="text-2xl font-bold pridetext mb-2">¡Ausencia Registrada!</h3>
-      <p class="text-slate-300 mb-6">Gracias, tu reporte nos ayuda a organizar mejor los entrenamientos.</p>
-      <button @click="resetForm" class="glass-button w-full sm:w-auto pride-glow">Registrar Otra Ausencia</button>
     </div>
 
     <!-- Form -->
@@ -83,12 +158,23 @@
         </ul>
         
         <!-- Dynamic Absent Indicator -->
-        <p v-if="form.name && form.dateStr" class="text-xs text-pride-light mt-1 animate-pulse">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block mr-1 align-middle">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-          </svg>
-          Ausencias en {{ currentSelectedMonthName }}: {{ monthlyAbsencesCount }}
-        </p>
+        <div v-if="form.name && form.dateStr" class="text-[11px] mt-1 space-y-1">
+          <p class="flex items-center gap-1.5 font-medium text-slate-400">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+            </svg>
+            Resumen de {{ currentSelectedMonthName }}:
+          </p>
+          <div class="flex flex-wrap gap-x-4 gap-y-1 ml-5">
+            <p class="text-slate-500">
+              <span class="font-bold">{{ pastMonthlyAbsencesCount }}</span> pasadas
+            </p>
+            <p :class="totalMonthlyAbsencesCount >= 3 ? 'text-pride-red font-black animate-pulse' : 'text-pride-light font-bold'">
+              <span class="font-bold">{{ futureMonthlyAbsencesCount }}</span> futuras
+              <span v-if="totalMonthlyAbsencesCount >= 3" class="ml-1 text-[9px] uppercase tracking-tighter">[Límite alcanzado]</span>
+            </p>
+          </div>
+        </div>
       </div>
 
       <!-- Date Selection -->
@@ -421,8 +507,8 @@ const currentSelectedMonthName = computed(() => {
   return format(parseISO(form.value.dateStr), "MMMM", { locale: es })
 })
 
-const monthlyAbsencesCount = computed(() => {
-  if (!form.value.name || !form.value.dateStr) return 0
+const monthlyAbsences = computed(() => {
+  if (!form.value.name || !form.value.dateStr) return []
   const selectedDate = parseISO(form.value.dateStr)
   const selectedMonth = selectedDate.getMonth()
   const selectedYear = selectedDate.getFullYear()
@@ -431,8 +517,18 @@ const monthlyAbsencesCount = computed(() => {
     if (a.name.toLowerCase() !== form.value.name.toLowerCase()) return false
     const d = parseISO(a.date)
     return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear
-  }).length
+  })
 })
+
+const pastMonthlyAbsencesCount = computed(() => {
+  return monthlyAbsences.value.filter(a => isSessionPast(a.date, a.time_slot || '12:00 pm - 1:00 pm')).length
+})
+
+const futureMonthlyAbsencesCount = computed(() => {
+  return monthlyAbsences.value.filter(a => !isSessionPast(a.date, a.time_slot || '12:00 pm - 1:00 pm')).length
+})
+
+const totalMonthlyAbsencesCount = computed(() => monthlyAbsences.value.length)
 
 // Date Logic
 const getTodayCDMX = () => startOfDay(toZonedTime(new Date(), TIMEZONE))

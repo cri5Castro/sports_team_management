@@ -128,6 +128,61 @@
                   </div>
               </div>
 
+              <!-- Search/Name Filter -->
+              <div class="mb-6 relative z-30">
+                <div class="relative group">
+                  <input 
+                    v-model="nameFilter" 
+                    @focus="showAutocomplete = true"
+                    @blur="hideAutocompleteDelay"
+                    class="glass-input pl-10 h-10 text-sm !bg-slate-900/40" 
+                    type="text" 
+                    placeholder="Filtrar por nombre de Sharke..." 
+                  />
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 absolute left-3.5 top-3 text-slate-500 group-focus-within:text-pride-blue transition-colors">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                  </svg>
+                  <button v-if="nameFilter" @click="nameFilter = ''" class="absolute right-3 top-2.5 text-slate-500 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Autocomplete dropdown -->
+                <ul v-if="showAutocomplete && filteredNames.length" class="absolute top-full left-0 w-full mt-1 bg-slate-800 border border-white/10 rounded-xl shadow-xl max-h-48 overflow-y-auto z-[100] divide-y divide-white/5">
+                  <li 
+                    v-for="name in filteredNames" 
+                    :key="name" 
+                    @click="selectName(name)"
+                    class="px-4 py-2 hover:bg-white/10 cursor-pointer text-slate-200 text-sm transition-colors"
+                  >
+                    {{ name }}
+                  </li>
+                </ul>
+                
+                <!-- Monthly Stats for Filtered User -->
+                <Transition name="fade">
+                  <div v-if="nameFilter && filteredAbsences.length > 0" class="mt-2 flex items-center gap-4 px-4 py-2 bg-slate-900/60 border border-white/5 rounded-xl">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Este Mes:</p>
+                    <div class="flex gap-4">
+                      <p class="text-xs font-bold text-slate-300">
+                        <span class="text-pride-light mr-1">{{ currentMonthPast }}</span> Pasadas
+                      </p>
+                      <p class="text-xs font-bold text-slate-300">
+                        <span class="text-pride-green mr-1">{{ currentMonthFuture }}</span> Futuras
+                      </p>
+                      <p v-if="currentMonthTotal >= 3" class="text-xs font-black text-pride-red animate-pulse flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3">
+                          <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+                        </svg>
+                        3+ ausencias detectadas
+                      </p>
+                    </div>
+                  </div>
+                </Transition>
+              </div>
+
       <!-- Dashboard Stats - Interactive Filters -->
       <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
         <button 
@@ -222,7 +277,25 @@
             <tbody class="divide-y divide-white/5" v-if="filteredAbsences.length">
               <tr v-for="a in filteredAbsences" :key="a.id" class="hover:bg-white/5 transition group">
                 <td class="p-4 pl-6 whitespace-nowrap font-medium">{{ formatDate(a.date) }}</td>
-                <td class="p-4 font-bold text-pride-light">{{ a.name }}</td>
+                <td class="p-4 font-bold text-pride-light">
+                  <button 
+                    @click="copyToClipboard(a.name)" 
+                    class="hover:underline cursor-pointer flex items-center gap-2 group/name relative"
+                    title="Clic para copiar nombre"
+                  >
+                    {{ a.name }}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3 opacity-0 group-hover/name:opacity-100 transition-opacity">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5-1.5M7.875 1.875A3.375 3.375 0 0 1 11.25 5.25v1.5a3.375 3.375 0 0 1-3.375 3.375h-1.5a3.375 3.375 0 0 1-3.375-3.375v-1.5a3.375 3.375 0 0 1 3.375-3.375h1.5Z" />
+                    </svg>
+                    
+                    <!-- Copy Indicator -->
+                    <Transition name="fade">
+                      <span v-if="copiedName === a.name" class="absolute left-0 -top-6 bg-pride-green text-white text-[9px] px-2 py-0.5 rounded shadow-lg font-black uppercase tracking-tighter z-50">
+                        Copiado
+                      </span>
+                    </Transition>
+                  </button>
+                </td>
                 <td class="p-4">
                   <span class="flex items-center gap-1.5 px-2 py-1 rounded inline-flex text-[10px] font-black uppercase tracking-tight"
                     :class="a.sport === 'soccer' ? 'bg-pride-green/20 text-pride-green' : 'bg-pride-light/20 text-pride-light'"
@@ -319,6 +392,9 @@ const allAbsences = ref([])
 const showPastDates = ref(false)
 const showNextDayOnly = ref(false)
 const currentFilter = ref('all')
+const nameFilter = ref('')
+const showAutocomplete = ref(false)
+const copiedName = ref('')
 const deletingId = ref(null)
 const isDeleting = ref(false)
 const adminTab = ref('absences')
@@ -409,7 +485,13 @@ const filteredAbsences = computed(() => {
     result = result.filter(a => !isSessionPast(a.date, a.time_slot))
   }
   
-  // 2. Filter by Type (Sport or Location)
+  // 2. Filter by Name
+  if (nameFilter.value) {
+    const query = nameFilter.value.toLowerCase()
+    result = result.filter(a => a.name.toLowerCase().includes(query))
+  }
+
+  // 3. Filter by Type (Sport or Location)
   if (currentFilter.value === 'swimming') {
     result = result.filter(a => a.sport === 'swimming' || !a.sport)
   } else if (currentFilter.value === 'soccer') {
@@ -450,6 +532,72 @@ const rawSwimmingCount = computed(() => absencesAfterTimeFilters.value.filter(a 
 const rawSoccerCount = computed(() => absencesAfterTimeFilters.value.filter(a => a.sport === 'soccer').length)
 const rawTlatelolcoCount = computed(() => absencesAfterTimeFilters.value.filter(a => a.location === 'Tlatelolco').length)
 const rawCuauhtemocCount = computed(() => absencesAfterTimeFilters.value.filter(a => a.location === 'Cuauhtemoc').length)
+
+// Autocomplete Logic
+const availableNames = computed(() => {
+  const names = allAbsences.value.map(a => a.name)
+  return [...new Set(names)].sort()
+})
+
+const filteredNames = computed(() => {
+  if (!nameFilter.value) return []
+  const query = nameFilter.value.toLowerCase()
+  return availableNames.value.filter(n => n.toLowerCase().includes(query)).slice(0, 10)
+})
+
+const selectName = (name) => {
+  nameFilter.value = name
+  showAutocomplete.value = false
+}
+
+const hideAutocompleteDelay = () => {
+  setTimeout(() => {
+    showAutocomplete.value = false
+  }, 200)
+}
+
+const copyToClipboard = async (text) => {
+  try {
+    await navigator.clipboard.writeText(text)
+    copiedName.value = text
+    nameFilter.value = text // Prefill the filter
+    setTimeout(() => {
+      if (copiedName.value === text) copiedName.value = ''
+    }, 2000)
+  } catch (err) {
+    console.error('Error al copiar:', err)
+  }
+}
+
+// Monthly Stats for the Filtered Result
+const currentMonthStats = computed(() => {
+  const now = new Date()
+  const currentMonth = now.getMonth()
+  const currentYear = now.getFullYear()
+  
+  // Base it on ALL absences for the filtered name, even if not shown by date filters
+  let baseSet = allAbsences.value
+  if (nameFilter.value) {
+    const query = nameFilter.value.toLowerCase()
+    baseSet = baseSet.filter(a => a.name.toLowerCase().includes(query))
+  } else {
+    return { past: 0, future: 0, total: 0 }
+  }
+
+  const thisMonthAbsences = baseSet.filter(a => {
+    const d = parseISO(a.date)
+    return d.getMonth() === currentMonth && d.getFullYear() === currentYear
+  })
+  
+  const past = thisMonthAbsences.filter(a => isSessionPast(a.date, a.time_slot)).length
+  const future = thisMonthAbsences.filter(a => !isSessionPast(a.date, a.time_slot)).length
+  
+  return { past, future, total: past + future }
+})
+
+const currentMonthPast = computed(() => currentMonthStats.value.past)
+const currentMonthFuture = computed(() => currentMonthStats.value.future)
+const currentMonthTotal = computed(() => currentMonthStats.value.total)
 
 const nextDateLabel = computed(() => {
   if (!filteredAbsences.value.length) return 'N/A'

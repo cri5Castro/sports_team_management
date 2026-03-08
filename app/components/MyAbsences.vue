@@ -62,9 +62,16 @@
               <span class="w-2 h-2 rounded-full bg-pride-light" :class="upcomingAbsences.length > 0 ? 'animate-pulse' : ''"></span>
               {{ upcomingAbsences.length }} ausencias programadas
             </p>
-            <p v-if="pastAbsences.length > 0" class="text-[10px] text-slate-500 mt-0.5">
-              {{ pastAbsences.length }} registros en el historial
-            </p>
+            <div class="flex gap-3 items-center mt-1">
+              <p v-if="pastAbsences.length > 0" class="text-[10px] text-slate-500">
+                {{ pastAbsences.length }} registros totales
+              </p>
+              <span class="text-[10px] text-white/20">•</span>
+              <p class="text-[10px] font-bold" :class="currentMonthTotal >= 3 ? 'text-pride-red' : 'text-slate-400'">
+                Este mes: {{ currentMonthPast }} pasadas, {{ currentMonthFuture }} futuras
+                <span v-if="currentMonthTotal >= 3" class="ml-1 uppercase text-[8px]">[Aviso: 3+]</span>
+              </p>
+            </div>
           </div>
 
           <!-- Premium Switch -->
@@ -251,6 +258,26 @@ const pastAbsences = computed(() => {
   return allAbsences.value.filter(a => isSessionPast(a.date, a.time_slot))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 })
+
+const currentMonthStats = computed(() => {
+  const now = new Date()
+  const currentMonth = now.getMonth()
+  const currentYear = now.getFullYear()
+  
+  const thisMonthAbsences = allAbsences.value.filter(a => {
+    const d = parseISO(a.date)
+    return d.getMonth() === currentMonth && d.getFullYear() === currentYear
+  })
+  
+  const past = thisMonthAbsences.filter(a => isSessionPast(a.date, a.time_slot)).length
+  const future = thisMonthAbsences.filter(a => !isSessionPast(a.date, a.time_slot)).length
+  
+  return { past, future, total: past + future }
+})
+
+const currentMonthPast = computed(() => currentMonthStats.value.past)
+const currentMonthFuture = computed(() => currentMonthStats.value.future)
+const currentMonthTotal = computed(() => currentMonthStats.value.total)
 
 // Fetch Init Data
 onMounted(async () => {
