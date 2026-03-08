@@ -37,12 +37,52 @@ export const getAbsences = async () => {
     }));
 };
 
+const getOrCreateMember = async (name: string) => {
+    const client = getClient();
+    const tableName = getTableName('members');
+
+    // Check if member exists
+    const { data: existingMember, error: fetchError } = await client.database
+        .from(tableName)
+        .select('id')
+        .eq('name', name)
+        .maybeSingle();
+
+    if (fetchError) {
+        console.error('Error fetching member:', fetchError);
+    }
+
+    if (existingMember) {
+        return existingMember.id;
+    }
+
+    // Create new member if not exists
+    const { data: newMember, error: insertError } = await client.database
+        .from(tableName)
+        .insert({ name })
+        .select('id')
+        .single();
+
+    if (insertError) {
+        console.error('Error creating member:', insertError);
+        throw createError({
+            statusCode: 500,
+            statusMessage: 'Error creating member: ' + insertError.message,
+        });
+    }
+
+    return newMember.id;
+};
+
 export const addAbsence = async (body: any) => {
     const client = getClient();
+    const memberId = await getOrCreateMember(body.name);
+
     const { data, error } = await client.database
         .from(getTableName('absences'))
         .insert({
             name: body.name,
+            member_id: memberId,
             date: body.date,
             time_slot: body.timeSlot,
             location: body.location,
@@ -106,14 +146,19 @@ export const overwriteAbsences = async (items: any[]) => {
 
     if (items.length === 0) return { success: true, count: 0 };
 
-    const formattedItems = items.map(a => ({
-        name: a.name,
-        date: a.date,
-        time_slot: a.timeSlot,
-        location: a.location,
-        reason: a.reason,
-        sport: a.sport
-    }));
+    const formattedItems = [];
+    for (const a of items) {
+        const memberId = await getOrCreateMember(a.name);
+        formattedItems.push({
+            name: a.name,
+            member_id: memberId,
+            date: a.date,
+            time_slot: a.timeSlot,
+            location: a.location,
+            reason: a.reason,
+            sport: a.sport
+        });
+    }
 
     const { data, error: insertError } = await client.database
         .from(getTableName('absences'))

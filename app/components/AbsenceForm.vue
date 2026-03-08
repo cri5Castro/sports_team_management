@@ -55,7 +55,7 @@
       <!-- Shark Name with Autocomplete -->
       <div class="space-y-2 relative pride-glow-focus">
         <label class="block text-sm font-medium text-slate-300 flex items-center gap-2">
-          <span>Nombre de Shark</span>
+          <span>Nombre del Sharke</span>
           <span class="w-1.5 h-1.5 rounded-full pride-bar inline-block"></span>
         </label>
         <input 
@@ -311,7 +311,7 @@ import { getTableName } from '~/utils/insforge'
 
 const TIMEZONE = 'America/Mexico_City'
 const tlatelolcoSlots = ['12:00 pm - 1:00 pm', '1:00 pm - 2:00 pm']
-const cuauhtemocSlots = ['3:00 pm - 4:00 pm', '4:00 pm - 5:00 pm']
+const cuauhtemocSlots = ['4:00 pm - 5:00 pm', '5:00 pm - 6:00 pm']
 
 // State
 const form = ref({
@@ -554,13 +554,10 @@ const submitForm = async () => {
       sport: form.value.sport
     }
 
-    const { data, error } = await insforge.database
-      .from(getTableName('absences'))
-      .insert([submission])
-      .select()
-      .single()
-    
-    if (error) throw error
+    const data = await $fetch('/api/absences', {
+      method: 'POST',
+      body: submission
+    })
     
     // update local state
     absencesData.value.push(data)

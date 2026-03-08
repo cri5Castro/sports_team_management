@@ -209,7 +209,7 @@
             <thead>
               <tr class="bg-slate-900/60 border-b border-white/10 text-xs uppercase tracking-wider text-slate-400 font-semibold">
                 <th class="p-4 pl-6">Fecha</th>
-                <th class="p-4">Shark</th>
+                <th class="p-4">Sharke</th>
                 <th class="p-4">Deporte</th>
                 <th class="p-4">Sede</th>
                 <th class="p-4">Horario</th>

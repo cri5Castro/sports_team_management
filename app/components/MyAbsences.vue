@@ -2,7 +2,7 @@
   <div class="glass-panel p-6 sm:p-8 animate-fade-in relative z-10">
     <!-- Search Section -->
     <div class="space-y-2 relative mb-8 z-20">
-      <label class="block text-sm font-medium text-slate-300">Nombre Exacto del Shark</label>
+      <label class="block text-sm font-medium text-slate-300">Nombre Exacto del Sharke</label>
       <div class="relative">
         <input 
           v-model="searchQuery" 
@@ -11,7 +11,7 @@
           @keydown.enter="fetchUserAbsences"
           class="glass-input pl-10" 
           type="text" 
-          placeholder="Ej: Carlos Silva..." 
+          placeholder="Ej: Carlos Silva... (trata de usar siempre el mismo orden)" 
         />
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 absolute left-3 top-3 text-slate-400">
           <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
