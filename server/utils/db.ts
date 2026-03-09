@@ -231,3 +231,97 @@ export const getDiscounts = async () => {
         isIndefinite: d.is_indefinite
     }));
 };
+
+export const getEvents = async () => {
+    const client = getClient();
+    const { data, error } = await client.database
+        .from(getTableName('events'))
+        .select('*')
+        .order('start_date', { ascending: true });
+
+    if (error) {
+        console.error('Error fetching events:', error);
+        return [];
+    }
+
+    return data.map((e: any) => ({
+        id: e.id,
+        title: e.title,
+        description: e.description,
+        startDate: e.start_date,
+        endDate: e.end_date,
+        photoUrl: e.photo_url,
+        isActive: e.is_active,
+        createdAt: e.created_at
+    }));
+};
+
+export const addEvent = async (body: any) => {
+    const client = getClient();
+    const { data, error } = await client.database
+        .from(getTableName('events'))
+        .insert({
+            title: body.title,
+            description: body.description,
+            start_date: body.startDate,
+            end_date: body.endDate,
+            photo_url: body.photoUrl,
+            is_active: body.isActive !== undefined ? body.isActive : true
+        })
+        .select()
+        .single();
+
+    if (error) {
+        throw createError({
+            statusCode: 500,
+            statusMessage: 'Error saving event to database: ' + error.message,
+        });
+    }
+
+    return {
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        startDate: data.start_date,
+        endDate: data.end_date,
+        photoUrl: data.photo_url,
+        isActive: data.is_active,
+        createdAt: data.created_at
+    };
+};
+
+export const deleteEvent = async (id: string) => {
+    const client = getClient();
+    const { error } = await client.database
+        .from(getTableName('events'))
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        throw createError({
+            statusCode: 500,
+            statusMessage: 'Error deleting event: ' + error.message,
+        });
+    }
+
+    return { success: true };
+};
+
+export const deletePastEvents = async () => {
+    const client = getClient();
+    const now = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+    const { error } = await client.database
+        .from(getTableName('events'))
+        .delete()
+        .lt('start_date', now);
+
+    if (error) {
+        throw createError({
+            statusCode: 500,
+            statusMessage: 'Error deleting past events: ' + error.message,
+        });
+    }
+
+    return { success: true };
+};

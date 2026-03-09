@@ -73,6 +73,16 @@
           Ausencias
         </button>
         <button 
+          @click="adminTab = 'events'" 
+          class="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2"
+          :class="adminTab === 'events' ? 'bg-white/15 text-pride-light shadow-lg' : 'text-slate-400 hover:text-white'"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+          </svg>
+          Eventos
+        </button>
+        <button 
           @click="adminTab = 'discounts'" 
           class="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2"
           :class="adminTab === 'discounts' ? 'bg-white/15 text-pride-light shadow-lg' : 'text-slate-400 hover:text-white'"
@@ -269,7 +279,7 @@
                 <th class="p-4">Sede</th>
                 <th class="p-4">Horario</th>
                 <th class="p-4">Motivo</th>
-                <th class="p-4">Reportado</th>
+                <th class="p-4">Fecha de reporte</th>
                 <th class="p-4 pr-6 text-right">Acción</th>
               </tr>
             </thead>
@@ -321,7 +331,7 @@
                 <td class="p-4 whitespace-nowrap text-sm">{{ a.time_slot }}</td>
                 <td class="p-4 text-sm text-slate-300 max-w-xs truncate" :title="a.reason">{{ a.reason || '-' }}</td>
                 <td class="p-4 text-[10px] text-slate-400 italic whitespace-nowrap">
-                  {{ a.createdAt ? format(parseISO(a.createdAt), "d MMM, h:mm a", { locale: es }) : '-' }}
+                  {{ a.created_at ? format(parseISO(a.created_at), "d MMM, h:mm a", { locale: es }) : '-' }}
                 </td>
                 <td class="p-4 pr-6 text-right relative">
                   <!-- Inline Delete for Admin -->
@@ -362,7 +372,106 @@
           </table>
         </div>
       </div>
-      <!-- End Absences View -->
+          <!-- End Absences View -->
+          </div>
+
+          <!-- Events View -->
+          <div v-else-if="adminTab === 'events'" key="events" class="space-y-6">
+              <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                  <h2 class="text-xl font-bold flex items-center gap-2">Gestión de Eventos</h2>
+                  <div class="flex items-center gap-3">
+                      <button @click="showEventForm = !showEventForm" class="glass-button !py-2 !px-4 hover:border-pride-blue/50 text-xs pride-glow">
+                          {{ showEventForm ? 'Cancelar' : 'Nuevo Evento' }}
+                      </button>
+                      <button @click="confirmDeletePastEvents" class="glass-button !py-2 !px-4 hover:border-pride-red/50 text-xs text-pride-red">
+                          Limpiar Pasados
+                      </button>
+                  </div>
+              </div>
+
+              <!-- Create Event Form -->
+              <Transition name="fade">
+                  <form v-if="showEventForm" @submit.prevent="handleCreateEvent" class="glass-panel p-6 space-y-4 border border-pride-blue/20">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div class="space-y-1">
+                              <label class="text-[10px] font-black uppercase text-slate-400">Título</label>
+                              <input v-model="newEvent.title" required type="text" class="glass-input !py-2" placeholder="Ej: Entrenamiento Especial" />
+                          </div>
+                          <div class="space-y-1">
+                              <label class="text-[10px] font-black uppercase text-slate-400">Banner / Imagen del Evento</label>
+                              <div class="mt-1 flex justify-center border-2 border-slate-700 hover:border-pride-blue/50 border-dashed rounded-xl transition-colors cursor-pointer relative group flex-col items-center shadow-inner overflow-hidden min-h-[120px]" :class="{ 'border-solid p-0': eventPreviewImage || newEvent.photoUrl }">
+                                  <input type="file" @change="handleEventImageUpload" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" :disabled="isSubmittingEvent" />
+                                  
+                                  <div v-if="!eventPreviewImage && !newEvent.photoUrl" class="space-y-2 text-center py-4 px-6">
+                                      <svg class="h-8 w-8 text-slate-500 mx-auto" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                          <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                      </svg>
+                                      <p class="text-xs font-bold text-pride-blue">Subir Imagen</p>
+                                  </div>
+                                  <div v-else class="relative w-full h-full min-h-[120px]">
+                                      <img :src="eventPreviewImage || newEvent.photoUrl" class="w-full h-full object-cover" />
+                                      <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                          <span class="text-white text-[10px] font-bold uppercase tracking-widest bg-slate-800 px-3 py-1.5 rounded-lg border border-white/10">Cambiar</span>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="space-y-1">
+                          <label class="text-[10px] font-black uppercase text-slate-400">Descripción</label>
+                          <textarea v-model="newEvent.description" required class="glass-input !py-2 h-20" placeholder="Detalles del evento..."></textarea>
+                      </div>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div class="space-y-1">
+                              <label class="text-[10px] font-black uppercase text-slate-400">Fecha Inicio</label>
+                              <input v-model="newEvent.startDate" required type="date" class="glass-input !py-2" />
+                          </div>
+                          <div class="space-y-1">
+                              <label class="text-[10px] font-black uppercase text-slate-400">Fecha Fin (Opcional)</label>
+                              <input v-model="newEvent.endDate" type="date" class="glass-input !py-2" />
+                          </div>
+                      </div>
+                      <div class="flex justify-end">
+                          <button type="submit" class="glass-button !bg-pride-blue/20 hover:!bg-pride-blue/40 !py-2 !px-8" :disabled="isSubmittingEvent">
+                              {{ isSubmittingEvent ? 'Creando...' : 'Crear Evento' }}
+                          </button>
+                      </div>
+                  </form>
+              </Transition>
+
+              <!-- Events List Table -->
+              <div class="glass-panel overflow-hidden">
+                  <div class="overflow-x-auto">
+                      <table class="w-full text-left border-collapse">
+                          <thead>
+                              <tr class="bg-slate-900/60 border-b border-white/10 text-xs uppercase text-slate-400">
+                                  <th class="p-4">Fecha</th>
+                                  <th class="p-4">Evento</th>
+                                  <th class="p-4 text-right">Acción</th>
+                              </tr>
+                          </thead>
+                          <tbody class="divide-y divide-white/5">
+                              <tr v-for="e in allEvents" :key="e.id" class="hover:bg-white/5 group">
+                                  <td class="p-4 text-sm font-medium">
+                                      {{ formatDate(e.startDate) }}
+                                      <span v-if="e.endDate" class="text-slate-500 block text-xs">al {{ formatDate(e.endDate) }}</span>
+                                  </td>
+                                  <td class="p-4">
+                                      <div class="font-bold text-white">{{ e.title }}</div>
+                                      <div class="text-xs text-slate-500 truncate max-w-xs">{{ e.description }}</div>
+                                  </td>
+                                  <td class="p-4 text-right">
+                                      <button @click="handleDeleteEvent(e.id)" class="text-slate-500 hover:text-pride-red p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                          </svg>
+                                      </button>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
           </div>
 
           <!-- Discounts View -->
@@ -399,6 +508,22 @@ const deletingId = ref(null)
 const isDeleting = ref(false)
 const adminTab = ref('absences')
 
+// Events State
+const allEvents = ref([])
+const showEventForm = ref(false)
+const isSubmittingEvent = ref(false)
+const newEvent = ref({
+    title: '',
+    description: '',
+    startDate: '',
+    endDate: '',
+    photoUrl: '',
+    isActive: true
+})
+
+const eventPreviewImage = ref(null)
+const eventImageFile = ref(null)
+
 // InsForge Client
 const insforge = useInsforge()
 import { getTableName } from '~/utils/insforge'
@@ -433,6 +558,7 @@ const checkSession = async () => {
     
     if (isAuthorized.value) {
       fetchAdminData()
+      fetchEvents()
     }
   }
 }
@@ -642,7 +768,7 @@ const exportCSV = () => {
     a.location, 
     `"${a.time_slot}"`, 
     `"${(a.reason || '').replace(/"/g, '""')}"`,
-    `"${a.createdAt || ''}"`
+    `"${a.created_at || ''}"`
   ])
   
   const csvContent = [
@@ -689,7 +815,7 @@ const importCSV = (event) => {
                   location: clean(cols[4]),
                   time_slot: clean(cols[5]),
                  reason: clean(cols[6]) || '',
-                 createdAt: clean(cols[7]) || new Date().toISOString()
+                 created_at: clean(cols[7]) || new Date().toISOString()
              })
         }
     }
@@ -711,5 +837,85 @@ const importCSV = (event) => {
   }
   reader.readAsText(file)
   event.target.value = '' // reset input
+}
+
+// Events Actions
+const fetchEvents = async () => {
+    try {
+        const data = await $fetch('/api/events')
+        allEvents.value = data || []
+    } catch (err) {
+        console.error('Error fetching events', err)
+    }
+}
+
+const handleEventImageUpload = (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+    eventImageFile.value = file
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+        eventPreviewImage.value = e.target.result
+    }
+    reader.readAsDataURL(file)
+}
+
+const handleCreateEvent = async () => {
+    isSubmittingEvent.value = true
+    try {
+        // Upload image if selected
+        let finalPhotoUrl = newEvent.value.photoUrl
+        if (eventImageFile.value) {
+            const fileExt = eventImageFile.value.name.split('.').pop()
+            const fileName = `event_${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`
+            const safeFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_')
+            
+            const { data, error } = await insforge.storage
+                .from(getTableName('events'))
+                .upload(`images/${safeFileName}`, eventImageFile.value)
+                
+            if (error) throw error
+            finalPhotoUrl = data.url
+        }
+
+        await $fetch('/api/events', {
+            method: 'POST',
+            body: {
+                ...newEvent.value,
+                photoUrl: finalPhotoUrl
+            }
+        })
+        await fetchEvents()
+        showEventForm.value = false
+        // Reset form
+        newEvent.value = { title: '', description: '', startDate: '', endDate: '', photoUrl: '', isActive: true }
+        eventPreviewImage.value = null
+        eventImageFile.value = null
+    } catch (err) {
+        alert('Error al crear evento: ' + err.message)
+    } finally {
+        isSubmittingEvent.value = false
+    }
+}
+
+const handleDeleteEvent = async (id) => {
+    if (!confirm('¿Seguro que quieres eliminar este evento?')) return
+    try {
+        await $fetch(`/api/events?id=${id}`, { method: 'DELETE' })
+        await fetchEvents()
+    } catch (err) {
+        alert('Error al eliminar evento')
+    }
+}
+
+const confirmDeletePastEvents = async () => {
+    if (!confirm('¿Seguro que quieres eliminar TODOS los eventos pasados? Esta acción no se puede deshacer.')) return
+    try {
+        await $fetch('/api/events?allPast=true', { method: 'DELETE' })
+        await fetchEvents()
+    } catch (err) {
+        alert('Error al limpiar eventos')
+    }
 }
 </script>
