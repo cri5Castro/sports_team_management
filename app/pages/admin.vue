@@ -32,8 +32,8 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
         </svg>
         <h2 class="text-3xl font-bold mb-2">Acceso Denegado</h2>
-        <p class="text-slate-400 mb-2">Tu correo <strong>{{ userEmail }}</strong> no está en la lista de administradores.</p>
-        <p class="text-xs text-slate-500 mb-8">Contacta al administrador para solicitar acceso.</p>
+        <p class="text-slate-400 mb-2">Tu correo <strong>{{ userEmail }}</strong> no está en la lista de administración.</p>
+        <p class="text-xs text-slate-500 mb-8">Contacta a la administración para solicitar acceso.</p>
         
         <button @click="handleLogout" class="glass-button !border-pride-red/30 hover:!bg-pride-red/10 text-pride-red w-full py-3">
           Cerrar Sesión
@@ -267,109 +267,195 @@
         </button>
       </div>
 
-      <!-- Table View -->
-      <div class="glass-panel overflow-hidden border border-white/10 shadow-2xl">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="bg-slate-900/60 border-b border-white/10 text-xs uppercase tracking-wider text-slate-400 font-semibold">
-                <th class="p-4 pl-6">Fecha</th>
-                <th class="p-4">Sharke</th>
-                <th class="p-4">Deporte</th>
-                <th class="p-4">Sede</th>
-                <th class="p-4">Horario</th>
-                <th class="p-4">Motivo</th>
-                <th class="p-4">Fecha de reporte</th>
-                <th class="p-4 pr-6 text-right">Acción</th>
-              </tr>
-            </thead>
-            
-            <tbody class="divide-y divide-white/5" v-if="filteredAbsences.length">
-              <tr v-for="a in filteredAbsences" :key="a.id" class="hover:bg-white/5 transition group">
-                <td class="p-4 pl-6 whitespace-nowrap font-medium">{{ formatDate(a.date) }}</td>
-                <td class="p-4 font-bold text-pride-light">
-                  <button 
-                    @click="copyToClipboard(a.name)" 
-                    class="hover:underline cursor-pointer flex items-center gap-2 group/name relative"
-                    title="Clic para copiar nombre"
-                  >
-                    {{ a.name }}
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3 opacity-0 group-hover/name:opacity-100 transition-opacity">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5-1.5M7.875 1.875A3.375 3.375 0 0 1 11.25 5.25v1.5a3.375 3.375 0 0 1-3.375 3.375h-1.5a3.375 3.375 0 0 1-3.375-3.375v-1.5a3.375 3.375 0 0 1 3.375-3.375h1.5Z" />
-                    </svg>
-                    
-                    <!-- Copy Indicator -->
-                    <Transition name="fade">
-                      <span v-if="copiedName === a.name" class="absolute left-0 -top-6 bg-pride-green text-white text-[9px] px-2 py-0.5 rounded shadow-lg font-black uppercase tracking-tighter z-50">
-                        Copiado
-                      </span>
-                    </Transition>
-                  </button>
-                </td>
-                <td class="p-4">
-                  <span class="flex items-center gap-1.5 px-2 py-1 rounded inline-flex text-[10px] font-black uppercase tracking-tight"
-                    :class="a.sport === 'soccer' ? 'bg-pride-green/20 text-pride-green' : 'bg-pride-light/20 text-pride-light'"
-                  >
-                    <svg v-if="a.sport === 'soccer'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3">
-                      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
-                      <path d="M12 7l-3 2v3l3 2 3-2V9zM7 12l2-3-2-3-3 1v4zM17 12l-2-3 2-3 3 1v4zM9 16l3-2 3 2-1 4H10z" fill="currentColor"/>
-                    </svg>
-                    <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3">
-                      <path d="M4 12c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                      <path d="M4 16c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                    </svg>
-                    {{ a.sport === 'soccer' ? 'Fútbol' : 'Natación' }}
-                  </span>
-                </td>
-                <td class="p-4">
-                  <span class="px-2 py-1 rounded inline-flex text-xs font-bold"
-                    :class="a.location === 'Tlatelolco' ? 'bg-pride-pink/20 text-pride-pink' : 'bg-pride-purple/20 text-pride-purple'"
-                  >
-                    {{ a.location }}
-                  </span>
-                </td>
-                <td class="p-4 whitespace-nowrap text-sm">{{ a.time_slot }}</td>
-                <td class="p-4 text-sm text-slate-300 max-w-xs truncate" :title="a.reason">{{ a.reason || '-' }}</td>
-                <td class="p-4 text-[10px] text-slate-400 italic whitespace-nowrap">
-                  {{ a.created_at ? format(parseISO(a.created_at), "d MMM, h:mm a", { locale: es }) : '-' }}
-                </td>
-                <td class="p-4 pr-6 text-right relative">
-                  <!-- Inline Delete for Admin -->
-                  <div class="inline-flex justify-end">
-                      <button 
-                        v-if="deletingId !== a.id"
-                        @click="deletingId = a.id"
-                        class="p-2 text-slate-500 hover:text-pride-red hover:bg-pride-red/10 rounded-lg transition opacity-0 group-hover:opacity-100 focus:opacity-100"
-                        title="Eliminar Reporte"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                        </svg>
-                      </button>
-                    
-                    <div v-else class="flex items-center bg-slate-900 border border-pride-red rounded p-1 absolute right-6 top-1/2 -translate-y-1/2 shadow-lg z-10 w-[140px] justify-between">
-                      <span class="text-[10px] font-bold text-pride-red ml-2 leading-none">¿Eliminar?</span>
-                      <div class="flex gap-1 pr-1">
-                        <button @click="confirmDelete(a.id)" class="px-2 py-1 bg-pride-red text-white text-[10px] font-bold rounded" :disabled="isDeleting">Sí</button>
-                        <button @click="deletingId = null" class="px-2 py-1 bg-slate-700 text-white text-[10px] font-bold rounded" :disabled="isDeleting">No</button>
+      <!-- Table View (Desktop) / Cards View (Mobile) -->
+      <div class="space-y-4">
+        <!-- Desktop Table -->
+        <div class="hidden sm:block glass-panel overflow-hidden border border-white/10 shadow-2xl">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-900/60 border-b border-white/10 text-xs uppercase tracking-wider text-slate-400 font-semibold">
+                  <th class="p-4 pl-6">Fecha</th>
+                  <th class="p-4">Sharke</th>
+                  <th class="p-4">Deporte</th>
+                  <th class="p-4">Sede</th>
+                  <th class="p-4">Horario</th>
+                  <th class="p-4">Motivo</th>
+                  <th class="p-4">Fecha de reporte</th>
+                  <th class="p-4 pr-6 text-right">Acción</th>
+                </tr>
+              </thead>
+              
+              <tbody class="divide-y divide-white/5" v-if="filteredAbsences.length">
+                <tr v-for="a in filteredAbsences" :key="a.id" class="hover:bg-white/5 transition group">
+                  <td class="p-4 pl-6 whitespace-nowrap font-medium">{{ formatDate(a.date) }}</td>
+                  <td class="p-4 font-bold text-pride-light">
+                    <button 
+                      @click="copyToClipboard(a.name)" 
+                      class="hover:underline cursor-pointer flex items-center gap-2 group/name relative"
+                      title="Clic para copiar nombre"
+                    >
+                      {{ a.name }}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3 opacity-0 group-hover/name:opacity-100 transition-opacity">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5-1.5M7.875 1.875A3.375 3.375 0 0 1 11.25 5.25v1.5a3.375 3.375 0 0 1-3.375 3.375h-1.5a3.375 3.375 0 0 1-3.375-3.375v-1.5a3.375 3.375 0 0 1 3.375-3.375h1.5Z" />
+                      </svg>
+                      
+                      <!-- Copy Indicator -->
+                      <Transition name="fade">
+                        <span v-if="copiedName === a.name" class="absolute left-0 -top-6 bg-pride-green text-white text-[9px] px-2 py-0.5 rounded shadow-lg font-black uppercase tracking-tighter z-50">
+                          Copiado
+                        </span>
+                      </Transition>
+                    </button>
+                  </td>
+                  <td class="p-4">
+                    <span class="flex items-center gap-1.5 px-2 py-1 rounded inline-flex text-[10px] font-black uppercase tracking-tight"
+                      :class="a.sport === 'soccer' ? 'bg-pride-green/20 text-pride-green' : 'bg-pride-light/20 text-pride-light'"
+                    >
+                      <svg v-if="a.sport === 'soccer'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3">
+                        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M12 7l-3 2v3l3 2 3-2V9zM7 12l2-3-2-3-3 1v4zM17 12l-2-3 2-3 3 1v4zM9 16l3-2 3 2-1 4H10z" fill="currentColor"/>
+                      </svg>
+                      <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3">
+                        <path d="M4 12c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M4 16c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0s2.5 1.5 3 0c.5-1.5 2.5-1.5 3 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                      </svg>
+                      {{ a.sport === 'soccer' ? 'Fútbol' : 'Natación' }}
+                    </span>
+                  </td>
+                  <td class="p-4">
+                    <span class="px-2 py-1 rounded inline-flex text-xs font-bold"
+                      :class="a.location === 'Tlatelolco' ? 'bg-pride-pink/20 text-pride-pink' : 'bg-pride-purple/20 text-pride-purple'"
+                    >
+                      {{ a.location }}
+                    </span>
+                  </td>
+                  <td class="p-4 whitespace-nowrap text-sm">{{ a.time_slot }}</td>
+                  <td class="p-4 text-sm text-slate-300 max-w-xs truncate" :title="a.reason">{{ a.reason || '-' }}</td>
+                  <td class="p-4 text-[10px] text-slate-400 italic whitespace-nowrap">
+                    {{ a.created_at ? format(parseISO(a.created_at), "d MMM, h:mm a", { locale: es }) : '-' }}
+                  </td>
+                  <td class="p-4 pr-6 text-right relative">
+                    <!-- Inline Delete for Admin -->
+                    <div class="inline-flex justify-end">
+                        <button 
+                          v-if="deletingId !== a.id"
+                          @click="deletingId = a.id"
+                          class="p-2 text-slate-500 hover:text-pride-red hover:bg-pride-red/10 rounded-lg transition opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100"
+                          title="Eliminar Reporte"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                          </svg>
+                        </button>
+                      
+                      <div v-else class="flex items-center bg-slate-900 border border-pride-red rounded p-1 absolute right-6 top-1/2 -translate-y-1/2 shadow-lg z-10 w-[140px] justify-between">
+                        <span class="text-[10px] font-bold text-pride-red ml-2 leading-none">¿Eliminar?</span>
+                        <div class="flex gap-1 pr-1">
+                          <button @click="confirmDelete(a.id)" class="px-2 py-1 bg-pride-red text-white text-[10px] font-bold rounded" :disabled="isDeleting">Sí</button>
+                          <button @click="deletingId = null" class="px-2 py-1 bg-slate-700 text-white text-[10px] font-bold rounded" :disabled="isDeleting">No</button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-            
-            <tbody v-else>
-              <tr>
-                <td colspan="6" class="p-12 text-center text-slate-400">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 opacity-40 mb-3 mx-auto">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                  </td>
+                </tr>
+              </tbody>
+              
+              <tbody v-else>
+                <tr>
+                  <td colspan="8" class="p-12 text-center text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 opacity-40 mb-3 mx-auto">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                    </svg>
+                    <p>No hay ausencias registradas.</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Mobile Cards -->
+        <div class="sm:hidden space-y-4 px-2" v-if="filteredAbsences.length">
+          <div v-for="a in filteredAbsences" :key="a.id" class="glass-panel p-5 space-y-4 border border-white/10 relative overflow-hidden group">
+            <!-- Header: Name and Date -->
+            <div class="flex justify-between items-start">
+              <div class="space-y-1">
+                <button 
+                  @click="copyToClipboard(a.name)"
+                  class="text-lg font-black text-white hover:text-pride-light text-left active:scale-95 transition-transform"
+                >
+                  {{ a.name }}
+                </button>
+                <div class="text-xs font-bold text-slate-400 flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                   </svg>
-                  <p>No hay ausencias registradas.</p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  {{ formatDate(a.date) }}
+                </div>
+              </div>
+              
+              <!-- Sport Pill -->
+              <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border"
+                :class="a.sport === 'soccer' ? 'bg-pride-green/10 text-pride-green border-pride-green/20' : 'bg-pride-light/10 text-pride-light border-pride-light/20'"
+              >
+                {{ a.sport === 'soccer' ? 'Fútbol' : 'Natación' }}
+              </span>
+            </div>
+
+            <!-- Body: Location and Time -->
+            <div class="grid grid-cols-2 gap-3 bg-slate-900/40 p-3 rounded-2xl border border-white/5">
+              <div class="space-y-0.5">
+                <p class="text-[9px] font-black uppercase text-slate-500 tracking-tighter">Sede</p>
+                <p class="text-xs font-bold text-white">{{ a.location }}</p>
+              </div>
+              <div class="space-y-0.5">
+                <p class="text-[9px] font-black uppercase text-slate-500 tracking-tighter">Horario</p>
+                <p class="text-xs font-bold text-white">{{ a.time_slot }}</p>
+              </div>
+            </div>
+
+            <!-- Reason -->
+            <div v-if="a.reason" class="text-xs text-slate-400 italic bg-white/5 p-3 rounded-xl">
+              "{{ a.reason }}"
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center justify-between pt-2">
+              <div class="text-[9px] text-slate-500 font-bold italic">
+                Reportado: {{ a.created_at ? format(parseISO(a.created_at), "d MMM, h:mm a", { locale: es }) : '-' }}
+              </div>
+              
+              <div class="relative">
+                <button 
+                  v-if="deletingId !== a.id"
+                  @click="deletingId = a.id"
+                  class="p-3 bg-pride-red/10 text-pride-red rounded-xl hover:bg-pride-red/20 transition active:scale-95"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                  </svg>
+                </button>
+                
+                <!-- Confirmation Overlay for Mobile -->
+                <div v-else class="flex items-center bg-slate-900 border border-pride-red rounded-xl p-1 shadow-2xl z-20 w-[140px] justify-between absolute right-0 bottom-0 animate-in fade-in slide-in-from-right-4 duration-200">
+                  <span class="text-[10px] font-black uppercase text-pride-red ml-3 leading-none">¿Eliminar?</span>
+                  <div class="flex gap-1 pr-1">
+                    <button @click="confirmDelete(a.id)" class="px-3 py-1.5 bg-pride-red text-white text-[10px] font-black uppercase rounded-lg shadow-lg active:scale-95" :disabled="isDeleting">Sí</button>
+                    <button @click="deletingId = null" class="px-3 py-1.5 bg-slate-800 text-slate-300 text-[10px] font-black uppercase rounded-lg active:scale-95" :disabled="isDeleting">No</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State Mobile -->
+        <div v-else class="sm:hidden p-12 text-center text-slate-400 glass-panel mx-2 border-white/5">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 opacity-40 mb-3 mx-auto">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+          </svg>
+          <p class="font-bold">No hay ausencias registradas.</p>
         </div>
       </div>
           <!-- End Absences View -->
@@ -446,52 +532,112 @@
                   </form>
               </Transition>
 
-              <!-- Events List Table -->
-              <div class="glass-panel overflow-hidden">
-                  <div class="overflow-x-auto">
-                      <table class="w-full text-left border-collapse">
-                          <thead>
-                              <tr class="bg-slate-900/60 border-b border-white/10 text-xs uppercase text-slate-400">
-                                  <th class="p-4">Fecha</th>
-                                  <th class="p-4">Evento</th>
-                                  <th class="p-4 text-right">Acción</th>
-                              </tr>
-                          </thead>
-                          <tbody class="divide-y divide-white/5">
-                              <tr v-for="e in allEvents" :key="e.id" class="hover:bg-white/5 group">
-                                  <td class="p-4 text-sm font-medium">
-                                      {{ formatDate(e.startDate) }}
-                                      <span v-if="e.endDate" class="text-slate-500 block text-xs">al {{ formatDate(e.endDate) }}</span>
+              <!-- Events List (Desktop Table / Mobile Cards) -->
+              <div class="space-y-4">
+                  <!-- Desktop Table -->
+                  <div class="hidden sm:block glass-panel overflow-hidden border border-white/10 shadow-2xl">
+                      <div class="overflow-x-auto">
+                          <table class="w-full text-left border-collapse">
+                              <thead>
+                                  <tr class="bg-slate-900/60 border-b border-white/10 text-xs uppercase text-slate-400">
+                                      <th class="p-4 pl-6">Fecha</th>
+                                      <th class="p-4">Evento</th>
+                                      <th class="p-4 text-right pr-6">Acción</th>
+                                  </tr>
+                              </thead>
+                              <tbody class="divide-y divide-white/5" v-if="allEvents.length">
+                                  <tr v-for="e in allEvents" :key="e.id" class="hover:bg-white/5 group">
+                                      <td class="p-4 pl-6 text-sm font-medium">
+                                          {{ formatDate(e.startDate) }}
+                                          <span v-if="e.endDate" class="text-slate-500 block text-xs">al {{ formatDate(e.endDate) }}</span>
+                                      </td>
+                                      <td class="p-4">
+                                          <div class="font-bold text-white">{{ e.title }}</div>
+                                          <div class="text-xs text-slate-500 truncate max-w-xs">{{ e.description }}</div>
+                                      </td>
+                                      <td class="p-4 pr-6 text-right relative">
+                                          <div class="inline-flex justify-end">
+                                              <button 
+                                                  v-if="deletingEventId !== e.id"
+                                                  @click="deletingEventId = e.id" 
+                                                  class="text-slate-500 hover:text-pride-red p-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 transition-opacity"
+                                                  title="Eliminar Evento"
+                                              >
+                                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                  </svg>
+                                              </button>
+                                              
+                                              <div v-else class="flex items-center bg-slate-900 border border-pride-red rounded p-1 absolute right-6 top-1/2 -translate-y-1/2 shadow-lg z-10 w-[140px] justify-between">
+                                                <span class="text-[10px] font-bold text-pride-red ml-2 leading-none">¿Eliminar?</span>
+                                                <div class="flex gap-1 pr-1">
+                                                  <button @click="handleDeleteEvent(e.id)" class="px-2 py-1 bg-pride-red text-white text-[10px] font-bold rounded" :disabled="isSubmittingEvent">Sí</button>
+                                                  <button @click="deletingEventId = null" class="px-2 py-1 bg-slate-700 text-white text-[10px] font-bold rounded" :disabled="isSubmittingEvent">No</button>
+                                                </div>
+                                              </div>
+                                          </div>
+                                      </td>
+                                  </tr>
+                              </tbody>
+                              <tbody v-else>
+                                <tr>
+                                  <td colspan="3" class="p-12 text-center text-slate-400">
+                                    <p>No hay eventos registrados.</p>
                                   </td>
-                                  <td class="p-4">
-                                      <div class="font-bold text-white">{{ e.title }}</div>
-                                      <div class="text-xs text-slate-500 truncate max-w-xs">{{ e.description }}</div>
-                                  </td>
-                                   <td class="p-4 text-right relative">
-                                       <div class="inline-flex justify-end">
-                                           <button 
-                                              v-if="deletingEventId !== e.id"
-                                              @click="deletingEventId = e.id" 
-                                              class="text-slate-500 hover:text-pride-red p-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                                              title="Eliminar Evento"
-                                           >
-                                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                               </svg>
-                                           </button>
-                                           
-                                           <div v-else class="flex items-center bg-slate-900 border border-pride-red rounded p-1 absolute right-6 top-1/2 -translate-y-1/2 shadow-lg z-10 w-[140px] justify-between">
-                                             <span class="text-[10px] font-bold text-pride-red ml-2 leading-none">¿Eliminar?</span>
-                                             <div class="flex gap-1 pr-1">
-                                               <button @click="handleDeleteEvent(e.id)" class="px-2 py-1 bg-pride-red text-white text-[10px] font-bold rounded" :disabled="isSubmittingEvent">Sí</button>
-                                               <button @click="deletingEventId = null" class="px-2 py-1 bg-slate-700 text-white text-[10px] font-bold rounded" :disabled="isSubmittingEvent">No</button>
-                                             </div>
-                                           </div>
-                                       </div>
-                                   </td>
-                              </tr>
-                          </tbody>
-                      </table>
+                                </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+
+                  <!-- Mobile List -->
+                  <div class="sm:hidden space-y-4 px-2" v-if="allEvents.length">
+                    <div v-for="e in allEvents" :key="e.id" class="glass-panel p-5 space-y-4 border border-white/10 relative overflow-hidden group">
+                      <div class="flex justify-between items-start gap-3">
+                        <div class="space-y-1 min-w-0">
+                          <h4 class="text-lg font-black text-white leading-tight truncate">{{ e.title }}</h4>
+                          <div class="flex items-center gap-2 text-[10px] font-black uppercase text-pride-light tracking-widest">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3 h-3">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                            </svg>
+                            {{ formatDate(e.startDate) }}
+                            <span v-if="e.endDate"> - {{ formatDate(e.endDate) }}</span>
+                          </div>
+                        </div>
+                        
+                        <div class="relative">
+                          <button 
+                            v-if="deletingEventId !== e.id"
+                            @click="deletingEventId = e.id"
+                            class="p-2.5 bg-pride-red/10 text-pride-red rounded-xl hover:bg-pride-red/20 active:scale-95 transition"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                            </svg>
+                          </button>
+                          
+                          <div v-else class="flex items-center bg-slate-900 border border-pride-red rounded-xl p-1 shadow-2xl z-20 w-[140px] justify-between absolute right-0 bottom-0 animate-in fade-in slide-in-from-right-4">
+                            <span class="text-[10px] font-black uppercase text-pride-red ml-3 leading-none">¿Eliminar?</span>
+                            <div class="flex gap-1 pr-1">
+                              <button @click="handleDeleteEvent(e.id)" class="px-3 py-1.5 bg-pride-red text-white text-[10px] font-black uppercase rounded-lg active:scale-95" :disabled="isSubmittingEvent">Sí</button>
+                              <button @click="deletingEventId = null" class="px-3 py-1.5 bg-slate-800 text-slate-300 text-[10px] font-black uppercase rounded-lg active:scale-95" :disabled="isSubmittingEvent">No</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div v-if="e.description" class="text-xs text-slate-400 bg-slate-900/60 p-3 rounded-xl border border-white/5 line-clamp-2">
+                        {{ e.description }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Empty State Mobile Events -->
+                  <div v-else class="sm:hidden p-12 text-center text-slate-400 glass-panel mx-2 border-white/5">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 opacity-40 mb-3 mx-auto">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                    </svg>
+                    <p class="font-bold">No hay eventos administrativos.</p>
                   </div>
               </div>
           </div>
@@ -567,7 +713,7 @@ const checkSession = async () => {
     isAuthenticated.value = true
     userEmail.value = data.session.user?.email || ''
     
-    // Check if email is in whitelist via database
+    // Check if email is in allowlist via database
     try {
       const { data: adminData } = await insforge.database
         .from(getTableName('members'))

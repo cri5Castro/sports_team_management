@@ -97,7 +97,7 @@
                          <button 
                           v-if="deletingId !== d.id"
                           @click="deletingId = d.id"
-                          class="p-2.5 text-slate-500 hover:text-pride-red hover:bg-pride-red/10 rounded-xl transition"
+                          class="p-2.5 text-slate-500 hover:text-pride-red hover:bg-pride-red/10 rounded-xl transition opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100"
                           title="Eliminar"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -190,9 +190,14 @@
         <!-- Header -->
         <div class="bg-slate-800/80 p-5 sm:p-6 sm:px-8 border-b border-white/10 flex justify-between items-center sticky top-0 z-20 backdrop-blur-xl">
            <div class="flex items-center gap-4">
-              <button @click="currentView = 'list'" class="p-2 sm:p-2.5 bg-slate-900 border border-white/10 text-slate-400 hover:text-white hover:bg-slate-800 rounded-full transition shadow-md group pr-3 flex items-center gap-2">
-                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
-                 <span class="text-xs font-bold uppercase tracking-wider hidden sm:inline-block">Volver</span>
+              <button 
+                @click="currentView = 'list'" 
+                class="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 border border-white/10 hover:bg-slate-800 hover:border-white/20 transition-all active:scale-95 group shadow-lg"
+              >
+                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 text-slate-400 group-hover:text-white group-hover:-translate-x-0.5 transition-all">
+                   <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                 </svg>
+                 <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-hover:text-white whitespace-nowrap">Volver</span>
               </button>
               <h3 class="text-xl sm:text-2xl font-black text-white">{{ editingId ? 'Editar Descuento' : 'Crear Descuento' }}</h3>
            </div>

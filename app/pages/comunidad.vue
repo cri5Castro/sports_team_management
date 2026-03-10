@@ -1,33 +1,25 @@
 <template>
-  <div class="space-y-8 md:space-y-12 animate-fade-in relative z-10">
-    <!-- Hero Section -->
-    <div class="text-center space-y-4">
-      <h1 class="text-4xl md:text-6xl font-black tracking-tighter text-white">
-        <span class="pride-gradient-text">Eventos </span> y Comunidad
-      </h1>
-      <p class="text-slate-400 text-lg max-w-2xl mx-auto">
-        Entérate de nuestras próximas fechas, entrenamientos especiales y lo mejor de Sharkes en redes sociales.
-      </p>
-
-      <!-- Discovery "Scroll to Feed" Hint (Relocated to Hero) -->
-      <div v-if="pendingEvents.length" class="flex justify-center pt-2">
-        <button 
-          @click="scrollToFeed"
-          class="glass-panel px-4 py-2 flex items-center gap-3 border-white/10 bg-white/[0.03] active:scale-95 transition-all animate-bounce"
-        >
-          <div class="w-5 h-5 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center p-[1px]">
-            <div class="w-full h-full bg-slate-900 rounded-[7px] flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-white w-2.5 h-2.5">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-              </svg>
-            </div>
-          </div>
-          <span class="text-[9px] font-black uppercase tracking-widest text-slate-300">Ver Feed @sharkeslgbtiq</span>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-2.5 h-2.5 text-pride-light">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
-          </svg>
-        </button>
+  <div class="space-y-12 md:space-y-20 animate-fade-in relative z-10 pb-20">
+    <!-- Immersive Community Hero -->
+    <div class="relative py-8 md:py-12 overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-pride-blue/5 via-transparent to-transparent opacity-50 blur-3xl"></div>
+      <div class="relative text-center space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-2">
+           <span class="relative flex h-2 w-2">
+             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pride-blue opacity-75"></span>
+             <span class="relative inline-flex rounded-full h-2 w-2 bg-pride-blue"></span>
+           </span>
+           <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Comunidad Activa</span>
+        </div>
+        
+        <h1 class="text-5xl md:text-8xl font-black tracking-tighter text-white leading-[0.85]">
+          EL CORAZÓN DE<br/>
+          <span class="pride-gradient-text italic"> SHARKES</span>
+        </h1>
+        
+        <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto font-medium leading-relaxed px-4">
+          Explora nuestros próximos eventos, revive los mejores momentos y conecta con la comunidad en redes sociales.
+        </p>
       </div>
     </div>
 

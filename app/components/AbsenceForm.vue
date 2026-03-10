@@ -25,9 +25,9 @@
           </svg>
         </div>
 
-        <h3 class="text-3xl sm:text-4xl font-black text-white mb-3 tracking-tighter">¡Listo, Sharke!</h3>
+        <h3 class="text-3xl sm:text-4xl font-black text-white mb-3 tracking-tighter">¡Todo listo, Sharke!</h3>
         <p class="text-slate-400 text-sm sm:text-lg mb-10 max-w-[280px] sm:max-w-md mx-auto leading-relaxed">
-          Pudimos registrar tu ausencia con éxito. ¡Nos vemos en el próximo entrenamiento!
+          Hemos registrado tu ausencia con éxito. ¡Nos vemos en el próximo entrenamiento!
         </p>
         
         <!-- Absence Summary Counter Card -->
@@ -66,11 +66,11 @@
         <div class="w-full max-w-sm space-y-4 animate-fade-up" style="animation-delay: 0.1s">
           <button 
             @click="resetForm" 
-            class="w-full h-16 rounded-2xl bg-white text-slate-900 font-black text-lg transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[0_20px_40px_rgba(255,255,255,0.15)] flex items-center justify-center gap-3 group"
+            class="w-full h-16 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md text-white font-black text-lg transition-all hover:bg-white/10 active:scale-[0.98] shadow-2xl flex items-center justify-center gap-3 group"
           >
-            <span>Regresar</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5 group-hover:-translate-x-1 transition-transform">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            <span class="uppercase tracking-widest text-sm">Cerrar</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5 group-hover:scale-110 transition-transform text-pride-light">
+               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>

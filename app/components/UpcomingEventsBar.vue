@@ -79,8 +79,8 @@ const nextEvent = computed(() => {
 })
 
 const showBar = computed(() => {
-  // Hide on admin pages
-  if (route.path.startsWith('/admin')) return false
+  // Hide on admin pages and home page (dashboard already has it)
+  if (route.path.startsWith('/admin') || route.path === '/') return false
   
   // Hide if dismissed manually
   if (isDismissed.value) return false

@@ -4,6 +4,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss', 'nuxt-icon'],
   css: ['~/assets/css/main.css'],
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' }
+  },
   runtimeConfig: {
     public: {
       insforgeUrl: process.env.NUXT_PUBLIC_INSFORGE_URL || 'https://t3tzpuc3.us-west.insforge.app',
