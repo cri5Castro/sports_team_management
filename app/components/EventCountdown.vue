@@ -1,15 +1,15 @@
 <template>
-  <div class="flex gap-2">
+  <div class="flex gap-3">
     <div v-for="(unit, index) in timeUnits" :key="unit.label" class="flex flex-col items-center">
       <div 
-        class="w-12 h-12 md:w-14 md:h-14 rounded-xl flex flex-col items-center justify-center border border-white/10 shadow-lg transition-transform hover:scale-105"
+        class="w-11 h-12 md:w-14 md:h-16 rounded-2xl flex flex-col items-center justify-center border border-white/10 shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 group/unit"
         :style="{ 
-          background: `linear-gradient(135deg, ${unit.color}20, ${unit.color}05)`,
-          borderColor: `${unit.color}40`
+          background: `linear-gradient(135deg, ${unit.color}15, ${unit.color}05)`,
+          borderColor: `${unit.color}30`
         }"
       >
-        <span class="text-lg md:text-xl font-black text-white leading-tight">{{ unit.value }}</span>
-        <span class="text-[8px] md:text-[9px] uppercase font-black tracking-tighter" :style="{ color: unit.color }">{{ unit.label }}</span>
+        <span class="text-base md:text-xl font-black text-white leading-tight group-hover/unit:scale-110 transition-transform">{{ unit.value }}</span>
+        <span class="text-[7px] md:text-[8px] uppercase font-black tracking-widest mt-0.5" :style="{ color: unit.color }">{{ unit.label }}</span>
       </div>
     </div>
   </div>

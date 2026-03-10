@@ -1,18 +1,39 @@
 <template>
-  <div class="space-y-12 animate-fade-in relative z-10">
+  <div class="space-y-8 md:space-y-12 animate-fade-in relative z-10">
     <!-- Hero Section -->
     <div class="text-center space-y-4">
       <h1 class="text-4xl md:text-6xl font-black tracking-tighter text-white">
-        <span class="pride-gradient-text"> Eventos </span> y Comunidad 
+        <span class="pride-gradient-text">Eventos </span> y Comunidad
       </h1>
       <p class="text-slate-400 text-lg max-w-2xl mx-auto">
         Entérate de nuestras próximas fechas, entrenamientos especiales y lo mejor de Sharkes en redes sociales.
       </p>
+
+      <!-- Discovery "Scroll to Feed" Hint (Relocated to Hero) -->
+      <div v-if="pendingEvents.length" class="flex justify-center pt-2">
+        <button 
+          @click="scrollToFeed"
+          class="glass-panel px-4 py-2 flex items-center gap-3 border-white/10 bg-white/[0.03] active:scale-95 transition-all animate-bounce"
+        >
+          <div class="w-5 h-5 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center p-[1px]">
+            <div class="w-full h-full bg-slate-900 rounded-[7px] flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-white w-2.5 h-2.5">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              </svg>
+            </div>
+          </div>
+          <span class="text-[9px] font-black uppercase tracking-widest text-slate-300">Ver Feed @sharkeslgbtiq</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-2.5 h-2.5 text-pride-light">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- Upcoming Events Section -->
     <section class="space-y-6">
-      <div class="flex items-center justify-between px-2">
+      <div class="flex items-center justify-between">
         <h2 class="text-xl md:text-2xl font-bold flex items-center gap-2 md:gap-3 text-white">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="text-pride-blue w-6 h-6 md:w-7 md:h-7">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
@@ -53,69 +74,92 @@
           </button>
         </div>
 
-        <!-- Hybrid Grid/Carousel Container -->
-        <div 
-          ref="carouselRef" 
-          class="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-8 no-scrollbar overflow-y-visible"
-          :class="{
-            'md:grid md:grid-cols-2 lg:px-0 lg:mx-0': pendingEvents.length <= 2,
-            'carousel-mask -mx-8 px-8': pendingEvents.length > 2
-          }"
-        >
+        <!-- Hybrid Grid/Carousel Container Wrapper with CSS Masking -->
+        <div class="relative w-full">
           <div 
-            v-for="event in pendingEvents" 
-            :key="event.id"
-            class="snap-center shrink-0 glass-panel overflow-hidden border border-white/10 group/card hover:border-white/20 transition-all flex flex-col shadow-2xl"
+            ref="carouselRef" 
+            class="flex gap-4 md:gap-10 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-14 no-scrollbar overscroll-x-contain transform-gpu"
+            style="
+              -webkit-overflow-scrolling: touch; 
+              scroll-padding-left: 9vw; 
+              scroll-padding-right: 9vw; 
+              will-change: transform;
+              mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+              -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            "
             :class="{
-              'w-[80vw]': true,
-              'md:w-full': pendingEvents.length <= 2,
-              'md:w-[48%] lg:w-[46%]': pendingEvents.length > 2
+              'md:grid md:grid-cols-2 lg:px-0 lg:mx-0': pendingEvents.length <= 2,
+              'px-[9vw] -mx-4 md:px-0 md:mx-0': pendingEvents.length > 2
             }"
           >
-            <!-- Event Photo -->
-            <div class="relative h-48 overflow-hidden bg-slate-800">
-              <img 
-                v-if="event.photoUrl" 
-                :src="event.photoUrl" 
-                :alt="event.title"
-                class="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500"
-              />
-              <div v-else class="w-full h-full flex items-center justify-center opacity-20">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-slate-400">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                  </svg>
+            <div 
+              v-for="(event, index) in pendingEvents" 
+              :key="event.id"
+              :data-index="index"
+              class="carousel-item snap-center shrink-0 glass-panel overflow-hidden border border-white/10 group/card hover:border-white/20 transition-all duration-700 ease-out flex flex-col shadow-2xl relative"
+              :class="{
+                'w-[82vw]': true,
+                'md:w-full': pendingEvents.length <= 2,
+                'md:w-[calc(50%-20px)] lg:w-[calc(50%-32px)]': pendingEvents.length > 2,
+                'opacity-25 scale-[0.85] blur-[3px] transition-all duration-700': activeIndex !== index && pendingEvents.length > 2,
+                'opacity-100 scale-100 blur-0 ring-1 ring-white/30 shadow-pride-blue/20': activeIndex === index && pendingEvents.length > 2
+              }"
+            >
+              <!-- Event Photo -->
+              <div class="relative h-48 overflow-hidden bg-slate-800">
+                <img 
+                  v-if="event.photoUrl" 
+                  :src="event.photoUrl" 
+                  :alt="event.title"
+                  class="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500"
+                />
+                <div v-else class="w-full h-full flex items-center justify-center opacity-20">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-slate-400">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                    </svg>
+                </div>
+                
+                <!-- Floating Date Badge -->
+                <div class="absolute top-4 left-4 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20 flex flex-col items-center">
+                  <span class="text-lg font-black leading-tight text-white">{{ getDay(event.startDate) }}</span>
+                  <span class="text-[10px] uppercase font-bold text-pride-light tracking-tighter">{{ getMonth(event.startDate) }}</span>
+                </div>
+                
+                <!-- Pride Badge -->
+                <div class="absolute bottom-4 right-4 pride-bar !h-1 !w-16 rounded-full opacity-70"></div>
               </div>
-              
-              <!-- Floating Date Badge -->
-              <div class="absolute top-4 left-4 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20 flex flex-col items-center">
-                <span class="text-lg font-black leading-tight text-white">{{ getDay(event.startDate) }}</span>
-                <span class="text-[10px] uppercase font-bold text-pride-light tracking-tighter">{{ getMonth(event.startDate) }}</span>
-              </div>
-              
-              <!-- Pride Badge -->
-              <div class="absolute bottom-4 right-4 pride-bar !h-1 !w-16 rounded-full opacity-70"></div>
-            </div>
 
-            <div class="p-6 space-y-4 flex-1 flex flex-col">
-              <div class="flex-1">
-                  <h3 class="text-xl font-bold text-white mb-2 group-hover/card:text-pride-light transition-colors">{{ event.title }}</h3>
-                  <p class="text-slate-400 text-sm leading-relaxed line-clamp-2 md:line-clamp-3">{{ event.description }}</p>
-                  
-                  <div v-if="event.endDate" class="mt-4 flex items-center gap-2 text-xs font-bold text-slate-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                      </svg>
-                      Del {{ formatDate(event.startDate) }} al {{ formatDate(event.endDate) }}
-                  </div>
-              </div>
+              <div class="p-6 space-y-4 flex-1 flex flex-col">
+                <div class="flex-1">
+                    <h3 class="text-xl font-bold text-white mb-2 group-hover/card:text-pride-light transition-colors">{{ event.title }}</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed line-clamp-2 md:line-clamp-3">{{ event.description }}</p>
+                    
+                    <div v-if="event.endDate" class="mt-4 flex items-center gap-2 text-xs font-bold text-slate-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        Del {{ formatDate(event.startDate) }} al {{ formatDate(event.endDate) }}
+                    </div>
+                </div>
 
-              <!-- Pride Countdown -->
-              <div class="pt-6 border-t border-white/5 mt-auto">
-                 <p class="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3">Comienza en:</p>
-                 <EventCountdown :targetDate="event.startDate + 'T00:00:00'" />
+                <!-- Pride Countdown -->
+                <div class="pt-6 border-t border-white/5 mt-auto">
+                   <p class="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3">Comienza en:</p>
+                   <EventCountdown :targetDate="event.startDate + 'T00:00:00'" />
+                </div>
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Pagination Dots (Mobile Only) -->
+        <div v-if="pendingEvents.length > 1" class="flex justify-center gap-2 mt-2 md:hidden">
+          <div 
+            v-for="(_, index) in pendingEvents" 
+            :key="index"
+            class="h-1.5 rounded-full transition-all duration-300"
+            :class="activeIndex === index ? 'w-6 bg-pride-light' : 'w-1.5 bg-white/20'"
+          ></div>
         </div>
       </div>
 
@@ -146,9 +190,10 @@
       </div>
     </section>
 
+
     <!-- Instagram Section -->
-    <section class="space-y-6 pt-8 border-t border-white/5">
-      <div class="flex items-center justify-between px-2 gap-4 flex-wrap">
+    <section id="instagram-feed" class="space-y-6 pt-8 md:pt-12 border-t border-white/5">
+      <div class="flex items-center justify-between gap-4 flex-wrap">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center p-[2.5px] shadow-lg shadow-pink-500/20">
             <div class="w-full h-full bg-slate-900 rounded-[13px] flex items-center justify-center">
@@ -188,6 +233,28 @@ import InstagramFeed from '~/components/InstagramFeed.vue'
 
 const events = ref([])
 const carouselRef = ref(null)
+const activeIndex = ref(0)
+let observer = null
+
+const setupObserver = () => {
+    if (observer) observer.disconnect()
+    
+    observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const index = parseInt(entry.target.getAttribute('data-index'))
+                activeIndex.value = index
+            }
+        })
+    }, {
+        root: carouselRef.value,
+        threshold: 0.7,
+        rootMargin: '0px'
+    })
+
+    const items = carouselRef.value?.querySelectorAll('.carousel-item')
+    items?.forEach(item => observer.observe(item))
+}
 
 const scrollCarousel = (direction) => {
     if (!carouselRef.value) return
@@ -196,6 +263,10 @@ const scrollCarousel = (direction) => {
         left: direction === 'next' ? scrollAmount : -scrollAmount,
         behavior: 'smooth'
     })
+}
+
+const scrollToFeed = () => {
+    document.getElementById('instagram-feed')?.scrollIntoView({ behavior: 'smooth' })
 }
 
 const fetchEvents = async () => {
@@ -207,8 +278,9 @@ const fetchEvents = async () => {
     }
 }
 
-onMounted(() => {
-    fetchEvents()
+onMounted(async () => {
+    await fetchEvents()
+    setTimeout(setupObserver, 100)
 })
 
 const pendingEvents = computed(() => {

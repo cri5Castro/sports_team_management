@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen relative overflow-x-hidden">
+  <div class="min-h-screen relative font-sans text-slate-200 overflow-x-hidden">
     <div class="pride-bar fixed top-0 left-0 z-50"></div>
     <AppHeader />
     <main class="pt-24 pb-12 px-4 max-w-4xl mx-auto w-full relative z-10">
