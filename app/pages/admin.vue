@@ -383,7 +383,14 @@
                       <button @click="showEventForm = !showEventForm" class="glass-button !py-2 !px-4 hover:border-pride-blue/50 text-xs pride-glow">
                           {{ showEventForm ? 'Cancelar' : 'Nuevo Evento' }}
                       </button>
-                      <button @click="confirmDeletePastEvents" class="glass-button !py-2 !px-4 hover:border-pride-red/50 text-xs text-pride-red">
+                      
+                      <!-- Inline Bulk Delete Confirmation -->
+                      <div v-if="isConfirmingClearPast" class="flex items-center gap-2 bg-slate-900 border border-pride-red/30 rounded-xl p-1 shadow-lg">
+                          <span class="text-[10px] font-black uppercase tracking-tight text-pride-red ml-2">¿Limpiar pasados?</span>
+                          <button @click="handleClearPastEvents" class="px-3 py-1.5 bg-pride-red text-white text-[10px] font-black uppercase rounded-lg hover:bg-pride-red/80 transition active:scale-95" :disabled="isCleaningPastEvents">Sí</button>
+                          <button @click="isConfirmingClearPast = false" class="px-3 py-1.5 bg-slate-800 text-slate-300 text-[10px] font-black uppercase rounded-lg hover:bg-slate-700 transition active:scale-95" :disabled="isCleaningPastEvents">No</button>
+                      </div>
+                      <button v-else @click="isConfirmingClearPast = true" class="glass-button !py-2 !px-4 hover:border-pride-red/50 text-xs text-pride-red">
                           Limpiar Pasados
                       </button>
                   </div>
@@ -424,11 +431,11 @@
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div class="space-y-1">
                               <label class="text-[10px] font-black uppercase text-slate-400">Fecha Inicio</label>
-                              <input v-model="newEvent.startDate" required type="date" class="glass-input !py-2" />
+                              <input v-model="newEvent.startDate" required type="date" style="color-scheme: dark;" class="glass-input !bg-slate-950/80 !p-3 !text-sm w-full" />
                           </div>
                           <div class="space-y-1">
                               <label class="text-[10px] font-black uppercase text-slate-400">Fecha Fin (Opcional)</label>
-                              <input v-model="newEvent.endDate" type="date" class="glass-input !py-2" />
+                              <input v-model="newEvent.endDate" type="date" style="color-scheme: dark;" class="glass-input !bg-slate-950/80 !p-3 !text-sm w-full" />
                           </div>
                       </div>
                       <div class="flex justify-end">
@@ -460,13 +467,28 @@
                                       <div class="font-bold text-white">{{ e.title }}</div>
                                       <div class="text-xs text-slate-500 truncate max-w-xs">{{ e.description }}</div>
                                   </td>
-                                  <td class="p-4 text-right">
-                                      <button @click="handleDeleteEvent(e.id)" class="text-slate-500 hover:text-pride-red p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                          </svg>
-                                      </button>
-                                  </td>
+                                   <td class="p-4 text-right relative">
+                                       <div class="inline-flex justify-end">
+                                           <button 
+                                              v-if="deletingEventId !== e.id"
+                                              @click="deletingEventId = e.id" 
+                                              class="text-slate-500 hover:text-pride-red p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                              title="Eliminar Evento"
+                                           >
+                                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                               </svg>
+                                           </button>
+                                           
+                                           <div v-else class="flex items-center bg-slate-900 border border-pride-red rounded p-1 absolute right-6 top-1/2 -translate-y-1/2 shadow-lg z-10 w-[140px] justify-between">
+                                             <span class="text-[10px] font-bold text-pride-red ml-2 leading-none">¿Eliminar?</span>
+                                             <div class="flex gap-1 pr-1">
+                                               <button @click="handleDeleteEvent(e.id)" class="px-2 py-1 bg-pride-red text-white text-[10px] font-bold rounded" :disabled="isSubmittingEvent">Sí</button>
+                                               <button @click="deletingEventId = null" class="px-2 py-1 bg-slate-700 text-white text-[10px] font-bold rounded" :disabled="isSubmittingEvent">No</button>
+                                             </div>
+                                           </div>
+                                       </div>
+                                   </td>
                               </tr>
                           </tbody>
                       </table>
@@ -523,6 +545,9 @@ const newEvent = ref({
 
 const eventPreviewImage = ref(null)
 const eventImageFile = ref(null)
+const deletingEventId = ref(null)
+const isConfirmingClearPast = ref(false)
+const isCleaningPastEvents = ref(false)
 
 // InsForge Client
 const insforge = useInsforge()
@@ -879,13 +904,19 @@ const handleCreateEvent = async () => {
             finalPhotoUrl = data.url
         }
 
-        await $fetch('/api/events', {
-            method: 'POST',
-            body: {
-                ...newEvent.value,
-                photoUrl: finalPhotoUrl
-            }
-        })
+        const { error } = await insforge.database
+            .from(getTableName('events'))
+            .insert({
+                title: newEvent.value.title,
+                description: newEvent.value.description,
+                start_date: newEvent.value.startDate,
+                end_date: newEvent.value.endDate,
+                photo_url: finalPhotoUrl,
+                is_active: newEvent.value.isActive
+            })
+            
+        if (error) throw error
+        
         await fetchEvents()
         showEventForm.value = false
         // Reset form
@@ -900,22 +931,39 @@ const handleCreateEvent = async () => {
 }
 
 const handleDeleteEvent = async (id) => {
-    if (!confirm('¿Seguro que quieres eliminar este evento?')) return
     try {
-        await $fetch(`/api/events?id=${id}`, { method: 'DELETE' })
+        isSubmittingEvent.value = true
+        const { error } = await insforge.database
+            .from(getTableName('events'))
+            .delete()
+            .eq('id', id)
+            
+        if (error) throw error
         await fetchEvents()
+        deletingEventId.value = null
     } catch (err) {
-        alert('Error al eliminar evento')
+        alert('Error al eliminar evento: ' + err.message)
+    } finally {
+        isSubmittingEvent.value = false
     }
 }
 
-const confirmDeletePastEvents = async () => {
-    if (!confirm('¿Seguro que quieres eliminar TODOS los eventos pasados? Esta acción no se puede deshacer.')) return
+const handleClearPastEvents = async () => {
+    isCleaningPastEvents.value = true
     try {
-        await $fetch('/api/events?allPast=true', { method: 'DELETE' })
+        const now = new Date().toISOString().split('T')[0]
+        const { error } = await insforge.database
+            .from(getTableName('events'))
+            .delete()
+            .lt('start_date', now)
+            
+        if (error) throw error
         await fetchEvents()
+        isConfirmingClearPast.value = false
     } catch (err) {
-        alert('Error al limpiar eventos')
+        alert('Error al limpiar eventos: ' + err.message)
+    } finally {
+        isCleaningPastEvents.value = false
     }
 }
 </script>

@@ -153,4 +153,66 @@
   .animate-shake {
     animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
   }
+
+  /* Custom Utilities */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  @keyframes bounce-x {
+
+    0%,
+    100% {
+      transform: translateX(-25%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+
+    50% {
+      transform: translateX(0);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+
+  .animate-bounce-x {
+    animation: bounce-x 1s infinite;
+  }
+
+  /* Pride Glow Utility - FAANG Premium Effect */
+  .pride-glow {
+    position: relative !important;
+    z-index: 1;
+  }
+
+  .pride-glow::after {
+    content: '' !important;
+    position: absolute !important;
+    inset: -1px !important;
+    z-index: -1 !important;
+    border-radius: inherit !important;
+    background: linear-gradient(90deg, #E40303, #FF8C00, #FFED00, #008026, #24408E, #732982, #5BCEFA, #F5A9B8) !important;
+    filter: blur(10px) !important;
+    opacity: 0 !important;
+    transition: opacity 0.4s ease, filter 0.4s ease !important;
+    pointer-events: none !important;
+  }
+
+  .pride-glow:hover::after {
+    opacity: 0.5 !important;
+    filter: blur(14px) !important;
+  }
+
+  .pride-glow:active::after {
+    opacity: 0.8 !important;
+    filter: blur(20px) !important;
+  }
+
+  .carousel-mask {
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
+  }
 }
