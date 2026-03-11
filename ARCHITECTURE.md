@@ -58,6 +58,9 @@ The application leverages a unified backend logic but is deployed into two disti
    - Driven by the `NUXT_PUBLIC_DEMO_MODE=true` environment variable.
    - Utilizes testing infrastructure and includes "admin bypass" functionalities to easily demonstrate features without requiring standard authentication flows.
 
+### 🛡️ Database Isolation Pattern
+To manage these environments safely, all database interactions pass through a centralized `getTableName` utility on the server. This function appends a `_dev` suffix to collection names when in demo/development mode, ensuring that experimental data never pollutes the production database even if both environments share the same InsForge project.
+
 ## 📁 Directory Structure
 
 ```text
@@ -123,6 +126,16 @@ erDiagram
         date start_date
         date end_date
         boolean is_indefinite
+        timestamp created_at
+    }
+    EVENT {
+        uuid id PK
+        string title
+        string description
+        date startDate
+        date endDate
+        string photoUrl
+        boolean isActive
         timestamp created_at
     }
     

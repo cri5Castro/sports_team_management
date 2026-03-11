@@ -26,14 +26,14 @@ Built using **AI Agentic Accelerated Development**, Sharkes demonstrates how hum
 ### 👤 Member Portal
 - **Report Absences**: Simple, intuitive flow to notify the team of absences in upcoming training sessions.
 - **My Absences**: Review historical absence reports with a clean, organized interface.
-- **Benefits & Perks**: Access exclusive team discounts and benefits via a dedicated coupon system.
+- **Benefits & Perks**: Access exclusive team discounts and benefits via a dedicated coupon system with QR code support and validity tracking.
 - **Responsive Design**: Optimized for desktops and mobile devices (iOS/Android).
 
 ### 🔐 Admin Command Center
-- **Attendance Overview**: Monitor team presence and manage absence records.
+- **Attendance Overview**: Monitor team presence and manage absence records with advanced filtering (Past, Next Day, Name-based).
 - **Member Management**: Register new players and maintain team rosters.
-- **Dynamic Scheduling**: Update training times and locations on the fly.
-- **Coupon Control**: Create and manage reward coupons for the team.
+- **Event Coordination**: Create and manage team events with persistent storage and automatic cleanup.
+- **Coupon Control**: Create and manage reward coupons for the team, including image uploads for promotional banners.
 - **Secure Access**: Robust authentication using InsForge/Google OAuth.
 
 ---
@@ -120,11 +120,13 @@ sequenceDiagram
 
 ---
 
-### 🔀 Dual Deployment Strategy requirements
+### 🔀 Dual Deployment Strategy
 
 Sharkes implements a dual deployment pipeline to separate live user app from testing environments:
 - **Production (Live)**: Connects to the main InsForge backend. `NUXT_PUBLIC_DEMO_MODE` is disabled.
-- **Demo (Secondary Project)**: Connects to a secondary InsForge backend. `NUXT_PUBLIC_DEMO_MODE=true` is enabling testing and admin bypass functionalities without affecting the live database.
+- **Demo (Secondary Project)**: Connects to a secondary InsForge backend. `NUXT_PUBLIC_DEMO_MODE=true` is enabled, allowing testing and admin bypass functionalities without affecting the live database.
+
+Both environments share the same logic, utilizing the `getTableName` server utility to dynamically resolve collection names (e.g., appending `_dev` tags in demo mode), ensuring total data isolation.
 
 ---
 

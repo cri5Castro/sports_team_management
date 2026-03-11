@@ -7,7 +7,7 @@ Whether you're a player, a developer, or a fan, your input helps this tool grow 
 ## 🛠️ Development Process
 
 1. **Fork the repo** and create your branch from `main`.
-2. **Setup your environment** (see [README.md](./README.md)).
+2. **Setup your environment** (see [README.md](./README.md) and [Developer Guide](./docs/DEVELOPER_GUIDE.md)).
 3. **Write code** following the project's styling and structure.
 4. **Test your changes** thoroughly.
 5. **Issue a Pull Request**.
