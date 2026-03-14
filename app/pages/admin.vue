@@ -100,41 +100,73 @@
           <div v-if="adminTab === 'absences'" key="absences">
               <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
                   <h2 class="text-xl font-bold flex items-center gap-2">Gestión de Ausencias</h2>
-                  <div class="flex items-center gap-3 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
-                      <!-- Switch for past dates -->
-                      <label class="flex items-center cursor-pointer p-2.5 bg-slate-900 border border-white/10 rounded-xl hover:border-white/20 transition-all flex-shrink-0 group">
-                        <div class="relative">
-                          <input type="checkbox" v-model="showPastDates" class="sr-only" />
-                          <div class="block w-11 h-6 rounded-full transition-colors duration-300" :class="showPastDates ? 'bg-pride-green shadow-[0_0_15px_rgba(0,128,38,0.4)]' : 'bg-slate-700'"></div>
-                          <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 shadow-lg" :class="{'translate-x-5': showPastDates, 'scale-110': showPastDates}"></div>
-                        </div>
-                        <div class="ml-3 text-[10px] font-black uppercase tracking-widest transition-colors duration-300" :class="showPastDates ? 'text-pride-green' : 'text-slate-400 group-hover:text-slate-300'">Pasadas</div>
-                      </label>
+                  <div class="flex items-center gap-3 w-full md:w-auto">
+                      <!-- Desktop Filters (Hidden on Mobile) -->
+                      <div class="hidden md:flex items-center gap-3">
+                          <!-- Switch for past dates -->
+                          <label class="flex items-center cursor-pointer p-2.5 bg-slate-900 border border-white/10 rounded-xl hover:border-white/20 transition-all flex-shrink-0 group">
+                            <div class="relative">
+                              <input type="checkbox" v-model="showPastDates" class="sr-only" />
+                              <div class="block w-11 h-6 rounded-full transition-colors duration-300" :class="showPastDates ? 'bg-pride-green shadow-[0_0_15px_rgba(0,128,38,0.4)]' : 'bg-slate-700'"></div>
+                              <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 shadow-lg" :class="{'translate-x-5': showPastDates, 'scale-110': showPastDates}"></div>
+                            </div>
+                            <div class="ml-3 text-[10px] font-black uppercase tracking-widest transition-colors duration-300" :class="showPastDates ? 'text-pride-green' : 'text-slate-400 group-hover:text-slate-300'">Pasadas</div>
+                          </label>
 
-                      <!-- Switch for next day only -->
-                      <label class="flex items-center cursor-pointer p-2.5 bg-slate-900 border border-white/10 rounded-xl hover:border-white/20 transition-all flex-shrink-0 group">
-                        <div class="relative">
-                          <input type="checkbox" v-model="showNextDayOnly" class="sr-only" />
-                          <div class="block w-11 h-6 rounded-full transition-colors duration-300" :class="showNextDayOnly ? 'bg-pride-light shadow-[0_0_15px_rgba(91,206,250,0.4)]' : 'bg-slate-700'"></div>
-                          <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 shadow-lg" :class="{'translate-x-5': showNextDayOnly, 'scale-110': showNextDayOnly}"></div>
-                        </div>
-                        <div class="ml-3 text-[10px] font-black uppercase tracking-widest transition-colors duration-300" :class="showNextDayOnly ? 'text-pride-light' : 'text-slate-400 group-hover:text-slate-300'">Próxima Fecha</div>
-                      </label>
+                          <!-- Switch for next day only -->
+                          <label class="flex items-center cursor-pointer p-2.5 bg-slate-900 border border-white/10 rounded-xl hover:border-white/20 transition-all flex-shrink-0 group">
+                            <div class="relative">
+                              <input type="checkbox" v-model="showNextDayOnly" class="sr-only" />
+                              <div class="block w-11 h-6 rounded-full transition-colors duration-300" :class="showNextDayOnly ? 'bg-pride-light shadow-[0_0_15px_rgba(91,206,250,0.4)]' : 'bg-slate-700'"></div>
+                              <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 shadow-lg" :class="{'translate-x-5': showNextDayOnly, 'scale-110': showNextDayOnly}"></div>
+                            </div>
+                            <div class="ml-3 text-[10px] font-black uppercase tracking-widest transition-colors duration-300" :class="showNextDayOnly ? 'text-pride-light' : 'text-slate-400 group-hover:text-slate-300'">Próxima Fecha</div>
+                          </label>
 
-                      <button @click="exportCSV" class="glass-button !py-2 !px-4 hover:border-pride-green/50 text-xs pride-glow flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 text-pride-green">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                        </svg>
-                        Exportar
+                          <!-- Switch for periods only -->
+                          <label class="flex items-center cursor-pointer p-2.5 bg-slate-900 border border-white/10 rounded-xl hover:border-white/20 transition-all flex-shrink-0 group">
+                            <div class="relative">
+                              <input type="checkbox" v-model="showRangesOnly" class="sr-only" />
+                              <div class="block w-11 h-6 rounded-full transition-colors duration-300" :class="showRangesOnly ? 'bg-pride-pink shadow-[0_0_15px_rgba(228,3,3,0.4)]' : 'bg-slate-700'"></div>
+                              <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 shadow-lg" :class="{'translate-x-5': showRangesOnly, 'scale-110': showRangesOnly}"></div>
+                            </div>
+                            <div class="ml-3 text-[10px] font-black uppercase tracking-widest transition-colors duration-300" :class="showRangesOnly ? 'text-pride-pink' : 'text-slate-400 group-hover:text-slate-300'">Periodos</div>
+                          </label>
+
+                          <button @click="exportCSV" class="glass-button !py-2 !px-4 hover:border-pride-green/50 text-xs pride-glow flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 text-pride-green">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                            </svg>
+                            Exportar
+                          </button>
+                          
+                          <label class="glass-button !py-2 !px-4 hover:border-pride-blue/50 text-xs cursor-pointer pride-glow flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 text-pride-blue">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                            </svg>
+                            Importar
+                            <input type="file" accept=".csv" class="hidden" @change="importCSV" />
+                          </label>
+                      </div>
+
+                      <!-- Mobile Filter Button (Premium FAANG Style) -->
+                      <button 
+                        @click="showFilterSheet = true"
+                        class="md:hidden w-full glass-button !py-3 !px-6 flex items-center justify-between pride-glow group"
+                      >
+                        <div class="flex items-center gap-3">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-pride-blue">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 18H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0m-9.75 0h9.75" />
+                          </svg>
+                          <span class="font-black text-xs uppercase tracking-widest">Opciones de Filtro</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <span v-if="showPastDates || showNextDayOnly || showRangesOnly" class="w-2 h-2 rounded-full bg-pride-light animate-pulse"></span>
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                          </svg>
+                        </div>
                       </button>
-                      
-                      <label class="glass-button !py-2 !px-4 hover:border-pride-blue/50 text-xs cursor-pointer pride-glow flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 text-pride-blue">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
-                        </svg>
-                        Importar
-                        <input type="file" accept=".csv" class="hidden" @change="importCSV" />
-                      </label>
                   </div>
               </div>
 
@@ -196,21 +228,21 @@
       <!-- Dashboard Stats - Interactive Filters -->
       <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
         <button 
-          @click="currentFilter = 'all'"
+          @click="clearFilters"
           class="glass-panel p-4 text-left transition-all active:scale-95 group"
-          :class="currentFilter === 'all' ? 'ring-2 ring-white bg-white/10' : 'bg-slate-800/80 hover:bg-slate-800'"
+          :class="isFilterActive ? 'ring-2 ring-white bg-white/10' : 'bg-slate-800/80 hover:bg-slate-800'"
         >
           <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center justify-between">
             Total
-            <span v-if="currentFilter === 'all'" class="w-1.5 h-1.5 rounded-full bg-white"></span>
+            <span v-if="isFilterActive" class="w-1.5 h-1.5 rounded-full bg-white"></span>
           </p>
           <p class="text-3xl font-black">{{ totalCount }}</p>
         </button>
 
         <button 
-          @click="currentFilter = 'swimming'"
+          @click="toggleSport('swimming')"
           class="glass-panel p-4 text-left border-t-2 transition-all active:scale-95 group relative overflow-hidden"
-          :class="currentFilter === 'swimming' ? 'ring-2 ring-pride-light bg-pride-light/5 border-t-pride-light' : 'bg-slate-800/80 border-t-pride-light hover:bg-slate-800'"
+          :class="selectedSports.includes('swimming') ? 'ring-2 ring-pride-light bg-pride-light/5 border-t-pride-light' : 'bg-slate-800/80 border-t-pride-light hover:bg-slate-800'"
         >
           <div class="absolute -right-2 -top-2 opacity-10 group-hover:scale-110 transition-transform">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16">
@@ -219,15 +251,15 @@
           </div>
           <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center justify-between relative z-10">
             Natación
-            <span v-if="currentFilter === 'swimming'" class="w-1.5 h-1.5 rounded-full bg-pride-light"></span>
+            <span v-if="selectedSports.includes('swimming')" class="w-1.5 h-1.5 rounded-full bg-pride-light"></span>
           </p>
           <p class="text-3xl font-black relative z-10">{{ rawSwimmingCount }}</p>
         </button>
 
         <button 
-          @click="currentFilter = 'soccer'"
+          @click="toggleSport('soccer')"
           class="glass-panel p-4 text-left border-t-2 transition-all active:scale-95 group relative overflow-hidden"
-          :class="currentFilter === 'soccer' ? 'ring-2 ring-pride-green bg-pride-green/5 border-t-pride-green' : 'bg-slate-800/80 border-t-pride-green hover:bg-slate-800'"
+          :class="selectedSports.includes('soccer') ? 'ring-2 ring-pride-green bg-pride-green/5 border-t-pride-green' : 'bg-slate-800/80 border-t-pride-green hover:bg-slate-800'"
         >
           <div class="absolute -right-2 -top-2 opacity-10 group-hover:scale-110 transition-transform">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-16 h-16">
@@ -237,34 +269,100 @@
           </div>
           <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center justify-between relative z-10">
             Fútbol
-            <span v-if="currentFilter === 'soccer'" class="w-1.5 h-1.5 rounded-full bg-pride-green"></span>
+            <span v-if="selectedSports.includes('soccer')" class="w-1.5 h-1.5 rounded-full bg-pride-green"></span>
           </p>
           <p class="text-3xl font-black relative z-10">{{ rawSoccerCount }}</p>
         </button>
 
         <button 
-          @click="currentFilter = 'Tlatelolco'"
+          @click="toggleLocation('Tlatelolco')"
           class="glass-panel p-4 text-left border-t-2 transition-all active:scale-95 group"
-          :class="currentFilter === 'Tlatelolco' ? 'ring-2 ring-pride-pink bg-pride-pink/5 border-t-pride-pink' : 'bg-slate-800/80 border-t-pride-pink hover:bg-slate-800'"
+          :class="selectedLocations.includes('Tlatelolco') ? 'ring-2 ring-pride-pink bg-pride-pink/5 border-t-pride-pink' : 'bg-slate-800/80 border-t-pride-pink hover:bg-slate-800'"
         >
           <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center justify-between">
             Tlatelolco
-            <span v-if="currentFilter === 'Tlatelolco'" class="w-1.5 h-1.5 rounded-full bg-pride-pink"></span>
+            <span v-if="selectedLocations.includes('Tlatelolco')" class="w-1.5 h-1.5 rounded-full bg-pride-pink"></span>
           </p>
           <p class="text-3xl font-black">{{ rawTlatelolcoCount }}</p>
         </button>
 
         <button 
-          @click="currentFilter = 'Cuauhtemoc'"
+          @click="toggleLocation('Cuauhtemoc')"
           class="glass-panel p-4 text-left border-t-2 transition-all active:scale-95 group"
-          :class="currentFilter === 'Cuauhtemoc' ? 'ring-2 ring-pride-purple bg-pride-purple/5 border-t-pride-purple' : 'bg-slate-800/80 border-t-pride-purple hover:bg-slate-800'"
+          :class="selectedLocations.includes('Cuauhtemoc') ? 'ring-2 ring-pride-purple bg-pride-purple/5 border-t-pride-purple' : 'bg-slate-800/80 border-t-pride-purple hover:bg-slate-800'"
         >
           <p class="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-1 flex items-center justify-between">
             Cuauhtémoc
-            <span v-if="currentFilter === 'Cuauhtemoc'" class="w-1.5 h-1.5 rounded-full bg-pride-purple"></span>
+            <span v-if="selectedLocations.includes('Cuauhtemoc')" class="w-1.5 h-1.5 rounded-full bg-pride-purple"></span>
           </p>
           <p class="text-3xl font-black">{{ rawCuauhtemocCount }}</p>
         </button>
+      </div>
+      
+      <!-- Desktop Schedule Chips (Premium Scrollable with explicit controls) -->
+      <div class="hidden md:block relative mb-8 group/scroll">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 flex-shrink-0 mr-2">
+            <span class="w-1.5 h-4 pride-bar rounded-full"></span>
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Horarios</span>
+          </div>
+
+          <div class="relative flex-1 min-w-0">
+            <!-- Left Scroll Button -->
+            <button 
+              v-if="canScrollLeft"
+              @click="scroll('left')"
+              class="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-slate-900/90 border border-white/10 rounded-full text-white shadow-lg backdrop-blur-sm transition-opacity hover:bg-slate-800"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+              </svg>
+            </button>
+
+            <!-- Right Scroll Button -->
+            <button 
+              v-if="canScrollRight"
+              @click="scroll('right')"
+              class="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-slate-900/90 border border-white/10 rounded-full text-white shadow-lg backdrop-blur-sm transition-opacity hover:bg-slate-800"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+            </button>
+
+            <!-- Gradient Overlays -->
+            <div v-if="canScrollLeft" class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-slate-950 to-transparent z-[5] pointer-events-none"></div>
+            <div v-if="canScrollRight" class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-950 to-transparent z-[5] pointer-events-none"></div>
+
+            <div 
+              ref="scrollContainer"
+              @scroll="updateScrollState"
+              class="flex items-center gap-3 overflow-x-auto pb-1 no-scrollbar scroll-smooth"
+            >
+              <button 
+                v-for="slot in availableSlots" 
+                :key="slot.name + slot.location"
+                @click="toggleSlot(slot.name)"
+                class="flex-shrink-0 px-4 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 group active:scale-95"
+                :class="selectedSlots.includes(slot.name) 
+                  ? 'bg-white text-slate-900 border-white shadow-[0_5px_15px_rgba(255,255,255,0.2)]' 
+                  : 'bg-slate-900/40 text-slate-400 border-white/5 hover:border-white/20 hover:text-white'"
+              >
+                <span class="w-1.5 h-1.5 rounded-full" :class="slot.location === 'Tlatelolco' ? 'bg-pride-pink' : 'bg-pride-purple'"></span>
+                {{ slot.name }}
+                <span class="text-[9px] opacity-60 font-medium px-1.5 py-0.5 rounded-md bg-white/10">{{ slot.location }}</span>
+              </button>
+            </div>
+          </div>
+          
+          <button 
+            v-if="selectedSlots.length > 0" 
+            @click="selectedSlots = []" 
+            class="text-xs font-bold text-pride-red hover:underline ml-2 flex-shrink-0 px-2 active:scale-95 transition-transform"
+          >
+            Limpiar
+          </button>
+        </div>
       </div>
 
       <!-- Table View (Desktop) / Cards View (Mobile) -->
@@ -288,7 +386,17 @@
               
               <tbody class="divide-y divide-white/5" v-if="filteredAbsences.length">
                 <tr v-for="a in filteredAbsences" :key="a.id" class="hover:bg-white/5 transition group">
-                  <td class="p-4 pl-6 whitespace-nowrap font-medium">{{ formatDate(a.date) }}</td>
+                  <td class="p-4 pl-6 whitespace-nowrap font-medium">
+                    {{ formatDate(a.date) }}
+                    <div v-if="a.end_date" class="mt-1 flex items-center gap-2">
+                      <span class="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">
+                        al {{ formatDate(a.end_date) }}
+                      </span>
+                      <span class="px-1.5 py-0.5 rounded-full bg-pride-purple/20 border border-pride-purple/30 text-pride-purple text-[8px] font-black uppercase tracking-wider">
+                        {{ calculateDuration(a) }} sesiones
+                      </span>
+                    </div>
+                  </td>
                   <td class="p-4 font-bold text-pride-light">
                     <button 
                       @click="copyToClipboard(a.name)" 
@@ -392,6 +500,12 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                   </svg>
                   {{ formatDate(a.date) }}
+                  <span v-if="a.end_date" class="flex items-center gap-1.5">
+                    - {{ formatDate(a.end_date) }}
+                    <span class="px-1.5 py-0.5 rounded-full bg-pride-purple/20 border border-pride-purple/30 text-pride-purple text-[8px] font-black uppercase tracking-wider scale-90 origin-left">
+                      {{ calculateDuration(a) }} sesiones
+                    </span>
+                  </span>
                 </div>
               </div>
               
@@ -649,12 +763,213 @@
       </Transition>
       
     </div>
+
+    <!-- Mobile Filter Bottom Sheet (Premium UX) -->
+    <Teleport to="body">
+      <Transition name="fade">
+        <div v-if="showFilterSheet" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[100]" @click="showFilterSheet = false"></div>
+      </Transition>
+      <Transition name="sheet">
+        <div 
+          v-if="showFilterSheet" 
+          class="fixed bottom-0 left-0 right-0 bg-slate-900/98 backdrop-blur-3xl border-t border-white/10 rounded-t-[40px] z-[101] p-5 pb-10 shadow-[0_-20px_50px_rgba(0,0,0,0.6)] max-h-[92vh] overflow-hidden"
+          @click.stop
+        >
+          <!-- Header (Fixed) -->
+          <div class="px-5 pt-5 pb-2 border-b border-white/5 flex-shrink-0">
+            <!-- Handle -->
+            <div class="w-10 h-1.5 bg-slate-700/40 rounded-full mx-auto mb-4"></div>
+
+            <div class="flex items-center justify-between max-w-lg mx-auto mb-4">
+              <div class="flex flex-col">
+                <h3 class="text-lg font-black flex items-center gap-3 text-white">
+                  <span class="w-2 h-5 pride-bar rounded-full"></span>
+                  Configuración
+                </h3>
+              </div>
+              <button @click="showFilterSheet = false" class="p-2 bg-slate-800/80 rounded-full text-slate-400 hover:text-white transition-all active:scale-90 border border-white/5 shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="flex p-1 bg-slate-950/60 rounded-xl border border-white/5 max-w-lg mx-auto mb-2">
+              <button 
+                @click="filterTab = 'general'"
+                class="flex-1 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all"
+                :class="filterTab === 'general' ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-500 hover:text-slate-300'"
+              >
+                Ajustes
+              </button>
+              <button 
+                @click="filterTab = 'slots'"
+                class="flex-1 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all"
+                :class="filterTab === 'slots' ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-500 hover:text-slate-300'"
+              >
+                Horarios
+              </button>
+            </div>
+          </div>
+
+          <!-- Body (Compact) -->
+          <div class="flex-1 px-5 py-4 overflow-hidden">
+            <div class="max-w-lg mx-auto h-full flex flex-col">
+              
+              <!-- ADJUSTMENTS TAB -->
+              <div v-if="filterTab === 'general'" class="space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <div class="grid grid-cols-2 gap-2">
+                  <!-- Switch for past dates -->
+                  <div 
+                    @click="showPastDates = !showPastDates" 
+                    class="flex flex-col p-3 rounded-2xl border transition-all cursor-pointer group relative overflow-hidden"
+                    :class="showPastDates ? 'bg-pride-green/10 border-pride-green/50' : 'bg-slate-800/40 border-white/5'"
+                  >
+                    <div class="flex items-center justify-between mb-2">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-pride-green">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        <div class="relative w-7 h-3.5 rounded-full transition-colors duration-300" :class="showPastDates ? 'bg-pride-green' : 'bg-slate-700'">
+                          <div class="absolute left-0.5 top-0.5 bg-white w-2.5 h-2.5 rounded-full transition-transform duration-300" :class="{'translate-x-3.5': showPastDates}"></div>
+                        </div>
+                    </div>
+                    <span class="font-black text-[9px] uppercase tracking-widest" :class="showPastDates ? 'text-white' : 'text-slate-400'">Pasadas</span>
+                  </div>
+
+                  <!-- Switch for next day only -->
+                  <div 
+                    @click="showNextDayOnly = !showNextDayOnly" 
+                    class="flex flex-col p-3 rounded-2xl border transition-all cursor-pointer group relative overflow-hidden"
+                    :class="showNextDayOnly ? 'bg-pride-light/10 border-pride-light/50' : 'bg-slate-800/40 border-white/5'"
+                  >
+                     <div class="flex items-center justify-between mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-pride-light">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                        </svg>
+                        <div class="relative w-7 h-3.5 rounded-full transition-colors duration-300" :class="showNextDayOnly ? 'bg-pride-light' : 'bg-slate-700'">
+                          <div class="absolute left-0.5 top-0.5 bg-white w-2.5 h-2.5 rounded-full transition-transform duration-300" :class="{'translate-x-3.5': showNextDayOnly}"></div>
+                        </div>
+                    </div>
+                    <span class="font-black text-[9px] uppercase tracking-widest" :class="showNextDayOnly ? 'text-white' : 'text-slate-400'">Próxima</span>
+                  </div>
+
+                  <!-- Switch for periods only -->
+                  <div 
+                    @click="showRangesOnly = !showRangesOnly" 
+                    class="flex flex-col p-3 rounded-2xl border transition-all cursor-pointer group relative overflow-hidden"
+                    :class="showRangesOnly ? 'bg-pride-pink/10 border-pride-pink/50' : 'bg-slate-800/40 border-white/5'"
+                  >
+                    <div class="flex items-center justify-between mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-pride-pink">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                        </svg>
+                        <div class="relative w-7 h-3.5 rounded-full transition-colors duration-300" :class="showRangesOnly ? 'bg-pride-pink' : 'bg-slate-700'">
+                          <div class="absolute left-0.5 top-0.5 bg-white w-2.5 h-2.5 rounded-full transition-transform duration-300" :class="{'translate-x-3.5': showRangesOnly}"></div>
+                        </div>
+                    </div>
+                    <span class="font-black text-[9px] uppercase tracking-widest" :class="showRangesOnly ? 'text-white' : 'text-slate-400'">Periodos</span>
+                  </div>
+
+                  <!-- Reset Filters Button -->
+                  <div 
+                    @click="clearFilters" 
+                    class="flex flex-col p-3 rounded-2xl border border-white/5 bg-slate-800/40 transition-all cursor-pointer hover:bg-slate-800 active:scale-95 text-slate-400 hover:text-white"
+                  >
+                     <div class="flex items-center justify-between mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                    </div>
+                    <span class="font-black text-[9px] uppercase tracking-widest">Reiniciar</span>
+                  </div>
+                </div>
+
+                <!-- Export/Import Actions (Compact) -->
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                  <button @click="exportCSV(); showFilterSheet = false" class="glass-button !bg-slate-950/40 border-white/5 !py-2.5 flex items-center justify-center gap-2 group pride-glow rounded-xl">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5 text-pride-green">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                      </svg>
+                    <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Exportar CSV</span>
+                  </button>
+                  <label class="glass-button !bg-slate-950/40 border-white/5 !py-2.5 flex items-center justify-center gap-2 cursor-pointer group pride-glow rounded-xl">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5 text-pride-blue">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                      </svg>
+                    <span class="text-[9px] font-black uppercase tracking-wider text-slate-400">Importar CSV</span>
+                    <input type="file" accept=".csv" class="hidden" @change="importCSV($event); showFilterSheet = false" />
+                  </label>
+                </div>
+              </div>
+
+              <!-- SCHEDULES TAB -->
+              <div v-if="filterTab === 'slots'" class="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <!-- Location Toggle -->
+                <div class="flex p-0.5 bg-slate-800/60 rounded-lg border border-white/5">
+                   <button 
+                    v-for="loc in ['Tlatelolco', 'Cuauhtemoc']"
+                    :key="loc"
+                    @click="mobileSelectedLocation = loc"
+                    class="flex-1 py-2 rounded-md text-[9px] font-black uppercase tracking-[0.15em] transition-all"
+                    :class="mobileSelectedLocation === loc ? 'bg-slate-700 text-white' : 'text-slate-500'"
+                  >
+                    {{ loc }}
+                  </button>
+                </div>
+
+                <!-- Slots Grid -->
+                <div class="grid grid-cols-2 gap-2 pb-2">
+                  <button 
+                    v-for="slot in availableSlots.filter(s => s.location === mobileSelectedLocation)" 
+                    :key="slot.name"
+                    @click="toggleSlot(slot.name)"
+                    class="flex flex-col p-3 rounded-2xl border transition-all active:scale-[0.98] text-left relative"
+                    :class="selectedSlots.includes(slot.name) 
+                      ? 'bg-pride-light/10 border-pride-light' 
+                      : 'bg-slate-800/40 border-white/5'"
+                  >
+                    <div class="flex items-center justify-between mb-1">
+                      <div class="w-1.5 h-1.5 rounded-full" :class="mobileSelectedLocation === 'Tlatelolco' ? 'bg-pride-pink' : 'bg-pride-purple'"></div>
+                      <div v-if="selectedSlots.includes(slot.name)" class="text-pride-light">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4.026-5.54Z" clip-rule="evenodd" />
+                        </svg>
+                      </div>
+                    </div>
+                    <span class="text-[10px] font-bold leading-tight" :class="selectedSlots.includes(slot.name) ? 'text-white' : 'text-slate-400'">{{ slot.name.split(' - ').join(' \n ') }}</span>
+                  </button>
+                </div>
+
+                <!-- Info Help -->
+                <div class="p-3 rounded-xl bg-white/5 border border-white/5 flex items-center gap-3">
+                  <div class="w-1.5 h-6 pride-bar rounded-full"></div>
+                  <p class="text-[9px] text-slate-500 font-medium">Seleccionando un horario solo verás las asistencias que coincidan con esa franja.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Footer (Sticky/Persistent) -->
+          <div class="px-5 py-4 border-t border-white/5 flex-shrink-0 bg-slate-900 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+            <button 
+              @click="showFilterSheet = false" 
+              class="w-full py-4 bg-slate-950 text-white font-black uppercase tracking-[0.3em] rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.4)] active:scale-[0.98] transition-all text-[10px] border border-white/10 relative overflow-hidden group pride-glow max-w-lg mx-auto block"
+            >
+              <div class="absolute bottom-0 left-0 w-full h-1 pride-bar translate-y-full group-hover:translate-y-0 transition-transform"></div>
+              <span class="relative z-10">Aplicar Filtros</span>
+            </button>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { startOfDay, format, parseISO } from 'date-fns'
+import { ref, computed, onMounted, watch } from 'vue'
+import { startOfDay, format, parseISO, eachDayOfInterval, isSaturday, isSunday } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
 import { es } from 'date-fns/locale'
 import { isSessionPast } from '~/utils/time'
@@ -668,13 +983,128 @@ const userEmail = ref('')
 const allAbsences = ref([])
 const showPastDates = ref(false)
 const showNextDayOnly = ref(false)
-const currentFilter = ref('all')
+const selectedSports = ref([])
+const selectedLocations = ref([])
+const selectedSlots = ref([])
+const showRangesOnly = ref(false)
+const showFilterSheet = ref(false)
 const nameFilter = ref('')
+const isFilterActive = computed(() => selectedSports.value.length === 0 && selectedLocations.value.length === 0 && selectedSlots.value.length === 0)
+
+const clearFilters = () => {
+  selectedSports.value = []
+  selectedLocations.value = []
+  selectedSlots.value = []
+}
+
+const filterTab = ref('general') // 'general' or 'slots'
+const mobileSelectedLocation = ref('Tlatelolco')
+
+const toggleSport = (sport) => {
+  const index = selectedSports.value.indexOf(sport)
+  if (index > -1) {
+    selectedSports.value.splice(index, 1)
+  } else {
+    selectedSports.value.push(sport)
+  }
+}
+
+const toggleLocation = (loc) => {
+  const index = selectedLocations.value.indexOf(loc)
+  if (index > -1) {
+    selectedLocations.value.splice(index, 1)
+  } else {
+    selectedLocations.value.push(loc)
+  }
+}
+
+const toggleSlot = (slot) => {
+  const index = selectedSlots.value.indexOf(slot)
+  if (index > -1) {
+    selectedSlots.value.splice(index, 1)
+  } else {
+    selectedSlots.value.push(slot)
+  }
+}
+
+const availableSlots = computed(() => {
+  const slots = []
+  const hasSelectedLocs = selectedLocations.value.length > 0
+  const hasSelectedSports = selectedSports.value.length > 0
+  
+  const showSwimming = !hasSelectedSports || selectedSports.value.includes('swimming')
+  const showSoccer = !hasSelectedSports || selectedSports.value.includes('soccer')
+  
+  if (showSwimming) {
+    if (!hasSelectedLocs || selectedLocations.value.includes('Tlatelolco')) {
+      slots.push(...['12:00 pm - 1:00 pm', '1:00 pm - 2:00 pm'].map(s => ({ name: s, location: 'Tlatelolco', sport: 'swimming' })))
+    }
+    if (!hasSelectedLocs || selectedLocations.value.includes('Cuauhtemoc')) {
+      slots.push(...['4:00 pm - 5:00 pm', '5:00 pm - 6:00 pm'].map(s => ({ name: s, location: 'Cuauhtemoc', sport: 'swimming' })))
+    }
+  }
+  
+  if (showSoccer) {
+    if (!hasSelectedLocs || selectedLocations.value.includes('Tlatelolco')) {
+      slots.push({ name: '10:00 am - 11:00 am', location: 'Tlatelolco', sport: 'soccer' })
+    }
+  }
+  
+  return slots
+})
 const showAutocomplete = ref(false)
 const copiedName = ref('')
 const deletingId = ref(null)
 const isDeleting = ref(false)
 const adminTab = ref('absences')
+
+// Desktop Scroll Logic
+const scrollContainer = ref(null)
+const canScrollLeft = ref(false)
+const canScrollRight = ref(false)
+
+const updateScrollState = () => {
+  if (!scrollContainer.value) return
+  const { scrollLeft, scrollWidth, clientWidth } = scrollContainer.value
+  canScrollLeft.value = scrollLeft > 5
+  canScrollRight.value = scrollLeft + clientWidth < scrollWidth - 5
+}
+
+const scroll = (direction) => {
+  if (!scrollContainer.value) return
+  const scrollAmount = direction === 'left' ? -200 : 200
+  scrollContainer.value.scrollBy({ left: scrollAmount, behavior: 'smooth' })
+}
+
+watch(availableSlots, () => {
+  setTimeout(updateScrollState, 100)
+}, { deep: true })
+
+onMounted(() => {
+  setTimeout(updateScrollState, 500) // Initial check
+  window.addEventListener('resize', updateScrollState)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateScrollState)
+})
+
+// Helpers
+const calculateDuration = (a) => {
+  if (!a.date) return 0
+  const start = parseISO(a.date)
+  const end = a.end_date ? parseISO(a.end_date) : start
+  try {
+    const days = eachDayOfInterval({ start, end })
+    return days.filter(d => isSaturday(d) || isSunday(d)).length
+  } catch (e) {
+    return 0
+  }
+}
+
+const countSessionsInArray = (arr) => {
+  return arr.reduce((acc, a) => acc + calculateDuration(a), 0)
+}
 
 // Events State
 const allEvents = ref([])
@@ -749,6 +1179,13 @@ const handleLogout = async () => {
   userEmail.value = ''
 }
 
+// Lock body scroll when filter sheet is open
+watch(showFilterSheet, (newVal) => {
+  if (import.meta.client) {
+    document.body.style.overflow = newVal ? 'hidden' : ''
+  }
+})
+
 // Data Fetching
 const fetchAdminData = async () => {
   try {
@@ -788,16 +1225,29 @@ const filteredAbsences = computed(() => {
     result = result.filter(a => a.name.toLowerCase().includes(query))
   }
 
-  // 3. Filter by Type (Sport or Location)
-  if (currentFilter.value === 'swimming') {
-    result = result.filter(a => a.sport === 'swimming' || !a.sport)
-  } else if (currentFilter.value === 'soccer') {
-    result = result.filter(a => a.sport === 'soccer')
-  } else if (currentFilter.value === 'Tlatelolco' || currentFilter.value === 'Cuauhtemoc') {
-    result = result.filter(a => a.location === currentFilter.value)
+  // 3. Filter by Type (Sport and Location - Combinable)
+  if (selectedSports.value.length > 0) {
+    result = result.filter(a => {
+      const sport = a.sport || 'swimming'
+      return selectedSports.value.includes(sport)
+    })
+  }
+  
+  if (selectedLocations.value.length > 0) {
+    result = result.filter(a => selectedLocations.value.includes(a.location))
   }
 
-  // 3. Filter by Next Day Only
+  // 3.5 Filter by Time Slots
+  if (selectedSlots.value.length > 0) {
+    result = result.filter(a => selectedSlots.value.includes(a.time_slot))
+  }
+
+  // 4. Filter by Ranges Only
+  if (showRangesOnly.value) {
+    result = result.filter(a => a.end_date)
+  }
+
+  // 5. Filter by Next Day Only
   if (showNextDayOnly.value && result.length > 0) {
     // Sort to find the earliest date in the current selection
     const sorted = [...result].sort((a, b) => parseISO(a.date).getTime() - parseISO(b.date).getTime())
@@ -824,11 +1274,23 @@ const absencesAfterTimeFilters = computed(() => {
   return result
 })
 
-const totalCount = computed(() => absencesAfterTimeFilters.value.length)
-const rawSwimmingCount = computed(() => absencesAfterTimeFilters.value.filter(a => a.sport === 'swimming' || !a.sport).length)
-const rawSoccerCount = computed(() => absencesAfterTimeFilters.value.filter(a => a.sport === 'soccer').length)
-const rawTlatelolcoCount = computed(() => absencesAfterTimeFilters.value.filter(a => a.location === 'Tlatelolco').length)
-const rawCuauhtemocCount = computed(() => absencesAfterTimeFilters.value.filter(a => a.location === 'Cuauhtemoc').length)
+const totalCount = computed(() => countSessionsInArray(absencesAfterTimeFilters.value))
+const rawSwimmingCount = computed(() => {
+  const base = absencesAfterTimeFilters.value.filter(a => a.sport === 'swimming' || !a.sport)
+  return countSessionsInArray(selectedSlots.value.length > 0 ? base.filter(a => selectedSlots.value.includes(a.time_slot)) : base)
+})
+const rawSoccerCount = computed(() => {
+  const base = absencesAfterTimeFilters.value.filter(a => a.sport === 'soccer')
+  return countSessionsInArray(selectedSlots.value.length > 0 ? base.filter(a => selectedSlots.value.includes(a.time_slot)) : base)
+})
+const rawTlatelolcoCount = computed(() => {
+  const base = absencesAfterTimeFilters.value.filter(a => a.location === 'Tlatelolco')
+  return countSessionsInArray(selectedSlots.value.length > 0 ? base.filter(a => selectedSlots.value.includes(a.time_slot)) : base)
+})
+const rawCuauhtemocCount = computed(() => {
+  const base = absencesAfterTimeFilters.value.filter(a => a.location === 'Cuauhtemoc')
+  return countSessionsInArray(selectedSlots.value.length > 0 ? base.filter(a => selectedSlots.value.includes(a.time_slot)) : base)
+})
 
 // Autocomplete Logic
 const availableNames = computed(() => {
@@ -872,6 +1334,9 @@ const currentMonthStats = computed(() => {
   const currentMonth = now.getMonth()
   const currentYear = now.getFullYear()
   
+  let totalPast = 0
+  let totalFuture = 0
+
   // Base it on ALL absences for the filtered name, even if not shown by date filters
   let baseSet = allAbsences.value
   if (nameFilter.value) {
@@ -881,15 +1346,27 @@ const currentMonthStats = computed(() => {
     return { past: 0, future: 0, total: 0 }
   }
 
-  const thisMonthAbsences = baseSet.filter(a => {
-    const d = parseISO(a.date)
-    return d.getMonth() === currentMonth && d.getFullYear() === currentYear
+  baseSet.forEach(a => {
+    try {
+      const start = parseISO(a.date)
+      const end = a.end_date ? parseISO(a.end_date) : start
+      const days = eachDayOfInterval({ start, end })
+      
+      days.forEach(day => {
+        if (day.getMonth() === currentMonth && day.getFullYear() === currentYear && (isSaturday(day) || isSunday(day))) {
+          if (isSessionPast(format(day, 'yyyy-MM-dd'), a.time_slot)) {
+            totalPast++
+          } else {
+            totalFuture++
+          }
+        }
+      })
+    } catch (e) {
+      console.error('Error calculating stats for absence:', a, e)
+    }
   })
   
-  const past = thisMonthAbsences.filter(a => isSessionPast(a.date, a.time_slot)).length
-  const future = thisMonthAbsences.filter(a => !isSessionPast(a.date, a.time_slot)).length
-  
-  return { past, future, total: past + future }
+  return { past: totalPast, future: totalFuture, total: totalPast + totalFuture }
 })
 
 const currentMonthPast = computed(() => currentMonthStats.value.past)
@@ -1113,3 +1590,25 @@ const handleClearPastEvents = async () => {
     }
 }
 </script>
+
+<style scoped>
+.sheet-enter-active,
+.sheet-leave-active {
+  transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.sheet-enter-from,
+.sheet-leave-to {
+  transform: translateY(100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

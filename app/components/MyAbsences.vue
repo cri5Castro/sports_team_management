@@ -2,7 +2,57 @@
   <div class="glass-panel p-6 sm:p-8 animate-fade-in relative z-10">
     <!-- Search Section -->
     <div class="space-y-2 relative mb-8 z-20">
-      <label class="block text-sm font-medium text-slate-300">Nombre Exacto del Sharke</label>
+      <label class="block text-sm font-medium text-slate-300 flex items-center justify-between group/label">
+        <span>Nombre del Sharke</span>
+        <button 
+          type="button" 
+          @click="showNameHint = !showNameHint"
+          class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-pride-light/10 border border-pride-light/20 hover:bg-pride-light/20 transition-all group/hint relative overflow-hidden"
+          aria-label="Información sobre el nombre"
+        >
+          <!-- Pulsing Dot -->
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pride-light opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-pride-light"></span>
+          </span>
+          <span class="text-[10px] font-black uppercase tracking-tighter text-pride-light">Instrucciones</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-pride-light group-hover/hint:rotate-12 transition-transform">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+          </svg>
+        </button>
+      </label>
+
+      <!-- Premium Name Hint -->
+      <Transition
+        enter-active-class="transition duration-500 cubic-bezier(0.34, 1.56, 0.64, 1)"
+        enter-from-class="transform -translate-y-4 scale-95 opacity-0"
+        enter-to-class="transform translate-y-0 scale-100 opacity-100"
+        leave-active-class="transition duration-300 ease-in"
+        leave-from-class="transform translate-y-0 scale-100 opacity-100"
+        leave-to-class="transform -translate-y-4 scale-95 opacity-0"
+      >
+        <div v-if="showNameHint" class="rounded-2xl bg-slate-900 border-2 border-pride-light/30 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group/hint-box mb-4">
+          <!-- Sharke Tip Header -->
+          <div class="px-4 py-2 bg-pride-light/10 border-b border-pride-light/20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-lg">💡</span>
+              <span class="text-[11px] font-black uppercase tracking-[0.2em] text-pride-light">Sharke Tip de Inclusión</span>
+            </div>
+            <button type="button" @click.stop="showNameHint = false" class="text-slate-500 hover:text-white transition-colors p-1 relative z-20" title="Cerrar tip">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          
+          <div class="p-4 relative z-10">
+            <div class="absolute -top-10 -right-10 w-24 h-24 bg-pride-light/10 blur-[40px] rounded-full pointer-events-none"></div>
+            <p class="text-xs sm:text-sm text-slate-200 leading-relaxed relative z-10">
+              Para que todos nos sintamos cómodes y reconocides: por favor introduce tus <span class="text-white font-black underline decoration-pride-light decoration-2 underline-offset-2">apellidos</span> tal como aparecen en documentos legales, y opcionalmente un <span class="text-white font-black underline decoration-pride-pink decoration-2 underline-offset-2">nombre</span> (puede ser tu nombre elegido o el legal) sin embargo te pedimos usar siempre el mismo nombre para que te podamos reconocer.
+            </p>
+          </div>
+        </div>
+      </Transition>
       <div class="relative">
         <input 
           v-model="searchQuery" 
@@ -11,7 +61,7 @@
           @keydown.enter="fetchUserAbsences"
           class="glass-input pl-10" 
           type="text" 
-          placeholder="Ej: Carlos Silva... (trata de usar siempre el mismo orden)" 
+          placeholder="Apellidos - Nombre (elegido ó legal)" 
         />
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 absolute left-3 top-3 text-slate-400">
           <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -106,7 +156,19 @@
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-slate-400">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                   </svg>
-                  <span class="font-bold text-white text-lg">{{ formatDate(absence.date) }}</span>
+                  <span class="font-bold text-white text-lg flex items-center gap-2">
+                    {{ formatDateShort(absence.date) }}
+                    <template v-if="absence.endDate">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-slate-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                      </svg>
+                      {{ formatDateShort(absence.endDate) }}
+                    </template>
+                    
+                    <span v-if="absence.endDate" class="ml-2 px-2 py-0.5 rounded-full bg-pride-purple/20 border border-pride-purple/30 text-pride-purple text-[10px] font-black uppercase tracking-wider">
+                      {{ calculateDuration(absence) }} sesiones
+                    </span>
+                  </span>
                 </div>
                 <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-300">
                   <span class="flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/5 text-[10px] font-bold uppercase tracking-tight"
@@ -126,7 +188,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-pride-purple">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    {{ absence.time_slot }}
+                    {{ absence.timeSlot }}
                   </span>
                   <span class="text-white/20 hidden sm:inline">•</span>
                   <span class="flex items-center gap-1">
@@ -189,8 +251,17 @@
             >
               <div class="pl-2">
                 <div class="flex items-center gap-2 mb-1">
-                  <span class="font-bold text-slate-300 text-lg">{{ formatDate(absence.date) }}</span>
+                  <span class="font-bold text-slate-300 text-lg flex items-center gap-2">
+                    {{ formatDateShort(absence.date) }}
+                    <template v-if="absence.endDate">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-slate-600">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                      </svg>
+                      {{ formatDateShort(absence.endDate) }}
+                    </template>
+                  </span>
                   <span class="text-[8px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded border border-white/10 font-bold uppercase">Sesión Pasada</span>
+                  <span v-if="absence.endDate" class="text-[9px] text-slate-500 font-bold">{{ calculateDuration(absence) }} sesiones de periodo</span>
                 </div>
                 <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-400">
                   <span class="flex items-center gap-1">
@@ -226,12 +297,13 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { format, parseISO } from 'date-fns'
+import { format, parseISO, eachDayOfInterval, isSaturday, isSunday } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
 import { es } from 'date-fns/locale'
 import { isSessionPast } from '~/utils/time'
 
 const insforge = useInsforge()
+import { getTableName } from '~/utils/insforge'
 
 const TIMEZONE = 'America/Mexico_City'
 
@@ -248,14 +320,41 @@ const loading = ref(false)
 
 const deletingId = ref(null)
 const isDeleting = ref(false)
+const showNameHint = ref(false)
+
+// Helpers
+const mapAbsence = (a) => ({
+  id: a.id,
+  name: a.name,
+  date: a.date,
+  endDate: a.end_date,
+  timeSlot: a.time_slot,
+  location: a.location,
+  reason: a.reason,
+  sport: a.sport
+})
+
+const isAbsencePast = (a) => isSessionPast(a.endDate || a.date, a.timeSlot)
+
+const calculateDuration = (a) => {
+  const start = parseISO(a.date)
+  const end = a.endDate ? parseISO(a.endDate) : start
+  try {
+    const days = eachDayOfInterval({ start, end })
+    return days.filter(d => isSaturday(d) || isSunday(d)).length
+  } catch (e) {
+    return 0
+  }
+}
 
 // Computed
 const upcomingAbsences = computed(() => {
-  return allAbsences.value.filter(a => !isSessionPast(a.date, a.time_slot))
+  return allAbsences.value.filter(a => !isAbsencePast(a))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 })
 
 const pastAbsences = computed(() => {
-  return allAbsences.value.filter(a => isSessionPast(a.date, a.time_slot))
+  return allAbsences.value.filter(a => isAbsencePast(a))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 })
 
@@ -264,15 +363,30 @@ const currentMonthStats = computed(() => {
   const currentMonth = now.getMonth()
   const currentYear = now.getFullYear()
   
-  const thisMonthAbsences = allAbsences.value.filter(a => {
-    const d = parseISO(a.date)
-    return d.getMonth() === currentMonth && d.getFullYear() === currentYear
+  let totalPast = 0
+  let totalFuture = 0
+
+  allAbsences.value.forEach(a => {
+    try {
+      const start = parseISO(a.date)
+      const end = a.endDate ? parseISO(a.endDate) : start
+      const days = eachDayOfInterval({ start, end })
+      
+      days.forEach(day => {
+        if (day.getMonth() === currentMonth && day.getFullYear() === currentYear && (isSaturday(day) || isSunday(day))) {
+          if (isSessionPast(format(day, 'yyyy-MM-dd'), a.timeSlot)) {
+            totalPast++
+          } else {
+            totalFuture++
+          }
+        }
+      })
+    } catch (e) {
+      console.error('Error calculating stats for absence:', a, e)
+    }
   })
   
-  const past = thisMonthAbsences.filter(a => isSessionPast(a.date, a.time_slot)).length
-  const future = thisMonthAbsences.filter(a => !isSessionPast(a.date, a.time_slot)).length
-  
-  return { past, future, total: past + future }
+  return { past: totalPast, future: totalFuture, total: totalPast + totalFuture }
 })
 
 const currentMonthPast = computed(() => currentMonthStats.value.past)
@@ -283,7 +397,7 @@ const currentMonthTotal = computed(() => currentMonthStats.value.total)
 onMounted(async () => {
   try {
     const { data: absences, error } = await insforge.database
-      .from('absences')
+      .from(getTableName('absences'))
       .select('name')
     
     if (error) throw error
@@ -324,12 +438,12 @@ const fetchUserAbsences = async () => {
   
   try {
     const { data, error } = await insforge.database
-      .from('absences')
+      .from(getTableName('absences'))
       .select('*')
       .eq('name', searchQuery.value)
     
     if (error) throw error
-    allAbsences.value = data || []
+    allAbsences.value = (data || []).map(mapAbsence)
   } catch (e) {
     console.error('Failed to fetch user absences', e)
     allAbsences.value = []
@@ -347,7 +461,7 @@ const confirmDelete = async (id) => {
     allAbsences.value = allAbsences.value.filter(a => a.id !== id)
     
     const { error } = await insforge.database
-      .from('absences')
+      .from(getTableName('absences'))
       .delete()
       .eq('id', id)
     
@@ -367,6 +481,11 @@ const confirmDelete = async (id) => {
 const formatDate = (isoStr) => {
   const d = parseISO(isoStr)
   return format(d, "EEEE, d 'de' MMMM", { locale: es }).replace(/^\w/, c => c.toUpperCase())
+}
+
+const formatDateShort = (isoStr) => {
+  const d = parseISO(isoStr)
+  return format(d, "EEE d MMM", { locale: es }).replace(/^\w/, c => c.toUpperCase())
 }
 </script>
 

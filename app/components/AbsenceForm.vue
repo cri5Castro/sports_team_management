@@ -73,6 +73,19 @@
                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
+
+          <!-- WhatsApp Disclaimer -->
+          <div class="mt-4 p-4 rounded-2xl bg-[#25D366]/10 border border-[#25D366]/20 flex items-center justify-center gap-3 animate-fade-up" style="animation-delay: 0.2s">
+            <div class="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(37,211,102,0.3)]">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.659 1.432 5.635 1.433h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </div>
+            <p class="text-[11px] sm:text-xs text-slate-400 text-left leading-relaxed">
+              <span class="text-white font-bold block mb-0.5">Contacto de Coordinación</span>
+              Por favor contacta al coordinador de tu horario por WhatsApp para proporcionar tus justificantes.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -119,17 +132,67 @@
 
       <!-- Shark Name with Autocomplete -->
       <div class="space-y-2 relative pride-glow-focus">
-        <label class="block text-sm font-medium text-slate-300 flex items-center gap-2">
-          <span>Nombre del Sharke</span>
-          <span class="w-1.5 h-1.5 rounded-full pride-bar inline-block"></span>
+        <label class="block text-sm font-medium text-slate-300 flex items-center justify-between group/label">
+          <div class="flex items-center gap-2">
+            <span>Nombre del Sharke</span>
+            <span class="w-1.5 h-1.5 rounded-full pride-bar inline-block"></span>
+          </div>
+          <button 
+            type="button" 
+            @click="showNameHint = !showNameHint"
+            class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-pride-light/10 border border-pride-light/20 hover:bg-pride-light/20 transition-all group/hint relative overflow-hidden"
+            aria-label="Información sobre el nombre"
+          >
+            <!-- Pulsing Dot -->
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pride-light opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-pride-light"></span>
+            </span>
+            <span class="text-[10px] font-black uppercase tracking-tighter text-pride-light">Instrucciones</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-pride-light group-hover/hint:rotate-12 transition-transform">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+            </svg>
+          </button>
         </label>
+        
+        <!-- Premium Name Hint -->
+        <Transition
+          enter-active-class="transition duration-500 cubic-bezier(0.34, 1.56, 0.64, 1)"
+          enter-from-class="transform -translate-y-4 scale-95 opacity-0"
+          enter-to-class="transform translate-y-0 scale-100 opacity-100"
+          leave-active-class="transition duration-300 ease-in"
+          leave-from-class="transform translate-y-0 scale-100 opacity-100"
+          leave-to-class="transform -translate-y-4 scale-95 opacity-0"
+        >
+          <div v-if="showNameHint" class="rounded-2xl bg-slate-900 border-2 border-pride-light/30 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group/hint-box">
+            <!-- Sharke Tip Header -->
+            <div class="px-4 py-2 bg-pride-light/10 border-b border-pride-light/20 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">💡</span>
+                <span class="text-[11px] font-black uppercase tracking-[0.2em] text-pride-light">Sharke Tip de Inclusión</span>
+              </div>
+              <button type="button" @click.stop="showNameHint = false" class="text-slate-500 hover:text-white transition-colors p-1 relative z-20" title="Cerrar tip">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div class="p-4 relative z-10">
+              <div class="absolute -top-10 -right-10 w-24 h-24 bg-pride-light/10 blur-[40px] rounded-full pointer-events-none"></div>
+              <p class="text-xs sm:text-sm text-slate-200 leading-relaxed relative z-10">
+                Para que todos nos sintamos cómodes y reconocides: por favor introduce tus <span class="text-white font-black underline decoration-pride-light decoration-2 underline-offset-2">apellidos</span> tal como aparecen en documentos legales, y opcionalmente un <span class="text-white font-black underline decoration-pride-pink decoration-2 underline-offset-2">nombre</span> (puede ser tu nombre elegido o el legal) sin embargo te pedimos usar siempre el mismo nombre para que te podamos reconocer.
+              </p>
+            </div>
+          </div>
+        </Transition>
         <input 
           v-model="form.name" 
           @focus="showAutocomplete = true"
           @blur="hideAutocompleteDelay"
           class="glass-input relative z-10" 
           type="text" 
-          placeholder="Escribe tu nombre completo (Apellidos - Nombre)" 
+          placeholder="Apellidos - Nombre (elegido ó legal)" 
           required 
         />
         <!-- Autocomplete dropdown -->
@@ -170,98 +233,152 @@
       <!-- Date Selection -->
       <div class="space-y-3" v-if="form.sport">
         <label class="block text-sm font-medium text-slate-300 flex justify-between items-center">
-          <span>Fecha de Ausencia</span>
-          <span class="text-xs text-slate-500">{{ form.sport === 'soccer' ? 'Solo Sábados' : 'Solo Sábado o Domingo' }}</span>
+          <div class="flex items-center gap-2">
+            <span>Fecha de Ausencia</span>
+            <span v-if="!form.isRange" class="text-[10px] text-slate-500 uppercase tracking-wider">{{ form.sport === 'soccer' ? 'Solo Sábados' : 'Solo Sábado o Domingo' }}</span>
+          </div>
+          
+          <!-- Range Toggle -->
+          <button 
+            type="button"
+            @click="toggleRange"
+            class="flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all hover:bg-white/5 group"
+            :class="form.isRange ? 'bg-pride-pink/20 border-pride-pink text-white font-bold' : 'bg-slate-800/40 border-white/10 text-slate-400'"
+          >
+            <div class="w-3.5 h-3.5 rounded-full border border-current flex items-center justify-center">
+              <div v-if="form.isRange" class="w-1.5 h-1.5 bg-current rounded-full"></div>
+            </div>
+            <span class="text-[10px] uppercase tracking-wider font-black">Periodo de ausencia</span>
+          </button>
         </label>
         
-        <div class="flex flex-wrap gap-2">
-          <!-- Upcoming weekends pills -->
-          <button 
-            v-for="date in quickDates"
-            :key="date.iso"
-            type="button"
-            @click="selectDate(date.iso)"
-            class="px-5 py-2.5 rounded-full text-sm transition-all whitespace-nowrap font-medium pride-glow"
-            :class="form.dateStr === date.iso ? 'bg-white text-slate-900 shadow-md scale-105 border border-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-white/10'"
-          >
-            {{ date.label }}
-          </button>
-          
-          <!-- Custom Date Input Dropdown -->
-          <div class="relative group" v-click-outside="closeCalendarPanel">
-            <button 
-              type="button"
-              @click="toggleCalendarPanel"
-              class="flex items-center justify-center px-5 py-2.5 rounded-full text-sm transition-all bg-slate-800 text-slate-300 border border-white/10 hover:bg-slate-700 hover:text-white font-medium pride-glow"
-              :class="{'!bg-white !text-slate-900 shadow-md font-bold !border-white': isCustomDateActive}"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-              </svg>
-              {{ isCustomDateActive && form.dateStr ? formatDateMedium(form.dateStr) : 'Elegir otra fecha...' }}
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-2 transition-transform" :class="{'rotate-180': isCalendarOpen}">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-              </svg>
-            </button>
-            
-            
-            <!-- Custom Premium Dropdown Panel -->
-            <Teleport to="body" :disabled="!isMobile">
-              <!-- Backdrop for mobile -->
-              <div v-if="isCalendarOpen && isMobile" 
-                   class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 animate-fade-in"
-                   @click="closeCalendarPanel">
-              </div>
-
-              <Transition name="fade-slide">
-                <div v-if="isCalendarOpen" 
-                     @click.stop
-                     class="z-50 bg-slate-900/90 backdrop-blur-3xl border-white/20 shadow-[0_16px_40px_rgba(0,0,0,0.5)] transition-all duration-300
-                            fixed inset-x-0 bottom-0 w-full rounded-t-3xl p-6 max-h-[85vh] flex flex-col
-                            sm:absolute sm:inset-auto sm:top-full sm:right-0 sm:bottom-auto sm:mt-3 sm:w-72 sm:rounded-2xl sm:border sm:p-4 sm:block"
+        <div class="flex flex-col gap-4">
+          <!-- Start Date Selection -->
+          <div class="space-y-2">
+            <span v-if="form.isRange" class="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-black block ml-2 mb-1">Inicio del periodo</span>
+            <div class="flex flex-wrap gap-2">
+              <button 
+                v-for="date in quickDates"
+                :key="date.iso"
+                type="button"
+                @click="selectDate(date.iso)"
+                class="px-5 py-2.5 rounded-full text-sm transition-all whitespace-nowrap font-medium pride-glow"
+                :class="form.dateStr === date.iso ? 'bg-white text-slate-900 shadow-md scale-105 border border-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-white/10'"
+              >
+                {{ date.label }}
+              </button>
+              
+              <div class="relative group" v-click-outside="() => closeCalendarPanel('start')">
+                <button 
+                  type="button"
+                  @click="toggleCalendarPanel('start')"
+                  class="flex items-center justify-center px-5 py-2.5 rounded-full text-sm transition-all bg-slate-800 text-slate-300 border border-white/10 hover:bg-slate-700 hover:text-white font-medium pride-glow"
+                  :class="{'!bg-white !text-slate-900 shadow-md font-bold !border-white': isCustomDateActive && !isEndCustomActive}"
                 >
-                   
-                   <!-- Header / PRIDE accents -->
-                   <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
-                     <h4 class="font-bold text-white flex items-center gap-2">
-                       <span class="w-2 h-2 rounded-full pride-bar inline-block"></span>
-                       Fechas Futuras
-                     </h4>
-                     <button @click="closeCalendarPanel" type="button" class="text-slate-400 hover:text-white transition-colors p-2 -mr-2" title="Cerrar">
-                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                       </svg>
-                     </button>
-                   </div>
-                   
-                   <!-- Date List -->
-                   <div class="space-y-1 overflow-y-auto pr-1 flex-1 custom-scrollbar">
-                     <button
-                       v-for="date in upcomingYearDates"
-                       :key="date.iso"
-                       type="button"
-                       @click="selectCustomDate(date.iso)"
-                       class="w-full text-left px-4 py-3 sm:py-2.5 rounded-xl text-sm transition-colors flex justify-between items-center group relative overflow-hidden active:bg-white/5"
-                       :class="form.dateStr === date.iso ? 'bg-pride-light/20 text-white font-bold border border-pride-light/30' : 'text-slate-300 hover:bg-white/10 border border-transparent'"
-                     >
-                       <div v-if="form.dateStr === date.iso" class="absolute left-0 top-0 bottom-0 w-1 bg-pride-light"></div>
-                       <span :class="{'pl-2': form.dateStr === date.iso}">{{ date.labelLong }}</span>
-                       <svg v-if="form.dateStr === date.iso" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-pride-light">
-                         <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12m13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
-                       </svg>
-                     </button>
-                     
-                     <div v-if="!upcomingYearDates.length" class="text-center py-8 text-slate-500 text-xs">
-                       Cargando fechas...
-                     </div>
-                   </div>
-                </div>
-              </Transition>
-            </Teleport>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                  </svg>
+                  {{ isCustomDateActive && !isEndCustomActive && form.dateStr ? formatDateMedium(form.dateStr) : 'Elegir otra fecha...' }}
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-2 transition-transform" :class="{'rotate-180': isCalendarOpen === 'start'}">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                  </svg>
+                </button>
+                
+                <Teleport to="body" :disabled="!isMobile">
+                  <div v-if="isCalendarOpen === 'start' && isMobile" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 animate-fade-in" @click="closeCalendarPanel('start')"></div>
+                  <Transition name="fade-slide">
+                    <div v-if="isCalendarOpen === 'start'" @click.stop class="z-50 bg-slate-900/90 backdrop-blur-3xl border-white/20 shadow-[0_16px_40px_rgba(0,0,0,0.5)] transition-all duration-300 fixed inset-x-0 bottom-0 w-full rounded-t-3xl p-6 max-h-[85vh] flex flex-col sm:absolute sm:inset-auto sm:top-full sm:right-0 sm:bottom-auto sm:mt-3 sm:w-72 sm:rounded-2xl sm:border sm:p-4 sm:block">
+                       <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
+                         <h4 class="font-bold text-white flex items-center gap-2">
+                           <span class="w-2 h-2 rounded-full pride-bar inline-block"></span>
+                           Inicio del Periodo
+                         </h4>
+                         <button @click="closeCalendarPanel('start')" type="button" class="text-slate-400 hover:text-white transition-colors p-2 -mr-2" title="Cerrar">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                           </svg>
+                         </button>
+                       </div>
+                       <div class="space-y-1 overflow-y-auto pr-1 flex-1 custom-scrollbar">
+                         <button v-for="date in upcomingYearDates" :key="date.iso" type="button" @click="selectCustomDate(date.iso, 'start')" class="w-full text-left px-4 py-3 sm:py-2.5 rounded-xl text-sm transition-colors flex justify-between items-center group relative overflow-hidden active:bg-white/5" :class="form.dateStr === date.iso ? 'bg-pride-light/20 text-white font-bold border border-pride-light/30' : 'text-slate-300 hover:bg-white/10 border border-transparent'">
+                           <div v-if="form.dateStr === date.iso" class="absolute left-0 top-0 bottom-0 w-1 bg-pride-light"></div>
+                           <span :class="{'pl-2': form.dateStr === date.iso}">{{ date.labelLong }}</span>
+                           <svg v-if="form.dateStr === date.iso" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-pride-light">
+                             <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12m13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+                           </svg>
+                         </button>
+                       </div>
+                    </div>
+                  </Transition>
+                </Teleport>
+              </div>
+            </div>
+          </div>
+
+          <!-- End Date Selection (Range only) -->
+          <div v-if="form.isRange" class="space-y-2 animate-fade-in">
+            <span class="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-black block ml-2 mb-1">Fin del periodo</span>
+            <div class="flex flex-wrap gap-2">
+              <button 
+                v-for="date in quickEndDates"
+                :key="date.iso"
+                type="button"
+                @click="selectEndDate(date.iso)"
+                class="px-5 py-2.5 rounded-full text-sm transition-all whitespace-nowrap font-medium pride-glow"
+                :class="form.endDateStr === date.iso ? 'bg-white text-slate-900 shadow-md scale-105 border border-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-white/10'"
+              >
+                {{ date.label }}
+              </button>
+
+              <div class="relative group" v-click-outside="() => closeCalendarPanel('end')">
+                <button 
+                  type="button"
+                  @click="toggleCalendarPanel('end')"
+                  class="flex items-center justify-center px-5 py-2.5 rounded-full text-sm transition-all bg-slate-800 text-slate-300 border border-white/10 hover:bg-slate-700 hover:text-white font-medium pride-glow"
+                  :class="{'!bg-white !text-slate-900 shadow-md font-bold !border-white': isEndCustomActive}"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                  </svg>
+                  {{ isEndCustomActive && form.endDateStr ? formatDateMedium(form.endDateStr) : 'Elegir otra fecha...' }}
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-2 transition-transform" :class="{'rotate-180': isCalendarOpen === 'end'}">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                  </svg>
+                </button>
+                
+                <Teleport to="body" :disabled="!isMobile">
+                  <div v-if="isCalendarOpen === 'end' && isMobile" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 animate-fade-in" @click="closeCalendarPanel('end')"></div>
+                  <Transition name="fade-slide">
+                    <div v-if="isCalendarOpen === 'end'" @click.stop class="z-50 bg-slate-900/90 backdrop-blur-3xl border-white/20 shadow-[0_16px_40px_rgba(0,0,0,0.5)] transition-all duration-300 fixed inset-x-0 bottom-0 w-full rounded-t-3xl p-6 max-h-[85vh] flex flex-col sm:absolute sm:inset-auto sm:top-full sm:right-0 sm:bottom-auto sm:mt-3 sm:w-72 sm:rounded-2xl sm:border sm:p-4 sm:block">
+                       <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
+                         <h4 class="font-bold text-white flex items-center gap-2">
+                           <span class="w-2 h-2 rounded-full pride-bar inline-block"></span>
+                           Fin del Periodo
+                         </h4>
+                         <button @click="closeCalendarPanel('end')" type="button" class="text-slate-400 hover:text-white transition-colors p-2 -mr-2" title="Cerrar">
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                           </svg>
+                         </button>
+                       </div>
+                       <div class="space-y-1 overflow-y-auto pr-1 flex-1 custom-scrollbar">
+                         <button v-for="date in upcomingYearDates" :key="date.iso" type="button" @click="selectCustomDate(date.iso, 'end')" class="w-full text-left px-4 py-3 sm:py-2.5 rounded-xl text-sm transition-colors flex justify-between items-center group relative overflow-hidden active:bg-white/5" :class="form.endDateStr === date.iso ? 'bg-pride-light/20 text-white font-bold border border-pride-light/30' : 'text-slate-300 hover:bg-white/10 border border-transparent'">
+                           <div v-if="form.endDateStr === date.iso" class="absolute left-0 top-0 bottom-0 w-1 bg-pride-light"></div>
+                           <span :class="{'pl-2': form.endDateStr === date.iso}">{{ date.labelLong }}</span>
+                           <svg v-if="form.endDateStr === date.iso" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-pride-light">
+                             <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12m13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+                           </svg>
+                         </button>
+                       </div>
+                    </div>
+                  </Transition>
+                </Teleport>
+            </div>
           </div>
         </div>
         <p v-if="dateError" class="text-pride-red text-sm mt-2 font-medium bg-pride-red/10 border border-pride-red/30 rounded-lg px-3 py-2 inline-block shadow-lg">{{ dateError }}</p>
       </div>
+    </div>
 
       <!-- Time / Location Slots -->
       <div class="space-y-3" v-if="form.sport">
@@ -377,7 +494,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
-import { startOfDay, addDays, isSaturday, isSunday, format, parseISO } from 'date-fns'
+import { startOfDay, addDays, isSaturday, isSunday, format, parseISO, eachDayOfInterval } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
 import { es } from 'date-fns/locale'
 import { isSessionPast } from '~/utils/time'
@@ -394,14 +511,18 @@ const form = ref({
   sport: '', // 'swimming' or 'soccer'
   name: '',
   dateStr: '',
+  endDateStr: '',
+  isRange: false,
   timeSlot: '',
   location: '',
   reason: ''
 })
 
 const isCustomDateActive = ref(false)
-const isCalendarOpen = ref(false)
+const isEndCustomActive = ref(false)
+const isCalendarOpen = ref(null) // null, 'start', or 'end'
 const dateError = ref('')
+const showNameHint = ref(false)
 
 const loading = ref(false)
 const submitSuccess = ref(false)
@@ -424,6 +545,8 @@ const updateMobileStatus = () => {
 const selectSport = (sport) => {
   form.value.sport = sport
   form.value.dateStr = ''
+  form.value.endDateStr = ''
+  form.value.isRange = false
   form.value.timeSlot = ''
   form.value.location = ''
   dateError.value = ''
@@ -433,6 +556,15 @@ const selectSport = (sport) => {
     form.value.location = 'Tlatelolco'
     form.value.timeSlot = '10:00 am - 11:00 am'
   }
+}
+
+const toggleRange = () => {
+  form.value.isRange = !form.value.isRange
+  if (!form.value.isRange) {
+    form.value.endDateStr = ''
+    isEndCustomActive.value = false
+  }
+  dateError.value = ''
 }
 
 // Init Mobile Check
@@ -462,7 +594,7 @@ onMounted(async () => {
     // 2. Fetch absences for indicator logic
     const { data: absences, error: absencesError } = await insforge.database
       .from(getTableName('absences'))
-      .select('name, date')
+      .select('name, date, end_date, time_slot')
       .order('date', { ascending: false })
     
     if (absencesError) throw absencesError
@@ -497,28 +629,47 @@ const currentSelectedMonthName = computed(() => {
   return format(parseISO(form.value.dateStr), "MMMM", { locale: es })
 })
 
-const monthlyAbsences = computed(() => {
-  if (!form.value.name || !form.value.dateStr) return []
+const monthlyAbsencesStats = computed(() => {
+  if (!form.value.name || !form.value.dateStr) return { past: 0, future: 0, total: 0 }
+  
   const selectedDate = parseISO(form.value.dateStr)
   const selectedMonth = selectedDate.getMonth()
   const selectedYear = selectedDate.getFullYear()
+  const lowerName = form.value.name.toLowerCase()
   
-  return absencesData.value.filter(a => {
-    if (a.name.toLowerCase() !== form.value.name.toLowerCase()) return false
-    const d = parseISO(a.date)
-    return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear
+  let past = 0
+  let future = 0
+  
+  absencesData.value.forEach(a => {
+    if (a.name.toLowerCase() !== lowerName) return
+    
+    try {
+      const start = parseISO(a.date)
+      const end = a.endDate || a.end_date ? parseISO(a.endDate || a.end_date) : start
+      const days = eachDayOfInterval({ start, end })
+      
+      days.forEach(day => {
+        if (day.getMonth() === selectedMonth && day.getFullYear() === selectedYear) {
+          if (isSaturday(day) || isSunday(day)) {
+            if (isSessionPast(format(day, 'yyyy-MM-dd'), a.time_slot || a.timeSlot || '12:00 pm - 1:00 pm')) {
+              past++
+            } else {
+              future++
+            }
+          }
+        }
+      })
+    } catch (e) {
+      console.error('Error calculating stats for absence:', a, e)
+    }
   })
+  
+  return { past, future, total: past + future }
 })
 
-const pastMonthlyAbsencesCount = computed(() => {
-  return monthlyAbsences.value.filter(a => isSessionPast(a.date, a.time_slot || '12:00 pm - 1:00 pm')).length
-})
-
-const futureMonthlyAbsencesCount = computed(() => {
-  return monthlyAbsences.value.filter(a => !isSessionPast(a.date, a.time_slot || '12:00 pm - 1:00 pm')).length
-})
-
-const totalMonthlyAbsencesCount = computed(() => monthlyAbsences.value.length)
+const pastMonthlyAbsencesCount = computed(() => monthlyAbsencesStats.value.past)
+const futureMonthlyAbsencesCount = computed(() => monthlyAbsencesStats.value.future)
+const totalMonthlyAbsencesCount = computed(() => monthlyAbsencesStats.value.total)
 
 // Date Logic
 const getTodayCDMX = () => startOfDay(toZonedTime(new Date(), TIMEZONE))
@@ -551,6 +702,29 @@ const quickDates = computed(() => {
           label: format(current, "EEE d MMM", { locale: es }).replace(/^\w/, c => c.toUpperCase())
         })
       }
+    }
+    current = addDays(current, 1)
+  }
+  return dates
+})
+
+const quickEndDates = computed(() => {
+  if (!form.value.dateStr) return []
+  
+  const dates = []
+  let current = addDays(parseISO(form.value.dateStr), 1)
+  
+  while(dates.length < 5) {
+    const allowed = form.value.sport === 'soccer' 
+      ? isSaturday(current) 
+      : (isSaturday(current) || isSunday(current))
+      
+    if (allowed) {
+      const iso = format(current, 'yyyy-MM-dd')
+      dates.push({
+        iso,
+        label: format(current, "EEE d MMM", { locale: es }).replace(/^\w/, c => c.toUpperCase())
+      })
     }
     current = addDays(current, 1)
   }
@@ -597,22 +771,36 @@ const formatDateMedium = (isoStr) => {
 const selectDate = (iso) => {
   form.value.dateStr = iso
   isCustomDateActive.value = false
-  isCalendarOpen.value = false
+  isCalendarOpen.value = null
   dateError.value = ''
 }
 
-const toggleCalendarPanel = () => {
-  isCalendarOpen.value = !isCalendarOpen.value
+const selectEndDate = (iso) => {
+  form.value.endDateStr = iso
+  isEndCustomActive.value = false
+  isCalendarOpen.value = null
+  dateError.value = ''
 }
 
-const closeCalendarPanel = () => {
-  isCalendarOpen.value = false
+const toggleCalendarPanel = (type) => {
+  isCalendarOpen.value = isCalendarOpen.value === type ? null : type
 }
 
-const selectCustomDate = (iso) => {
-  form.value.dateStr = iso
-  isCustomDateActive.value = true
-  isCalendarOpen.value = false
+const closeCalendarPanel = (type) => {
+  if (isCalendarOpen.value === type) {
+    isCalendarOpen.value = null
+  }
+}
+
+const selectCustomDate = (iso, type) => {
+  if (type === 'start') {
+    form.value.dateStr = iso
+    isCustomDateActive.value = true
+  } else {
+    form.value.endDateStr = iso
+    isEndCustomActive.value = true
+  }
+  isCalendarOpen.value = null
   dateError.value = ''
 }
 
@@ -620,6 +808,10 @@ const selectCustomDate = (iso) => {
 const submitForm = async () => {
   if (!form.value.dateStr) {
     dateError.value = 'Debes seleccionar una fecha'
+    return
+  }
+  if (form.value.isRange && !form.value.endDateStr) {
+    dateError.value = 'Debes seleccionar una fecha de fin'
     return
   }
   if (!form.value.timeSlot) {
@@ -631,12 +823,19 @@ const submitForm = async () => {
   submitError.value = ''
   
   try {
+    const formattedDate = form.value.isRange 
+      ? form.value.dateStr 
+      : form.value.dateStr
+
+    const formattedReason = form.value.reason
+
     const submission = {
       name: form.value.name,
-      date: form.value.dateStr,
+      date: formattedDate,
+      endDate: form.value.isRange ? form.value.endDateStr : null,
       time_slot: form.value.timeSlot,
       location: form.value.location,
-      reason: form.value.reason,
+      reason: formattedReason,
       sport: form.value.sport
     }
 
@@ -666,12 +865,15 @@ const resetForm = () => {
     sport: '',
     name: '',
     dateStr: '',
+    endDateStr: '',
+    isRange: false,
     timeSlot: '',
     location: '',
     reason: ''
   }
   isCustomDateActive.value = false
-  isCalendarOpen.value = false
+  isEndCustomActive.value = false
+  isCalendarOpen.value = null
 }
 </script>
 

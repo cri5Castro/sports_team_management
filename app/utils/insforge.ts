@@ -24,9 +24,16 @@ export const useInsforge = () => {
 
 /**
  * Returns the environment-appropriate table name.
- * If running in development mode, prefixes the table name with 'dev_'.
+ * If running in development or demo mode, prefixes the table name with 'dev_'.
  */
 export const getTableName = (baseName: string) => {
-    // process.dev is a Nuxt-specific boolean for development mode
-    return process.dev ? `dev_${baseName}` : baseName;
+    try {
+        const config = useRuntimeConfig();
+        const isDemo = config.public.demoMode === 'true';
+        const isDev = process.dev || import.meta.dev || isDemo;
+        return isDev ? `dev_${baseName}` : baseName;
+    } catch (e) {
+        // Fallback if useRuntimeConfig is not available
+        return (process.dev || import.meta.dev) ? `dev_${baseName}` : baseName;
+    }
 };

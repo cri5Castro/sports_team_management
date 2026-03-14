@@ -7,6 +7,7 @@ export default defineEventHandler(async (event) => {
     const normalizedBody = {
         name: body.name,
         date: body.date,
+        endDate: body.endDate || body.end_date,
         timeSlot: body.timeSlot || body.time_slot,
         location: body.location,
         reason: body.reason,

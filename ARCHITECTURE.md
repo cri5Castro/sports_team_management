@@ -110,6 +110,7 @@ erDiagram
         uuid id PK
         string name
         date date
+        date end_date
         string time_slot
         string location
         string reason

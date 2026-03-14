@@ -9,7 +9,9 @@ const getClient = () => {
 };
 
 const getTableName = (baseName: string) => {
-    const isDev = process.env.NODE_ENV === 'development' || process.dev;
+    const config = useRuntimeConfig();
+    const isDemo = config.public.demoMode === 'true';
+    const isDev = process.env.NODE_ENV === 'development' || process.dev || isDemo;
     return isDev ? `dev_${baseName}` : baseName;
 };
 
@@ -29,6 +31,7 @@ export const getAbsences = async () => {
         id: a.id,
         name: a.name,
         date: a.date,
+        endDate: a.end_date,
         timeSlot: a.time_slot,
         location: a.location,
         reason: a.reason,
@@ -84,6 +87,7 @@ export const addAbsence = async (body: any) => {
             name: body.name,
             member_id: memberId,
             date: body.date,
+            end_date: body.endDate,
             time_slot: body.timeSlot,
             location: body.location,
             reason: body.reason,
@@ -103,6 +107,7 @@ export const addAbsence = async (body: any) => {
         id: data.id,
         name: data.name,
         date: data.date,
+        endDate: data.end_date,
         timeSlot: data.time_slot,
         location: data.location,
         reason: data.reason,
@@ -153,6 +158,7 @@ export const overwriteAbsences = async (items: any[]) => {
             name: a.name,
             member_id: memberId,
             date: a.date,
+            end_date: a.endDate,
             time_slot: a.timeSlot,
             location: a.location,
             reason: a.reason,

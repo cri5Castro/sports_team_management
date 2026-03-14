@@ -63,7 +63,7 @@
 
         <!-- Quick Actions & Insights Grid -->
         <div class="max-w-4xl mx-auto px-4">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             <!-- Action: Report Absence -->
             <button 
               @click="currentView = 'register'"
@@ -114,22 +114,26 @@
                 <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mt-1">Exclusivos para ti</p>
               </div>
             </button>
+
+            <!-- Action: Social y Eventos -->
+            <NuxtLink 
+              to="/comunidad"
+              class="group glass-panel p-6 border-white/5 hover:border-pride-orange/30 active:scale-95 transition-all duration-500 text-left relative overflow-hidden h-40 flex flex-col justify-between"
+            >
+              <div class="absolute top-0 right-0 w-24 h-24 bg-pride-orange/5 blur-3xl group-hover:bg-pride-orange/10 transition-colors"></div>
+              <div class="w-12 h-12 rounded-2xl bg-pride-orange/20 flex items-center justify-center text-pride-orange group-hover:scale-110 transition-transform duration-500 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-black text-white text-lg tracking-tight">Social y Eventos</h3>
+                <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mt-1">Comunidad Sharke</p>
+              </div>
+            </NuxtLink>
           </div>
         </div>
 
-        <!-- Community "The Vibe" Preview -->
-        <div class="max-w-4xl mx-auto px-4 pt-12 border-t border-white/5 space-y-8">
-           <div class="flex items-center justify-between">
-              <h2 class="text-2xl md:text-3xl font-black text-white italic tracking-tighter group flex items-center gap-3">
-                 <span class="pride-gradient-text">#SharkesVibe</span>
-                 <span class="w-1 h-1 rounded-full bg-slate-500"></span>
-              </h2>
-              <NuxtLink to="/comunidad" class="text-xs font-black uppercase tracking-widest text-pride-light hover:underline">Ver todo</NuxtLink>
-           </div>
-           
-           <!-- Mini Instagram Grid/Carousel Preview -->
-           <InstagramFeed :limit="3" />
-        </div>
       </div>
 
       <!-- Detail Views (Absence Form, History, etc.) -->
@@ -166,7 +170,6 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { format, parseISO, isAfter, startOfDay } from 'date-fns'
 import { es } from 'date-fns/locale'
-import InstagramFeed from '~/components/InstagramFeed.vue'
 
 const currentView = ref('dashboard')
 const transitionName = ref('push')
